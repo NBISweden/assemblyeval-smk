@@ -17,7 +17,7 @@ container: "docker://continuumio/miniconda3"
 ##### load config and sample sheets #####
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
-print(config)
+
 assemblies = pd.read_csv(config["assemblies"], sep="\t").set_index(["species", "version"], drop=False)
 assemblies = assemblies.replace({np.nan: None})
 assemblies.index.names = ["species", "version"]
@@ -48,7 +48,7 @@ __RAW__ = Path(config["fs"]["raw"])
 __REPORTS__ = Path("reports")
 __RESOURCES__ = Path(config["fs"]["resources"])
 __RESULTS__ = Path("results")
-print("INTERIM: ", __INTERIM__)
+
 ##############################
 ## Wildcard constraints
 ##############################
