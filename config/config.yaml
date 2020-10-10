@@ -1,0 +1,3 @@
+assemblies: config/assemblies.tsv
+transcripts: config/transcripts.tsv
+reads: config/reads.tsv
