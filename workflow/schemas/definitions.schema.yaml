@@ -1,0 +1,48 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+
+description: Various definitions
+
+type: object
+
+definitions:
+  fs:
+    type: object
+    description: >
+        file system layout; defines Path objects and wildcards for
+        snakemake rules
+    default: {}
+    properties:
+      external:
+        type: string
+        default: data/external
+      interim:
+        type: string
+        default: data/interim
+      metadata:
+        type: string
+        default: data/metadata
+      raw:
+        type: string
+        default: data/raw
+      resources:
+        type: string
+        default: resources
+  rule:
+    type: object
+    description: generic configuration for rules
+    properties:
+      options:
+        type: [string, array, object]
+        default: ""
+        items:
+          type: string
+      runtime:
+        default: 60
+        type: number
+      threads:
+        default: 1
+        type: number
+      mem_mb:
+        description: Resource that defines assigned memory
+        default: 8192
+        type: number

@@ -1,0 +1,4 @@
+name: "gmap_build"
+description: build gmap database
+authors:
+  - Per Unneberg

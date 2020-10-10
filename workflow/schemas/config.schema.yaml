@@ -1,0 +1,26 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+
+description: snakemake configuration file
+
+type: object
+
+definitions:
+
+properties:
+  assemblies:
+    type: string
+  transcripts:
+    type: [string, 'null']
+    default: null
+  reads:
+    type: [string, 'null']
+    default: null
+  fs:
+    $ref: "definitions.schema.yaml#/definitions/fs"
+    default: {}
+  gmap:
+    $ref: "gmap.schema.yaml#/definitions/gmap"
+    default: {}
+
+required:
+  - assemblies

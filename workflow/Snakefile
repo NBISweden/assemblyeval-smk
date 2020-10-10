@@ -1,0 +1,25 @@
+# The main entry point of your workflow.
+# After configuring, running snakemake -n in a clone of this repository should successfully execute a dry-run of the workflow.
+include: "rules/common.smk"
+include: "rules/gmap.smk"
+include: "rules/other.smk"
+
+
+##############################
+## Report
+##############################
+report: "report/workflow.rst"
+
+
+# Allow users to fix the underlying OS via singularity.
+container: "docker://continuumio/miniconda3"
+
+
+rule all:
+    input:
+        ["data/interim/gmap/map/foo_v1-A.psl",
+         "data/interim/gmap/map/foo_v1-B.psl"]
+        #"data/interim/gmap/map/foo_v2-B.psl",
+        # "data/interim/gmap/map/foo_v2-B.psl"]
+        # The first rule should define the default target files
+        # Subsequent target rules can be specified below. They should start with all_*.

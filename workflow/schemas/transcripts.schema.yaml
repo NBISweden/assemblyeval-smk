@@ -1,0 +1,24 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+description: Transciptome schema definition. Describe basic features of a transcriptome file.
+type: object
+properties:
+  id:
+    type: string
+    description: transcript set identifier
+  species:
+    type: string
+    description: the biological species whose genome has been sequenced and assembled
+  fasta:
+    type: string
+    description: transcript set fasta file
+  description:
+    type: string
+  source:
+    type: [string, 'null']
+    description: if transcript set is from an external resource, provide source as URI here
+    default: null
+    
+required:
+  - id
+  - species
+  - fasta

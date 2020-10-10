@@ -1,0 +1,3 @@
+id	species	fasta
+A	foo	data/raw/transcriptome/A.trx.fasta.gz
+B	bar	data/raw/transcriptome/B.trx.fasta

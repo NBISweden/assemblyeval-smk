@@ -1,0 +1,22 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+description: Read schema definition. List read files.
+type: object
+properties:
+  id:
+    type: string
+    description: read set identifier
+  reads:
+    type: string
+    description: fastq/sam/bam/cram file
+  source:
+    type: string
+    description: >
+        if reads are from an external source, list the source file
+        here as an URI
+    items:
+      type: uri
+      
+required:
+  - id
+  - reads
+  
