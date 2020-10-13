@@ -3,13 +3,21 @@ transcripts: config/transcripts.tsv
 reads: config/reads.tsv
 
 genecovr:
-  csv_genecovr_analysis: config/genecovr.csv
-
+  dataset1:
+    csvfile: config/genecovr.csv
+  dataset2:
+    assemblies: ["foo_v1", "foo_v2"]
+    transcripts: ["A", "B"]
 btk:
   blobdir_foo_v1:
     fasta:
+      # - foo_v1
       - resources/assembly.v1.fasta
     bam:
+      # read ids, e.g.
+      # - A.reads
+      # - B.reads
       - data/interim/bwa/A.reads_foo_v1.sort.bam
     bls:
+      # taxid for blast database; we know the assembly (from blobdir_())
       - data/interim/btk/blobdir_foo_v1/nt_v5.merged.out.gz
