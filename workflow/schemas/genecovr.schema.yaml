@@ -20,7 +20,42 @@ definitions:
         type: string
         default: --height 14 --width 14
     patternProperties:
-      '^csv_[a-zA-Z\-_0-9\.]+$':
-        type: string
-        description: csv file input to genecovr run
+      '^dataset[a-zA-Z\-_0-9\.]+$':
+        type: object
+        description: >
+            dataset definition. List assemblies and transcripts by ids
+            to define input to genecovr. The product of the two lists
+            will be used to generate the inputs.
+        properties:
+          csvfile:
+            type: [string, 'null']
+            description: location of manually provided csv file
+            default: null
+            examples: config/genecovr.csv
+          outprefix:
+            type: string
+            description: >
+                output prefix for csvfile. The csv file will be
+                formatted as prefix + dataset key + .csv
+            default: config/genecovr
+          assemblies:
+            type: array
+            description: list of assembly ids formatted as species_version
+            default: []
+            items:
+              uniqueItems: true
+              type: string
+            examples:
+              - ['foo_v1', 'foo_v2']
+          transcripts:
+            type: array
+            description: list of transcript ids
+            default: []
+            items:
+              uniqueItems: true
+              type: string
+            examples:
+              - ['A', 'B']
+
+
     additionalProperties: false
