@@ -146,3 +146,63 @@ def get_btk_all(wildcards):
 def get_genecovr_all(wildcards):
     dataset = [x for x in config["genecovr"].keys() if x.startswith("dataset")]
     return expand(f"{str(__RESULTS__)}/genecovr/{{dataset}}/psldata.csv.gz", dataset=dataset)
+
+
+def genecovr_make_csv_inputfile_input(wildcards):
+    assembly_keys = config["genecovr"][wildcards.dataset]["assemblies"]
+    species = [k.split("_")[0] for k in assembly_keys]
+    version = [k.split("_")[1] for k in assembly_keys]
+    trx_keys = config["genecovr"][wildcards.dataset]["transcripts"]
+    assembly_fasta = assemblies.loc[(species, version), "fasta"].tolist()
+    trx_fasta = transcripts.loc[trx_keys, "fasta"].tolist()
+    retval = {
+        'psl': [str(__INTERIM__ / f"gmap/map/{a}-{b}.psl") for a, b in itertools.product(assembly_keys, trx_keys)],
+        'assembly': [f"{a}" for a, b in itertools.product(assembly_fasta, trx_fasta)],
+        'trxset': [f"{b}" for a, b in itertools.product(assembly_fasta, trx_fasta)]
+    }
+    return retval
+
+
+def get_genecovr_input(wildcards):
+    retval = []
+    csvfile = config["genecovr"][wildcards.dataset]['csvfile']
+    if csvfile is not None:
+        data = pd.read_csv(csvfile, header=None).set_index(0, drop=False)
+        data.columns = ["dataset", "psl", "assembly", "trxset"]
+        for k in ["psl", "assembly", "trxset"]:
+            retval += [x for x in data[k].tolist() if x is not None]
+    else:
+        csvfile = f"{config['genecovr'][wildcards.dataset]['outprefix']}.{wildcards.dataset}.csv"
+    return {'csv': csvfile, 'files': retval}
+
+
+def genecovr_output():
+    retval = []
+    retval += report(expand("{{genecovr_results}}/{{dataset}}/gene_body_coverage.minmatch.{mm}.pdf", mm=__GENECOVR_MINMATCH__),
+                     caption="../report/genecovr.rst", category="Gene body coverages")
+    retval += report(expand("{{genecovr_results}}/{{dataset}}/ncontigs_per_transcripts.{type}.mm0.75.pdf", type=__GENECOVR_NCONTIGS__),
+                     caption="../report/genecovr.rst", category="n contigs per transcripts")
+    retval += report(expand("{{genecovr_results}}/{{dataset}}/depth_breadth_{type}.mm0.75.pdf", type=__GENECOVR_DEPTH_BREADTH__),
+                     caption="../report/genecovr.rst", category="Depth and breadth of coverage")
+    retval += report(expand("{{genecovr_results}}/{{dataset}}/match_indel.{type}.pdf", type=__GENECOVR_MATCH_INDEL__),
+                     caption="../report/genecovr.rst", category="Match and indel distributions")
+    retval += report(expand("{{genecovr_results}}/{{dataset}}/{fn}", fn=__GENECOVR_FN__),
+                     caption="../report/genecovr.rst", category="Match and indel distributions")
+    retval += report(expand("{{genecovr_results}}/{{dataset}}/{fn}", fn=__GENECOVR_CSV_GZ__),
+                     caption="../report/genecovr.rst", category="Data files")
+    return retval
+
+
+def _btk_link_fasta_input(wildcards):
+    return [_btk_link_fasta_input_paths(wildcards)['path']]
+
+
+def _btk_link_fasta_input_paths(wildcards):
+    ret = {}
+    fn = Path(wildcards.interim) / "btk" / wildcards.blobdir / f"{wildcards.prefix}.fasta.gz"
+    for x in config["btk"][wildcards.blobdir]["fasta"]:
+        if str(fn.name) == str(Path(x).name):
+            ret['path'] = str(Path(x))
+            ret['abspath'] = str(Path(x).absolute())
+            break
+    return ret

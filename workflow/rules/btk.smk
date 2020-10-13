@@ -14,23 +14,11 @@ rule btk_create_blobdir:
         blobtools = config["btk"]["exe"]
     conda:
         "../envs/btk.yaml"
-    singularity:
+    container:
         "docker://genomehubs/blobtoolkit"
     shell:
         "{params.blobtools} create $(dirname {output.flag}) && touch {output.flag}"
 
-def _btk_link_fasta_input(wildcards):
-    return [_btk_link_fasta_input_paths(wildcards)['path']]
-
-def _btk_link_fasta_input_paths(wildcards):
-    ret = {}
-    fn = Path(wildcards.interim) / "btk" / wildcards.blobdir / (wildcards.prefix + ".fasta.gz")
-    for x in config["btk"][wildcards.blobdir]["fasta"]:
-        if str(fn.name) == str(Path(x).name):
-            ret['path'] = str(Path(x))
-            ret['abspath'] = str(Path(x).absolute())
-            break
-    return ret
 
 rule btk_link_fasta:
     """btk link fasta file from config"""
@@ -78,7 +66,7 @@ rule btk_add_fasta:
         runtime = lambda wildcards, attempt: attempt * config["btk"]["add_fasta"]["runtime"]
     conda:
         "../envs/btk.yaml"
-    singularity:
+    container:
         "docker://genomehubs/blobtoolkit"
     shell:
         "{params.blobtools} add --replace --fasta {input.fasta} $(dirname {input.blobdir})"
@@ -211,7 +199,7 @@ rule btk_add_fasta:
 #     params:
 #         blobtools = config["btk"]["exe"],
 #         hits_cols = config["btk"]["hits-cols"]
-#     singularity:
+#     container:
 #         "docker://genomehub/blobtoolskit"
 #     conda:
 #         "../envs/btk.yaml"
