@@ -14,6 +14,7 @@ rule btk_create_blobdir:
         blobtools = config["btk"]["exe"]
     conda:
         "../envs/btk.yaml"
+    log: "logs/{interim}/btk/{blobdir}.ok.log"
     container:
         "docker://genomehubs/blobtoolkit"
     shell:
@@ -28,6 +29,7 @@ rule btk_link_fasta:
         "{interim}/btk/{blobdir}/{prefix}.fasta.gz"
     input:
         _btk_link_fasta_input
+    log: "logs/{interim}/btk/{blobdir}/{prefix}.fasta.gz.log"
     wildcard_constraints:
         prefix = "[^/]+"
     shell:
@@ -42,6 +44,7 @@ rule btk_link_fasta:
 #         gz = "{interim}/btk/{blobdir}/{prefix}.fasta.gz"
 #     conda:
 #         "blast.yaml"
+#     log: "logs/{interim}/btk/{blobdir}/{prefix}.fasta.bgz.log"
 #     wildcard_constraints:
 #         prefix = "[^/]+"
 #     threads:
@@ -64,6 +67,7 @@ rule btk_add_fasta:
     resources:
         mem_mb = config["btk"]["add"]["mem_mb"],
         runtime = lambda wildcards, attempt: attempt * config["btk"]["add_fasta"]["runtime"]
+    log: "logs/{interim}/btk/{blobdir}/add_fasta.log"
     conda:
         "../envs/btk.yaml"
     container:

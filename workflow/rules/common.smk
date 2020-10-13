@@ -162,6 +162,15 @@ def genecovr_make_csv_inputfile_input(wildcards):
     }
     return retval
 
+def genecovr_make_csv_inputfile_dataframe(d, wildcards):
+    assembly_keys = config["genecovr"][wildcards.dataset]["assemblies"]
+    trx_keys = config["genecovr"][wildcards.dataset]["transcripts"]
+    df = pd.concat([
+        pd.Series([f"{a}/{b}" for a, b in itertools.product(assembly_keys, trx_keys)]),
+        pd.Series(list(d["psl"])), pd.Series(list(d["assembly"])),
+        pd.Series(list(d["trxset"]))], axis=1)
+    return df
+
 
 def get_genecovr_input(wildcards):
     retval = []

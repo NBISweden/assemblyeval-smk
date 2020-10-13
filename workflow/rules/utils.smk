@@ -17,6 +17,7 @@ rule assemblyeval_get_external:
     output:
         "{resource_file}"
     input: lambda wildcards: src_map[wildcards.resource_file]
+    log: "logs/{resource_file}.log"
     shell:
         "rsync -av {input} {output}"
 
@@ -31,6 +32,8 @@ rule assemblyeval_samtools_faidx:
         runtime = lambda wildcards, attempt: attempt * config["samtools"]["faidx"]["runtime"]
     conda:
         "../envs/samtools.yaml"
+    log:
+        "logs/{prefix}{fa}{gz}.fai.log"
     threads:
         1
     wrapper:
