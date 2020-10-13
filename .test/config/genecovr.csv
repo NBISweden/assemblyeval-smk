@@ -1,0 +1,4 @@
+A/foo_v1,data/interim/gmap/map/foo_v1-A.psl,resources/assembly.v1.fasta.fai,data/raw/transcriptome/A.trx.fasta.gz.fai
+A/foo_v2,data/interim/gmap/map/foo_v2-A.psl,resources/assembly.v2.fasta.fai,data/raw/transcriptome/A.trx.fasta.gz.fai
+B/foo_v1,data/interim/gmap/map/foo_v1-B.psl,resources/assembly.v1.fasta.fai,data/raw/transcriptome/B.trx.fasta.fai
+B/foo_v2,data/interim/gmap/map/foo_v2-B.psl,resources/assembly.v2.fasta.fai,data/raw/transcriptome/B.trx.fasta.fai
