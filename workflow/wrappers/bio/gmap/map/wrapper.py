@@ -19,7 +19,7 @@ with open(snakemake.input.log, "r") as fh:
         raise
 
 extra = snakemake.params.get("extra", "")
-log = snakemake.log_fmt_shell(stdout=True, stderr=True)
+log = snakemake.log_fmt_shell(stdout=False, stderr=True)
 
 dbok = snakemake.input.db
 transcriptome = snakemake.input.transcriptome
