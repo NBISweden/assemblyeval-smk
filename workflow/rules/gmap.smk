@@ -15,7 +15,7 @@ rule gmap_build:
     log:
         "logs/gmap_build/{assembly}.log"
     wrapper:
-        str(WRAPPER_PREFIX / "bio/gmap/build")
+        f"{WRAPPER_PREFIX}/bio/gmap/build"
 
 rule gmap_map:
     """Map transcriptome to sequence database"""
@@ -35,4 +35,4 @@ rule gmap_map:
     log:
         "logs/gmap_map/{assembly}-{transcriptome}.psl.log"
     wrapper:
-        str(WRAPPER_PREFIX / "bio/gmap/map")
+        f"{WRAPPER_PREFIX}/bio/gmap/map"

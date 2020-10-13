@@ -34,7 +34,7 @@ rule assemblyeval_samtools_faidx:
     threads:
         1
     wrapper:
-        str(SMK_WRAPPER_PREFIX / "bio/samtools/faidx")
+        f"{SMK_WRAPPER_PREFIX}/0.66.0/bio/samtools/faidx"
 
 
 localrules: assemblyeval_get_external

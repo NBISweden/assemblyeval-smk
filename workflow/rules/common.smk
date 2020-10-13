@@ -6,11 +6,11 @@ import numpy as np
 
 # Determine wrapper prefix since we mix local wrappers with wrappers
 # from snakemake-wrappers
-SMK_WRAPPER_PREFIX = Path("https://github.com/snakemake/snakemake-wrappers/raw")
-WRAPPER_PREFIX = Path(workflow.wrapper_prefix)
+SMK_WRAPPER_PREFIX = "https://github.com/snakemake/snakemake-wrappers/raw"
+WRAPPER_PREFIX = workflow.wrapper_prefix
 if WRAPPER_PREFIX == SMK_WRAPPER_PREFIX:
     # Change main to version number once we start sem-versioning
-    WRAPPER_PREFIX = Path("https://raw.githubusercontent.com/percyfal/assemblyeval-smk/main/workflow")
+    WRAPPER_PREFIX = "https://raw.githubusercontent.com/percyfal/assemblyeval-smk/main/workflow"
 
 # this container defines the underlying OS for each job when using the workflow
 # with --use-conda --use-singularity
