@@ -33,9 +33,9 @@ jobs:
         snakefile: workflow/Snakefile
         args: --use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache --conda-frontend mamba --wrapper-prefix  file://github/workspace/workflow/wrappers
 
-    # - name: Test report
-    #   uses: snakemake/snakemake-github-action@v1.10.0
-    #   with:
-    #     directory: .test
-    #     snakefile: workflow/Snakefile
-    #     args: "-n -p --report report.zip"
+    - name: Test report
+      uses: snakemake/snakemake-github-action@v1.10.0
+      with:
+        directory: .test
+        snakefile: workflow/Snakefile
+        args: "-n -p --report report.zip"
