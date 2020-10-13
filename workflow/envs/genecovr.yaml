@@ -4,12 +4,4 @@ channels:
   - defaults
   - percyfal
 dependencies:
-  - bioconductor-biocparallel
-  - bioconductor-genomeinfodb
-  - bioconductor-rtracklayer
-  - r-devtools
-  - r-dplyr
-  - r-ggplot2
-  - r-rlang
-  - r-viridis
-
+  - genecovr >= 0.0.0.9007
