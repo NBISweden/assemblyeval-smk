@@ -25,6 +25,13 @@ properties:
   genecovr:
     $ref: "genecovr.schema.yaml#/definitions/genecovr"
     default: {}
+  samtools:
+    type: object
+    default: {}
+    properties:
+      faidx:
+        $ref: "definitions.schema.yaml#/definitions/rule"
+        default: {}
 
 additionalProperties: false
 required:
