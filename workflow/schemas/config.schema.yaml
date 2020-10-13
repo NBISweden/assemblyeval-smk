@@ -4,8 +4,6 @@ description: snakemake configuration file
 
 type: object
 
-definitions:
-
 properties:
   assemblies:
     type: string
@@ -21,6 +19,13 @@ properties:
   gmap:
     $ref: "gmap.schema.yaml#/definitions/gmap"
     default: {}
+  btk:
+    $ref: "btk.schema.yaml#/definitions/btk"
+    default: {}
+  genecovr:
+    $ref: "genecovr.schema.yaml#/definitions/genecovr"
+    default: {}
 
+additionalProperties: false
 required:
   - assemblies

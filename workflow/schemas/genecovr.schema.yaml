@@ -1,0 +1,26 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+description: Configuration schema for genecovr
+definitions:
+  genecovr:
+    title: genecovr workflow configuration
+    description: genecovr workflow configuration
+    type: object
+    default: {}
+    properties:
+      exe:
+        type: string
+        default: genecovr
+      runtime:
+        type: integer
+        default: 240
+      threads:
+        type: integer
+        default: 1
+      options:
+        type: string
+        default: --height 14 --width 14
+    patternProperties:
+      '^csv_[a-zA-Z\-_0-9\.]+$':
+        type: string
+        description: csv file input to genecovr run
+    additionalProperties: false

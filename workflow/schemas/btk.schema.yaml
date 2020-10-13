@@ -1,0 +1,125 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+description: Configuration schema for blobtoolskit workflow
+definitions:
+  blast:
+    type: object
+    default: {}
+    description: blast configuration for all blast rules
+    properties:
+      threads:
+        type: number
+        default: 1
+      runtime:
+        type: number
+        default: 600
+      npartitions:
+        type: number
+        default: 1000
+      db:
+        type: string
+        default: "nt_v5"
+      outfmt:
+        type: string
+        default: "6 qseqid sseqid pident length mismatch gapopen qstart qend qlen sstart send slen evalue bitscore salltitles staxid"
+      options:
+        type: string
+        default: "-max_target_seqs 10 -max_hsps 1 -evalue 1e-25"
+      envmodules:
+        type: string
+        default: "blast"
+  blobdir:
+    type: object
+    default: {}
+    properties:
+      fasta:
+        type: array
+        description: assembly fasta files
+        uniqueItems: true
+        default: []
+        items:
+          type: string
+      bam:
+        type: array
+        description: BAM/SAM/CRAM read alignment file
+        uniqueItems: true
+        default: []
+        items:
+          type: string
+      bls:
+        type: array
+        description: tabular BLAST/Diamond output files
+        uniqueItems: true
+        default: []
+        items:
+          type: string
+    additionalProperties: false
+  btk:
+    title: btk workflow configuration
+    description: btk workflow configuration
+    type: object
+    default: {}
+    properties:
+      exe:
+        type: string
+        default: "./blobtools2/blobtools"
+      path:
+        type: string
+        default: "btk"
+      hits-cols:
+        type: string
+        default: "1=qseqid,16=staxids,2=sseqid,10=sstart,11=send,13=evalue,14=bitscore"
+      taxdump:
+        type: [string, 'null']
+        default: null
+      blastdb:
+        type: string
+        default: "nt_v5"
+      create:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      add:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      add_cov:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      add_blastn:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      add_fasta:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      convert_fasta_gz_to_bgzip:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      sort:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      index:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      faidx:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      blast:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+      seqtk:
+        type: object
+        default: {}
+        $ref: "definitions.schema.yaml#/definitions/rule"
+    patternProperties:
+      '^blobdir_[a-zA-Z\-_0-9\.]+$':
+        type: object
+        default: {}
+        $ref: "#/definitions/blobdir"

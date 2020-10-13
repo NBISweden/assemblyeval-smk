@@ -1,3 +1,5 @@
+import sys
+from snakemake.utils import logger
 from snakemake.utils import validate
 import pandas as pd
 import numpy as np
@@ -17,7 +19,7 @@ container: "docker://continuumio/miniconda3"
 ##### load config and sample sheets #####
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
-
+print(config["genecovr"])
 assemblies = pd.read_csv(config["assemblies"], sep="\t").set_index(["species", "version"], drop=False)
 assemblies = assemblies.replace({np.nan: None})
 assemblies.index.names = ["species", "version"]
@@ -37,6 +39,39 @@ if config["reads"]:
     reads.index.names = ["id"]
     validate(reads, schema="../schemas/reads.schema.yaml")
 
+## Validate genecovr files
+for v in config["genecovr"].keys():
+    if not v.startswith("csv_"):
+        continue
+    csvfile = config["genecovr"][v]
+    data = pd.read_csv(csvfile, header=None).set_index(0, drop=False)
+    data.columns = ["dataset", "psl", "assembly", "trxset"]
+    assert data["assembly"].isin(assemblies["fasta"]).all(),\
+        "some values in 'assembly' column not present in assemblies input file"
+    assert data["trxset"].isin(transcripts["fasta"]).all(),\
+        "some values in 'trxset' column not present in transcripts input file"
+    validate(data, schema="../schemas/genecovr_csv.schema.yaml")
+
+##############################
+## Config checks; function defs
+##############################
+def check_blobdir_keys():
+    blobdir_assemblies = []
+    for blobdir in config["btk"].keys():
+        if not blobdir.startswith("blobdir_"):
+            continue
+        species, version = re.sub("blobdir_", "", blobdir).split("_")
+        if (species, version) not in assemblies.index:
+            logger.error(f"error in blobdir configuration: {species}_{version} not in {config['assemblies']}")
+            sys.exit(1)
+
+
+
+
+##############################
+## Config checks
+##############################
+check_blobdir_keys()
 
 ##############################
 ## Paths
@@ -63,7 +98,9 @@ wildcard_constraints:
 
 ## Assemblies etc
 wildcard_constraints:
-    assembly = "|".join(f"{species}_{version}" for species, version in assemblies.index)
+    assembly = "|".join(f"{species}_{version}" for species, version in assemblies.index),
+    blobdir = "[^/]+",
+    region = "\d+"
 
 ## File extensions
 wildcard_constraints:
@@ -85,3 +122,26 @@ def get_transcriptome(wildcards):
     if isinstance(value, str):
         value = [value]
     return value
+
+
+##############################
+## Pseudo-rule targets
+##############################
+def get_btk_all(wildcards):
+    retval = []
+    for v in config["btk"].keys():
+        if not v.startswith("blobdir"):
+            continue
+        if len(config["btk"][v]["fasta"]) > 0:
+            retval.append(str(__INTERIM__ / f"btk/{v}/gc.json"))
+        for bam in config["btk"][v]["bam"]:
+            retval.append(str(__INTERIM__ / f"btk/{v}/{Path(bam).name}.sort_cov.json"))
+        if len(config["btk"][v]["bls"]) > 0:
+            retval.append(str(__INTERIM__ / f"btk/{v}/bestsumorder_class_score.json"))
+    return retval[0]
+
+
+def get_genecovr_all(wildcards):
+    dataset = [x.lstrip("csv_") for x in config["genecovr"].keys() if x.startswith("csv_")]
+    print(dataset)
+    return expand(f"{str(__RESULTS__)}/genecovr/{{dataset}}/psldata.csv.gz", dataset=dataset)

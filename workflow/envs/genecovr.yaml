@@ -1,0 +1,15 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+  - percyfal
+dependencies:
+  - bioconductor-biocparallel
+  - bioconductor-genomeinfodb
+  - bioconductor-rtracklayer
+  - r-devtools
+  - r-dplyr
+  - r-ggplot2
+  - r-rlang
+  - r-viridis
+

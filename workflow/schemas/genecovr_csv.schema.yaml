@@ -1,0 +1,28 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+
+# description: >
+#     an entry in the genecovr csv input file. See genecovr script for
+#     details.
+
+properties:
+  dataset:
+    type: string
+    description: dataset identifier
+  psl:
+    type: string
+    description: transcript to assembly mapping in psl format. This file should be a valid workflow target name.
+    examples: data/interim/gmap/map/foo_v1-A.psl
+  assembly:
+    type: string
+    description: assembly fasta file. Must be defined in assemblies input file.
+    examples: resources/assembly.v1.fasta
+  trxset:
+    type: string
+    description: transcript fasta file. Must be defined in assemblies input file.
+    examples: data/raw/transcriptome/A.trx.fasta.gz
+  
+required:
+  - dataset
+  - psl
+  - assembly
+  - trxset

@@ -1,0 +1,18 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - docopt
+  - geckodriver
+  - nodejs=10
+  - psutil
+  - pysam
+  - python=3.6
+  - python-fastjsonschema
+  - pyvirtualdisplay
+  - pyyaml
+  - selenium
+  - seqtk
+  - tqdm
+  - ujson
+  - yq

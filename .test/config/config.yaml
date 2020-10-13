@@ -1,3 +1,15 @@
 assemblies: config/assemblies.tsv
 transcripts: config/transcripts.tsv
 reads: config/reads.tsv
+
+genecovr:
+  csv_genecovr_analysis: config/genecovr.csv
+
+btk:
+  blobdir_foo_v1:
+    fasta:
+      - resources/assembly.v1.fasta
+    bam:
+      - data/interim/bwa/A.reads_foo_v1.sort.bam
+    bls:
+      - data/interim/btk/blobdir_foo_v1/nt_v5.merged.out.gz
