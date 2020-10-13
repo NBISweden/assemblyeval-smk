@@ -1,6 +1,6 @@
 import sys
-from snakemake.utils import logger
-from snakemake.utils import validate
+from snakemake.utils import logger, validate
+import itertools
 import pandas as pd
 import numpy as np
 
@@ -19,7 +19,7 @@ container: "docker://continuumio/miniconda3"
 ##### load config and sample sheets #####
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
-print(config["genecovr"])
+
 assemblies = pd.read_csv(config["assemblies"], sep="\t").set_index(["species", "version"], drop=False)
 assemblies = assemblies.replace({np.nan: None})
 assemblies.index.names = ["species", "version"]
@@ -41,14 +41,16 @@ if config["reads"]:
 
 ## Validate genecovr files
 for v in config["genecovr"].keys():
-    if not v.startswith("csv_"):
+    if not v.startswith("dataset"):
         continue
-    csvfile = config["genecovr"][v]
+    csvfile = config["genecovr"][v]['csvfile']
+    if csvfile is None:
+        continue
     data = pd.read_csv(csvfile, header=None).set_index(0, drop=False)
     data.columns = ["dataset", "psl", "assembly", "trxset"]
-    assert data["assembly"].isin(assemblies["fasta"]).all(),\
+    assert data["assembly"].str.replace(r".fai", "").isin(assemblies["fasta"]).all(),\
         "some values in 'assembly' column not present in assemblies input file"
-    assert data["trxset"].isin(transcripts["fasta"]).all(),\
+    assert data["trxset"].str.replace(r".fai", "").isin(transcripts["fasta"]).all(),\
         "some values in 'trxset' column not present in transcripts input file"
     validate(data, schema="../schemas/genecovr_csv.schema.yaml")
 
@@ -142,6 +144,5 @@ def get_btk_all(wildcards):
 
 
 def get_genecovr_all(wildcards):
-    dataset = [x.lstrip("csv_") for x in config["genecovr"].keys() if x.startswith("csv_")]
-    print(dataset)
+    dataset = [x for x in config["genecovr"].keys() if x.startswith("dataset")]
     return expand(f"{str(__RESULTS__)}/genecovr/{{dataset}}/psldata.csv.gz", dataset=dataset)
