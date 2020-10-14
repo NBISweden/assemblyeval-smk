@@ -26,14 +26,13 @@ jobs:
     - uses: actions/checkout@v1
     - name: Checkout submodules
       uses: textbook/git-checkout-submodule-action@2.0.0
-    - name: install rsync
-      run: mamba install rsync
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1.10.0
       with:
         directory: .test
         snakefile: workflow/Snakefile
         args: --use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache --conda-frontend mamba --wrapper-prefix  file:///github/workspace/workflow/wrappers
+        stagein: mamba install rsync
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1.10.0
