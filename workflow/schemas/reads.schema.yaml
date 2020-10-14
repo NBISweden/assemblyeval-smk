@@ -19,4 +19,4 @@ properties:
 required:
   - id
   - reads
-  
+  - source

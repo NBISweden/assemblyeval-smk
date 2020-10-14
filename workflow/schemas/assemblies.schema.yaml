@@ -5,18 +5,21 @@ properties:
   species:
     type: string
     description: the biological species whose genome has been sequenced and assembled
-  fasta:
-    type: string
-    description: assembly fasta file
   version:
     type: string
     description: assembly version
+    pattern: "^[^_/]+$"
+  fasta:
+    type: string
+    description: assembly fasta file
   source:
     type: [string, 'null']
     description: if assembly is from an external source, list the source file here as an URI
     format: [uri, 'null']
-    
+    default: null
+
 required:
   - species
-  - fasta
   - version
+  - fasta
+  - source
