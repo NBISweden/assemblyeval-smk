@@ -39,4 +39,4 @@ jobs:
       with:
         directory: .test
         snakefile: workflow/Snakefile
-        args: "-n -p --report report.zip --wrapper-prefix file:///github/workspace/worfklow/wrappers"
+        args: "-n -p --report report.zip --wrapper-prefix file:///github/workspace/worfklow/wrappers config/genecovr.dataset2.csv"
