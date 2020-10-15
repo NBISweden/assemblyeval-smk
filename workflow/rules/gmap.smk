@@ -11,7 +11,7 @@ rule gmap_build:
         runtime = lambda wildcards, attempt: attempt * config["gmap"]["build"]["runtime"],
         mem_mb = config["gmap"]["build"]["mem_mb"]
     threads:
-        1
+        lambda wildcards, attempt: attempt * config["gmap"]["build"]["threads"]
     log:
         "logs/gmap_build/{assembly}.log"
     wrapper:
