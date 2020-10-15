@@ -32,11 +32,12 @@ jobs:
         directory: .test
         snakefile: workflow/Snakefile
         args: --use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache --conda-frontend mamba --wrapper-prefix  file:///github/workspace/workflow/wrappers config/genecovr.dataset2.csv
-        stagein: mamba install -c conda-forge rsync
+        stagein: mamba install -y -c conda-forge rsync
 
-    - name: Test report
-      uses: snakemake/snakemake-github-action@v1.10.0
-      with:
-        directory: .test
-        snakefile: workflow/Snakefile
-        args: "-n -p --report report.zip --wrapper-prefix file:///github/workspace/worfklow/wrappers"
+    # - name: Test report
+    #   uses: snakemake/snakemake-github-action@v1.10.0
+    #   with:
+    #     directory: .test
+    #     snakefile: workflow/Snakefile
+    #     args: "-n -p --report report.zip --wrapper-prefix file:///github/workspace/worfklow/wrappers config/genecovr.dataset2.csv"
+    #     stagein: mamba update -y graphviz pygraphviz pango
