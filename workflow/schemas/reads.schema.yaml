@@ -9,7 +9,8 @@ properties:
     type: string
     description: fastq/sam/bam/cram file
   source:
-    type: string
+    type: [string, 'null']
+    default: null
     description: >
         if reads are from an external source, list the source file
         here as an URI
