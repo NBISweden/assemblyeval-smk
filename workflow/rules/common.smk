@@ -181,7 +181,7 @@ def genecovr_make_csv_inputfile_input(wildcards):
     trx_fasta = transcripts.loc[trx_keys, "fasta"].tolist()
     retval = {
         'psl': [str(__INTERIM__ / f"gmap/map/{a}-{b}.psl") for a, b in itertools.product(assembly_keys, trx_keys)],
-        'assembly': [f"{a}" for a, b in itertools.product(assembly_fasta, trx_fasta)],
+        'assembly': [f"{a}.fai" for a, b in itertools.product(assembly_fasta, trx_fasta)],
         'trxset': [f"{b}" for a, b in itertools.product(assembly_fasta, trx_fasta)]
     }
     return retval
