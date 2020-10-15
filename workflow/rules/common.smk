@@ -1,8 +1,12 @@
 import sys
-from snakemake.utils import logger, validate
+import re
+import os
 import itertools
+import urllib
 import pandas as pd
 import numpy as np
+from snakemake.utils import logger, validate
+import snakemake.remote.SFTP
 
 # Determine wrapper prefix since we mix local wrappers with wrappers
 # from snakemake-wrappers
@@ -109,6 +113,26 @@ wildcard_constraints:
     fa = "(.fa|.fasta)",
     gz = "(|.gz)"
 
+##################################################
+## Uri parsing functions
+##################################################
+def get_uri_scheme(uri):
+    return urllib.parse.urlparse(uri)[0]
+
+def parse_uri(uri):
+    """Parse uri and return snakemake target"""
+    scheme = get_uri_scheme(uri)
+    if not scheme in ['', 'rsync', 'file', 'sftp']:
+        logger.error(f"scheme '{scheme}' not allowed: use one of '', 'file', 'rsync' or 'sftp'")
+        sys.exit(1)
+    uri = re.sub(f"{scheme}://", "", uri)
+    if scheme in ['', 'file'] and not uri.startswith("/"):
+        uri = os.path.normpath(os.path.abspath(uri))
+    if scheme == 'sftp':
+        from snakemake.remote.SFTP import RemoteProvider
+        SFTP = RemoteProvider()
+        uri = SFTP.remote(uri)
+    return uri
 
 ##################################################
 ## Functions and utilities

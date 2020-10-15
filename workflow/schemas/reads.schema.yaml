@@ -7,17 +7,23 @@ properties:
     description: read set identifier
   reads:
     type: string
+    format: uri
     description: fastq/sam/bam/cram file
   source:
     type: [string, 'null']
+    format: uri
     default: null
+    examples:
+      - data/raw/reads_1.fastq.gz
+      - file://data/raw/reads_1.fastq.gz
+      - rsync:///datastore/reads_1.fastq.gz
+      - sftp://user@datastore.com:/datastore/reads_1.fastq.gz
     description: >
         if reads are from an external source, list the source file
-        here as an URI
-    items:
-      type: uri
-      
+        here as an URI. The regular file scheme will softlink files,
+        the rsync scheme copies local files, whereas sftp else
+        the files will be soft-linked.
+
 required:
   - id
   - reads
-  - source
