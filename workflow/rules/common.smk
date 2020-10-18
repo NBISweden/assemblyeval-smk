@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from snakemake.utils import validate
 from snakemake.logging import logger
-
+from snakemake.utils import logger, validate
 
 # Determine wrapper prefix since we mix local wrappers with wrappers
 # from snakemake-wrappers
@@ -122,7 +122,7 @@ def parse_uri(uri):
             SFTP = RemoteProvider()
             uri = SFTP.remote(uri)
         except WorkflowError as e:
-            logger.warn(e)
+            logger.error(e)
     return uri
 
 ##################################################
