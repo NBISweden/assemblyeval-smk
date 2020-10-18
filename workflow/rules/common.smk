@@ -6,7 +6,6 @@ import urllib
 import pandas as pd
 import numpy as np
 from snakemake.utils import logger, validate
-import snakemake.remote.SFTP
 
 # Determine wrapper prefix since we mix local wrappers with wrappers
 # from snakemake-wrappers
@@ -129,9 +128,12 @@ def parse_uri(uri):
     if scheme in ['', 'file'] and not uri.startswith("/"):
         uri = os.path.normpath(os.path.abspath(uri))
     if scheme == 'sftp':
-        from snakemake.remote.SFTP import RemoteProvider
-        SFTP = RemoteProvider()
-        uri = SFTP.remote(uri)
+        try:
+            from snakemake.remote.SFTP import RemoteProvider
+            SFTP = RemoteProvider()
+            uri = SFTP.remote(uri)
+        except WorkflowError as e:
+            logger.error(e)
     return uri
 
 ##################################################
