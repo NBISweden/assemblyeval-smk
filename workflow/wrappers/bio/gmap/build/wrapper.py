@@ -12,7 +12,7 @@ log = snakemake.log_fmt_shell(stdout=True, stderr=True)
 
 seq = snakemake.input.seq
 touchdb = snakemake.output.db
-zipflag = "-g" if re.search("(.gz|.gzip)$", snakemake.wildcards.assembly) else ""
+zipflag = "-g" if re.search("(.gz|.gzip)$", seq) else ""
 
 dirname = os.path.dirname(touchdb)
 db = f"{snakemake.wildcards.assembly}.db"
