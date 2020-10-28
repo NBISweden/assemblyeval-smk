@@ -224,17 +224,17 @@ def get_genecovr_input(wildcards):
 def genecovr_output():
     retval = []
     retval += report(expand("{{genecovr_results}}/{{dataset}}/gene_body_coverage.minmatch.{mm}.pdf", mm=__GENECOVR_MINMATCH__),
-                     caption="../report/genecovr.rst", category="Gene body coverages")
+                     caption="../report/genecovr_gbc.rst", category="Gene body coverages")
     retval += report(expand("{{genecovr_results}}/{{dataset}}/ncontigs_per_transcripts.{type}.mm0.75.pdf", type=__GENECOVR_NCONTIGS__),
-                     caption="../report/genecovr.rst", category="n contigs per transcripts")
+                     caption="../report/genecovr_ncontigs.rst", category="Number of contigs per transcript")
     retval += report(expand("{{genecovr_results}}/{{dataset}}/depth_breadth_{type}.mm0.75.pdf", type=__GENECOVR_DEPTH_BREADTH__),
-                     caption="../report/genecovr.rst", category="Depth and breadth of coverage")
+                     caption="../report/genecovr_depth_breadth.rst", category="Depth and breadth of coverage")
     retval += report(expand("{{genecovr_results}}/{{dataset}}/match_indel.{type}.pdf", type=__GENECOVR_MATCH_INDEL__),
-                     caption="../report/genecovr.rst", category="Match and indel distributions")
+                     caption="../report/genecovr_match_indel.rst", category="Match and indel distributions")
     retval += report(expand("{{genecovr_results}}/{{dataset}}/{fn}", fn=__GENECOVR_FN__),
-                     caption="../report/genecovr.rst", category="Match and indel distributions")
+                     caption="../report/genecovr_match_indel.rst", category="Match and indel distributions")
     retval += report(expand("{{genecovr_results}}/{{dataset}}/{fn}", fn=__GENECOVR_CSV_GZ__),
-                     caption="../report/genecovr.rst", category="Data files")
+                     caption="../report/genecovr_data.rst", category="Data files")
     return retval
 
 
