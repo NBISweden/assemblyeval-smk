@@ -23,24 +23,25 @@ container: "docker://continuumio/miniconda3"
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
-assemblies = pd.read_csv(config["assemblies"], sep="\t").set_index(["species", "version"], drop=False)
-assemblies = assemblies.replace({np.nan: None})
-assemblies.index.names = ["species", "version"]
-validate(assemblies, schema="../schemas/assemblies.schema.yaml")
 
-transcripts = None
-if config["transcripts"]:
-    transcripts = pd.read_csv(config["transcripts"], sep="\t").set_index("id", drop=False)
-    transcripts = transcripts.replace({np.nan: None})
-    transcripts.index.names = ["id"]
-    validate(transcripts, schema="../schemas/transcripts.schema.yaml")
+def _read_tsv(infile, index, schema):
+    if infile is None:
+        return None
+    df = pd.read_csv(infile, sep="\t").set_index(index, drop=False)
+    df = df.replace({np.nan: None})
+    df.index.names = index
+    validate(df, schema=schema)
+    return df
 
-reads = None
-if config["reads"]:
-    reads = pd.read_csv(config["reads"], sep="\t").set_index("id", drop=False)
-    reads = reads.replace({np.nan: None})
-    reads.index.names = ["id"]
-    validate(reads, schema="../schemas/reads.schema.yaml")
+assemblies = _read_tsv(config["assemblies"], ["species", "version"],
+                       "../schemas/assemblies.schema.yaml")
+datasources = _read_tsv(config["datasources"], ["data"],
+                        "../schemas/datasources.schema.yaml")
+transcripts = _read_tsv(config["transcripts"], ["id"],
+                        "../schemas/transcripts.schema.yaml")
+reads = _read_tsv(config["reads"], ["id"],
+                  "../schemas/reads.schema.yaml")
+
 
 ## Validate genecovr files
 for v in config["genecovr"].keys():
@@ -69,9 +70,6 @@ def check_blobdir_keys():
         if (species, version) not in assemblies.index:
             logger.error(f"error in blobdir configuration: {species}_{version} not in {config['assemblies']}")
             sys.exit(1)
-
-
-
 
 ##############################
 ## Config checks
