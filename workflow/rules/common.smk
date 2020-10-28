@@ -5,6 +5,8 @@ import itertools
 import urllib
 import pandas as pd
 import numpy as np
+from snakemake.utils import validate
+from snakemake.logging import logger
 from snakemake.utils import logger, validate
 
 # Determine wrapper prefix since we mix local wrappers with wrappers
@@ -43,20 +45,9 @@ reads = _read_tsv(config["reads"], ["id"],
                   "../schemas/reads.schema.yaml")
 
 
-## Validate genecovr files
-for v in config["genecovr"].keys():
-    if not v.startswith("dataset"):
-        continue
-    csvfile = config["genecovr"][v]['csvfile']
-    if csvfile is None:
-        continue
-    data = pd.read_csv(csvfile, header=None).set_index(0, drop=False)
-    data.columns = ["dataset", "psl", "assembly", "trxset"]
-    assert data["assembly"].str.replace(r".fai", "").isin(assemblies["fasta"]).all(),\
-        "some values in 'assembly' column not present in assemblies input file"
-    assert data["trxset"].str.replace(r".fai", "").isin(transcripts["fasta"]).all(),\
-        "some values in 'trxset' column not present in transcripts input file"
-    validate(data, schema="../schemas/genecovr_csv.schema.yaml")
+# Save current base dir for later validation in functions
+BASEDIR=workflow.current_basedir
+
 
 ##############################
 ## Config checks; function defs
@@ -214,6 +205,17 @@ def get_genecovr_input(wildcards):
     if csvfile is not None:
         data = pd.read_csv(csvfile, header=None).set_index(0, drop=False)
         data.columns = ["dataset", "psl", "assembly", "trxset"]
+        try:
+            assert data["assembly"].str.replace(r".fai", "").isin(assemblies["fasta"]).all()
+        except AssertionError as e:
+            logger.error(e)
+            logger.error("some values in 'assembly' column not present in assemblies input file")
+        try:
+            assert data["trxset"].str.replace(r".fai", "").isin(transcripts["fasta"]).all()
+        except AssertionError as e:
+            logger.error(e)
+            logger.error("some values in 'trxset' column not present in transcripts input file")
+        validate(data, schema=os.path.join(BASEDIR, "../schemas/genecovr_csv.schema.yaml"))
         for k in ["psl", "assembly", "trxset"]:
             retval += [x for x in data[k].tolist() if x is not None]
     else:
