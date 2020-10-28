@@ -1,0 +1,4 @@
+data	source
+resources/assembly.v2.fasta	external_resources/assembly.v2.fasta
+data/raw/reads/B.reads_1.fastq.gz	file://external_resources/B.reads_1.fastq.gz
+data/raw/reads/B.reads_2.fastq.gz	rsync://external_resources/B.reads_2.fastq.gz
