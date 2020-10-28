@@ -1,6 +1,7 @@
 assemblies: config/assemblies.tsv
 transcripts: config/transcripts.tsv
 reads: config/reads.tsv
+datasources: config/datasources.tsv
 
 genecovr:
   dataset1:

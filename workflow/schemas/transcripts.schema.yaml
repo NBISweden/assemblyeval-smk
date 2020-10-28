@@ -13,10 +13,6 @@ properties:
     description: transcript set fasta file
   description:
     type: string
-  source:
-    type: [string, 'null']
-    description: if transcript set is from an external resource, provide source as URI here
-    default: null
 
 required:
   - id

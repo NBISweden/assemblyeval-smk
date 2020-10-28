@@ -1,0 +1,23 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+description: >
+    Datasources schema definition. List data sources as
+    datafile:datasource key:value pairs.
+type: object
+properties:
+  data:
+    type: string
+    description: data file identifier
+    format: uri
+  source:
+    type: [string, 'null']
+    format: uri
+    default: null
+    examples:
+      - data/raw/reads_1.fastq.gz
+      - file://data/raw/reads_1.fastq.gz
+      - rsync:///datastore/reads_1.fastq.gz
+      - sftp://user@datastore.com:/datastore/reads_1.fastq.gz
+
+required:
+  - data
+  - source

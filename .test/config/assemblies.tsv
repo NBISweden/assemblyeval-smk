@@ -1,3 +1,3 @@
-species	version	fasta	source
+species	version	fasta
 foo	v1	resources/assembly.v1.fasta
-foo	v2	resources/assembly.v2.fasta	external_resources/assembly.v2.fasta
+foo	v2	resources/assembly.v2.fasta

@@ -13,6 +13,9 @@ properties:
   reads:
     type: [string, 'null']
     default: null
+  datasources:
+    type: [string, 'null']
+    default: null
   fs:
     $ref: "definitions.schema.yaml#/definitions/fs"
     default: {}

@@ -12,11 +12,6 @@ properties:
   fasta:
     type: string
     description: assembly fasta file
-  source:
-    type: [string, 'null']
-    description: if assembly is from an external source, list the source file here as an URI
-    format: [uri, 'null']
-    default: null
 
 required:
   - species

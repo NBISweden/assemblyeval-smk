@@ -1,5 +1,5 @@
-id	reads	source
+id	reads
 A.reads	data/raw/reads/A.reads_1.fastq.gz
 A.reads	data/raw/reads/A.reads_2.fastq.gz
-B.reads	data/raw/reads/B.reads_1.fastq.gz	file://external_resources/B.reads_1.fastq.gz
-B.reads	data/raw/reads/B.reads_2.fastq.gz	rsync://external_resources/B.reads_2.fastq.gz
+B.reads	data/raw/reads/B.reads_1.fastq.gz
+B.reads	data/raw/reads/B.reads_2.fastq.gz
