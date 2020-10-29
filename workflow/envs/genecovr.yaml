@@ -4,4 +4,4 @@ channels:
   - defaults
   - percyfal
 dependencies:
-  - genecovr >= 0.0.0.9007
+  - genecovr >= 0.0.0.9009

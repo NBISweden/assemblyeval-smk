@@ -5,7 +5,7 @@ __GENECOVR_MINMATCH__ = [0.75, 0.85, 0.9, 0.95]
 __GENECOVR_NCONTIGS__ = ["bar"]
 __GENECOVR_MATCH_INDEL__ = ["violin", "boxplot", "boxplot.log10"]
 __GENECOVR_FN__ = ["width_violin.pdf", "qnuminsert.pdf"]
-__GENECOVR_DEPTH_BREADTH__ = ["coverage", "dataset_jitter", "dataset_hist"]
+__GENECOVR_DEPTH_BREADTH__ = ["coverage", "jitter", "hist", "seqlengths"]
 __GENECOVR_CSV_GZ__ = ["gene_body_coverage.csv.gz", "psldata.csv.gz", "gbc_summary.csv.gz", "ncontigs_per_transcripts.csv.gz"]
 
 
