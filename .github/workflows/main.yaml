@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Lint workflow
-      uses: snakemake/snakemake-github-action@v1.10.0
+      uses: snakemake/snakemake-github-action@v1.12.0
       with:
         directory: .
         snakefile: workflow/Snakefile
@@ -22,22 +22,21 @@ jobs:
   Testing:
     runs-on: ubuntu-latest
     needs: Linting
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v1
     - name: Checkout submodules
       uses: textbook/git-checkout-submodule-action@2.0.0
     - name: Test workflow (local test data)
+      uses: snakemake/snakemake-github-action@v1.12.0
+      with:
+        directory: .test
+        snakefile: workflow/Snakefile
+        args: "--use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache --conda-frontend mamba --wrapper-prefix file:///github/workspace/workflow/wrappers"
+        stagein: mamba install -y -c conda-forge rsync
+    - name: Test report
       uses: snakemake/snakemake-github-action@v1.10.0
       with:
         directory: .test
         snakefile: workflow/Snakefile
-        args: --use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache --conda-frontend mamba --wrapper-prefix  file:///github/workspace/workflow/wrappers config/genecovr.dataset2.csv
-        stagein: mamba install -y -c conda-forge rsync
-
-    # - name: Test report
-    #   uses: snakemake/snakemake-github-action@v1.10.0
-    #   with:
-    #     directory: .test
-    #     snakefile: workflow/Snakefile
-    #     args: "-n -p --report report.zip --wrapper-prefix file:///github/workspace/worfklow/wrappers config/genecovr.dataset2.csv"
-    #     stagein: mamba update -y graphviz pygraphviz pango
+        args: "--report report.zip --wrapper-prefix file:///github/workspace/worfklow/wrappers"

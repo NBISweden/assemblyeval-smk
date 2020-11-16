@@ -9,9 +9,8 @@ __GENECOVR_DEPTH_BREADTH__ = ["coverage", "jitter", "hist", "seqlengths"]
 __GENECOVR_CSV_GZ__ = ["gene_body_coverage.csv.gz", "psldata.csv.gz", "gbc_summary.csv.gz", "ncontigs_per_transcripts.csv.gz"]
 
 
-
-rule genecovr_all:
-    input: get_genecovr_all
+rule all_genecovr:
+    input: all_genecovr_input
 
 
 rule genecovr_make_csv_inputfile:
@@ -29,24 +28,21 @@ rule genecovr_make_csv_inputfile:
         df.to_csv(output.csv, index=False, header=False)
 
 
-rule genecovr:
+rule genecovr_run:
     """Calculate gene body coverage"""
     output:
         genecovr_output()
     input:
         unpack(get_genecovr_input)
     params:
-        options = config["genecovr"]["options"],
-        exe = config["genecovr"]["exe"]
+        options = get_params("genecovr_run", "options")
     resources:
-        runtime = lambda wildcards, attempt: attempt * config["genecovr"]["runtime"]
+        runtime = lambda wildcards, attempt: resources("genecovr_run", "runtime", attempt)
     log: "logs/{genecovr_results}/{dataset}.log"
-    conda:
-        "../envs/genecovr.yaml"
     threads:
-        config["genecovr"]["threads"]
-    shell:
-        "{params.exe} -p {threads} {params.options} -d results/genecovr/{wildcards.dataset} {input.csv}"
+        lambda wildcards, attempt: resources("genecovr_run", "threads", attempt)
+    wrapper:
+        f"{WRAPPER_PREFIX}/bio/genecovr"
 
 
 localrules: genecovr_make_csv_inputfile

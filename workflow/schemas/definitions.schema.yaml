@@ -5,6 +5,146 @@ description: Various definitions
 type: object
 
 definitions:
+
+  ##############################
+  # Atomic properties for reuse in object properties
+  ##############################
+
+  options:
+    description: program options represented as string, array or dictionary
+    type: [string, array, object]
+    items:
+      type: string
+    uniqueItems: true
+  runtime:
+    description: rule runtime in minutes
+    type: integer
+  threads:
+    description: number of threads
+    type: integer
+  mem_mb:
+    description: Resource that defines assigned memory in megabases
+    type: integer
+  java_options:
+    description: options to pass to java interpreter
+    type: string
+  java_tmpdir:
+    description: java temporary directory
+    type: string
+  step_size:
+    description: step size
+    type: array
+    minItems: 1
+    items:
+      type: integer
+  window_size:
+    description: window size
+    type: array
+    minItems: 1
+    items:
+      type: integer
+
+  ##############################
+  # Default resources
+  ##############################
+
+  resources.default:
+    title: Default resources.
+    description: >
+      Default resources. Any rule that does not specify resources will
+      fall back on these default values.
+    type: object
+    default: {}
+    properties:
+      threads:
+        $ref: "#/definitions/threads"
+        default: 1
+      mem_mb:
+        $ref: "#/definitions/mem_mb"
+        default: 8192
+      runtime:
+        $ref: "#/definitions/runtime"
+        default: 120
+      options:
+        $ref: "#/definitions/options"
+        default: ""
+      java_options:
+        $ref: "#/definitions/java_options"
+        default: ""
+      java_tmpdir:
+        $ref: "#/definitions/java_tmpdir"
+        default: "/tmp"
+    additionalProperties: false
+
+  ##############################
+  # Rule resources
+  ##############################
+
+  resources.rule:
+    title: Rule configuration
+    description: generic configuration for rules
+    type: object
+    properties:
+      options:
+        $ref: "#/definitions/options"
+      threads:
+        $ref: "#/definitions/threads"
+      mem_mb:
+        $ref: "#/definitions/mem_mb"
+      runtime:
+        $ref: "#/definitions/runtime"
+
+
+  ##############################
+  # Java rule resources
+  ##############################
+
+  resources.rule.java:
+    title: Java rule configuration
+    description: generic configuration for java rules
+    type: object
+    properties:
+      options:
+        $ref: "#/definitions/options"
+      threads:
+        $ref: "#/definitions/threads"
+      mem_mb:
+        $ref: "#/definitions/mem_mb"
+      runtime:
+        $ref: "#/definitions/runtime"
+      java_options:
+        $ref: "#/definitions/java_options"
+      java_tmpdir:
+        $ref: "#/definitions/java_tmpdir"
+
+
+  ##############################
+  # Windowed rule resources
+  ##############################
+
+  resources.rule.window:
+    title: Windowed rule configuration
+    description: generic configuration for rules that do sliding window analyses
+    type: object
+    properties:
+      options:
+        $ref: "#/definitions/options"
+      threads:
+        $ref: "#/definitions/threads"
+      mem_mb:
+        $ref: "#/definitions/mem_mb"
+      runtime:
+        $ref: "#/definitions/runtime"
+      step_size:
+        $ref: "#/definitions/step_size"
+      window_size:
+        $ref: "#/definitions/window_size"
+
+
+  ##############################
+  # File system layout
+  ##############################
+
   fs:
     type: object
     description: >
@@ -27,22 +167,48 @@ definitions:
       resources:
         type: string
         default: resources
-  rule:
+
+  ##############################
+  # Resources; defines property for the vast majority of workflow
+  # rules. This section is reused in its entirety in
+  # config.schema.yaml in the patternProperties property listing
+  ##############################
+
+  resources:
+    title: Resources configuration
+    description: >
+      This schema defines rule schemas for all rules in the workflow.
     type: object
-    description: generic configuration for rules
     properties:
-      options:
-        type: [string, array, object]
-        default: ""
-        items:
-          type: string
-      runtime:
-        default: 60
-        type: number
-      threads:
-        default: 1
-        type: number
-      mem_mb:
-        description: Resource that defines assigned memory
-        default: 8192
-        type: number
+
+      ##############################
+      # gmap
+      ##############################
+      gmap_build:
+        default: {}
+        $ref: "gmap.schema.yaml#/definitions/gmap_build"
+
+      gmap_map:
+        default: {}
+        $ref: "gmap.schema.yaml#/definitions/gmap_map"
+
+
+      ##############################
+      # genecovr
+      ##############################
+      genecovr_make_csv_inputfile:
+        default: {}
+        $ref: "genecovr.schema.yaml#/definitions/genecovr_make_csv_inputfile"
+
+      genecovr_run:
+        default:
+          options: --height 14 --width 14
+        $ref: "genecovr.schema.yaml#/definitions/genecovr_run"
+
+
+      ##############################
+      # Assemblyeval utils
+      ##############################
+      assemblyeval_samtools_faidx:
+        default: {}
+        $ref: "utils.schema.yaml#/definitions/assemblyeval_samtools_faidx"

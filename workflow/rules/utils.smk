@@ -32,7 +32,7 @@ rule assemblyeval_samtools_faidx:
     input:
         "{prefix}{fa}{gz}"
     resources:
-        runtime = lambda wildcards, attempt: attempt * config["samtools"]["faidx"]["runtime"]
+        runtime = lambda wildcards, attempt: resources("assemblyeval_samtools_faidx", "runtime", attempt)
     conda:
         "../envs/samtools.yaml"
     log:
@@ -41,6 +41,15 @@ rule assemblyeval_samtools_faidx:
         1
     wrapper:
         f"{SMK_WRAPPER_PREFIX}/0.66.0/bio/samtools/faidx"
+
+
+
+rule assemblyeval_save_config:
+    """Save assemblyeval configuration"""
+    output: report("config/assemblyeval.config.yaml", caption="../report/config.rst", category="Configuration")
+    log: "logs/assemblyeval/assemblyeval_save_config.log"
+    script: "../scripts/assemblyeval_save_config.py"
+
 
 
 localrules: assemblyeval_get_external

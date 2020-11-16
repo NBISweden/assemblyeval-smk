@@ -15,4 +15,4 @@ report: "report/workflow.rst"
 container: "docker://continuumio/miniconda3"
 
 rule all:
-    input: get_genecovr_all
+    input: unpack(all)

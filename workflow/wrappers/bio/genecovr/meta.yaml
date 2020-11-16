@@ -1,0 +1,4 @@
+name: genecovr
+description: Run gene body coverage analysis with genecovr
+authors:
+  - Per Unneberg

@@ -77,47 +77,47 @@ definitions:
       create:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       add:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       add_cov:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       add_blastn:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       add_fasta:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       convert_fasta_gz_to_bgzip:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       sort:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       index:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       faidx:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       blast:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
       seqtk:
         type: object
         default: {}
-        $ref: "definitions.schema.yaml#/definitions/rule"
+        $ref: "definitions.schema.yaml#/definitions/resources.rule"
     patternProperties:
       '^blobdir_[a-zA-Z\-_0-9\.]+$':
         type: object

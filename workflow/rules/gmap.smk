@@ -4,18 +4,17 @@ rule gmap_build:
         db = __INTERIM__ / "gmap/db/{assembly}.db.ok"
     input:
         seq = get_assembly
-    conda:
-        "../envs/gmap.yaml"
     cache: True
     resources:
-        runtime = lambda wildcards, attempt: attempt * config["gmap"]["build"]["runtime"],
-        mem_mb = config["gmap"]["build"]["mem_mb"]
+        runtime = lambda wildcards, attempt: resources("gmap_build", "runtime", attempt),
+        mem_mb = lambda wildcards, attempt: resources("gmap_build", "mem_mb", attempt),
     threads:
-        lambda wildcards, attempt: attempt * config["gmap"]["build"]["threads"]
+        lambda wildcards, attempt: resources("gmap_build", "threads", attempt)
     log:
         "logs/gmap_build/{assembly}.log"
     wrapper:
         f"{WRAPPER_PREFIX}/bio/gmap/build"
+
 
 rule gmap_map:
     """Map transcriptome to sequence database"""
@@ -25,13 +24,11 @@ rule gmap_map:
         db = __INTERIM__ / "gmap/db/{assembly}.db.ok",
         transcriptome = get_transcriptome,
         log = "logs/gmap_build/{assembly}.log"
-    conda:
-        "../envs/gmap.yaml"
     resources:
-        runtime = lambda wildcards, attempt: attempt * config["gmap"]["map"]["runtime"],
-        mem_mb = config["gmap"]["map"]["mem_mb"]
+        runtime = lambda wildcards, attempt: resources("gmap_map", "runtime", attempt),
+        mem_mb = lambda wildcards, attempt: resources("gmap_map", "mem_mb", attempt),
     threads:
-        lambda wildcards, attempt: attempt * config["gmap"]["map"]["threads"]
+        lambda wildcards, attempt: resources("gmap_map", "threads", attempt)
     log:
         "logs/gmap_map/{assembly}-{transcriptome}.psl.log"
     wrapper:

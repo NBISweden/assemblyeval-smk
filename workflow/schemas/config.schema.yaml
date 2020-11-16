@@ -5,36 +5,45 @@ description: snakemake configuration file
 type: object
 
 properties:
+
   assemblies:
     type: string
+
   transcripts:
     type: [string, 'null']
     default: null
+
   reads:
     type: [string, 'null']
     default: null
+
   datasources:
     type: [string, 'null']
     default: null
+
   fs:
     $ref: "definitions.schema.yaml#/definitions/fs"
     default: {}
-  gmap:
-    $ref: "gmap.schema.yaml#/definitions/gmap"
-    default: {}
+
   btk:
     $ref: "btk.schema.yaml#/definitions/btk"
     default: {}
+
   genecovr:
-    $ref: "genecovr.schema.yaml#/definitions/genecovr"
+    $ref: "genecovr.schema.yaml#/definitions/genecovr_workflow"
     default: {}
-  samtools:
-    type: object
+
+  ##############################
+  # Resources and rules
+  ##############################
+  resources.default:
+    $ref: "definitions.schema.yaml#/definitions/resources.default"
     default: {}
-    properties:
-      faidx:
-        $ref: "definitions.schema.yaml#/definitions/rule"
-        default: {}
+
+  resources:
+    $ref: "definitions.schema.yaml#/definitions/resources"
+    default: {}
+
 
 additionalProperties: false
 required:

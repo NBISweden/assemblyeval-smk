@@ -5,14 +5,11 @@ description: gmap rules configuration
 type: object
 
 definitions:
-  gmap:
-    type: object
-    description: gmap configuration
-    default: {}
-    properties:
-      build:
-        $ref: "definitions.schema.yaml#/definitions/rule"
-        default: {}
-      map:
-        $ref: "definitions.schema.yaml#/definitions/rule"
-        default: {}
+
+  gmap_build:
+    description: gmap build configuration
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  gmap_map:
+    description: gmap map configuration
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"

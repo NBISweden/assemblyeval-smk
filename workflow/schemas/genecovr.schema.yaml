@@ -1,24 +1,24 @@
 $schema: "http://json-schema.org/draft-07/schema#"
+
 description: Configuration schema for genecovr
+
+type: object
+
 definitions:
-  genecovr:
+
+  genecovr_make_csv_inputfile:
+    description: genecovr configuration for make csv inputfile
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  genecovr_run:
+    description: genecovr rule configuration
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  genecovr_workflow:
     title: genecovr workflow configuration
     description: genecovr workflow configuration
     type: object
     default: {}
-    properties:
-      exe:
-        type: string
-        default: genecovr
-      runtime:
-        type: integer
-        default: 240
-      threads:
-        type: integer
-        default: 1
-      options:
-        type: string
-        default: --height 14 --width 14
     patternProperties:
       '^dataset[a-zA-Z\-_0-9\.]+$':
         type: object
@@ -56,6 +56,5 @@ definitions:
               type: string
             examples:
               - ['A', 'B']
-
 
     additionalProperties: false
