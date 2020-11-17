@@ -1,7 +1,7 @@
 # Snakemake workflow: Assembly evaluation workflow
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.25.0-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![GitHub actions status](https://github.com/percyfal/assemblyeval-smk/workflows/Tests/badge.svg)](https://github.com/percyfal/assemblyeval-smk/actions?query=workflow%3ATests)
+[![GitHub actions status](https://github.com/NBISweden/assemblyeval-smk/workflows/Tests/badge.svg)](https://github.com/NBISweden/assemblyeval-smk/actions?query=workflow%3ATests)
 
 This is the template for a new Snakemake workflow. Replace this text with a comprehensive description covering the purpose and domain.
 Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs`. Define the entry point of the workflow in the `Snakefile` and the main configuration in the `config.yaml` file.
@@ -101,4 +101,3 @@ In case you have also changed or added steps, please consider contributing them 
 ## Testing
 
 Test cases are in the subfolder `.test`. They are automatically executed via continuous integration with [Github Actions](https://github.com/features/actions).
-
