@@ -1,0 +1,4 @@
+name: "busco"
+description: Evaluate assembly with busco
+authors:
+  - Per Unneberg

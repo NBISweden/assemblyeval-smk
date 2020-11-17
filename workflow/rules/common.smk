@@ -11,7 +11,9 @@ from snakemake.utils import logger, validate
 
 # Determine wrapper prefix since we mix local wrappers with wrappers
 # from snakemake-wrappers
-SMK_WRAPPER_PREFIX = "https://github.com/snakemake/snakemake-wrappers/raw/"
+SMK_WRAPPER_VERSION = "0.67.0"
+SMK_WRAPPER_PREFIX_RAW = "https://github.com/snakemake/snakemake-wrappers/raw"
+SMK_WRAPPER_PREFIX = f"{SMK_WRAPPER_PREFIX_RAW}/{SMK_WRAPPER_VERSION}"
 WRAPPER_PREFIX = workflow.wrapper_prefix
 if WRAPPER_PREFIX == SMK_WRAPPER_PREFIX:
     # Change main to version number once we start sem-versioning
@@ -48,6 +50,11 @@ reads = _read_tsv(config["reads"], ["id"],
 # Save current base dir for later validation in functions
 BASEDIR=workflow.current_basedir
 
+##################################################
+## Core configuration
+##################################################
+include: "core/config.smk"
+
 ##############################
 ## Paths
 ##############################
@@ -73,7 +80,7 @@ wildcard_constraints:
 
 ## Assemblies etc
 wildcard_constraints:
-    assembly = "|".join(f"{species}_{version}" for species, version in assemblies.index),
+    assembly = "|".join(make_assembly_ids()),
     blobdir = "[^/]+",
     region = "[0-9]+"
 
@@ -81,11 +88,6 @@ wildcard_constraints:
 wildcard_constraints:
     fa = "(.fa|.fasta)",
     gz = "(|.gz)"
-
-##################################################
-## Core configuration
-##################################################
-include: "core/config.smk"
 
 ## Store some workflow metadata
 config["__workflow_basedir__"] = workflow.basedir
@@ -117,6 +119,7 @@ include: "core/uri.smk"
 ##################################################
 def all(wildcards):
     d = {
+        'multiqc': [str(__REPORTS__ / "qc/multiqc.html")],
         'genecovr': all_genecovr_input(wildcards),
     }
     d['config'] = "config/assemblyeval.config.yaml"
@@ -131,3 +134,23 @@ include: "input/genecovr.smk"
 # btk
 ##############################
 include: "input/btk.smk"
+
+##############################
+# quast
+##############################
+include: "input/quast.smk"
+
+##############################
+# jellyfish
+##############################
+include: "input/jellyfish.smk"
+
+##############################
+# busco
+##############################
+include: "input/busco.smk"
+
+##############################
+# multiqc
+##############################
+include: "input/multiqc.smk"

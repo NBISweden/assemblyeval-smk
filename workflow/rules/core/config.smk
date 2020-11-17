@@ -14,15 +14,23 @@ def resources(rule, resource, attempt=1, wildcards=None, **kwargs):
 
 def get_params(rule, resource, wildcards=None, **kwargs):
     """Retrieve rule parameters"""
-    val = config['resources'][rule].get(resource, None)
+    val = config["resources"][rule].get(resource, None)
     if val is not None:
         return val
     val = config['resources.default'][resource]
     return val
 
 
+def get_workflow_params(section, option, **kwargs):
+    """Retrieve workflow settings"""
+    val = config[section].get(option, None)
+    return val
+
+
 def check_blobdir_keys():
     """Check that blobdir key is formatted correctly and that species and version exist"""
+    if "btk" not in config.keys():
+        return
     blobdir_assemblies = []
     for blobdir in config["btk"].keys():
         if not blobdir.startswith("blobdir_"):
@@ -36,13 +44,20 @@ def check_blobdir_keys():
 ##################################################
 ## Getters for assembly and transcriptome
 ##################################################
+def make_assembly_ids():
+    """Make a complete list of assembly ids"""
+    val = [f"{species}_{version}" for species, version in assemblies.index]
+    return val
+
 def get_assembly(wildcards):
+    """Retrieve the sequence file for a given assembly id"""
     # In principle could use ensembl wrapper if db not present:
     # file:// would be better
     species, version = wildcards.assembly.split("_")
     return assemblies.loc[species, version]["fasta"]
 
 def get_transcriptome(wildcards):
+    """Retrieve the sequence file for a given transcriptome id"""
     value = transcripts.loc[wildcards.transcriptome]["fasta"]
     if isinstance(value, str):
         value = [value]

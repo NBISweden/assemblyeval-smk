@@ -1,0 +1,27 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+
+description: jellyfish configuration
+
+type: object
+
+definitions:
+
+  jellyfish:
+    type: object
+    description: top-level jellyfish configuration
+    default: {}
+    properties:
+      kmer:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+        default: [21]
+
+  jellyfish_count:
+    description: jellyfish count config
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  jellyfish_histo:
+    description: jellyfish histo config
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"

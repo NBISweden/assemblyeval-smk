@@ -40,7 +40,7 @@ rule assemblyeval_samtools_faidx:
     threads:
         1
     wrapper:
-        f"{SMK_WRAPPER_PREFIX}/0.66.0/bio/samtools/faidx"
+        f"{SMK_WRAPPER_PREFIX}/bio/samtools/faidx"
 
 
 

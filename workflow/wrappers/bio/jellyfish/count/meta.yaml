@@ -1,0 +1,4 @@
+name: "jellyfish count"
+description: Count kmers with jellyfish
+authors:
+  - Per Unneberg

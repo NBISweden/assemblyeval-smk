@@ -1,0 +1,4 @@
+name: "quast"
+description: quast genome assembly evaluation tool
+authors:
+  - Per Unneberg

@@ -1,0 +1,11 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+
+description: multiqc configuration
+
+type: object
+
+definitions:
+
+  multiqc:
+    description: multiqc configuration
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"

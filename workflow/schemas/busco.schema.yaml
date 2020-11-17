@@ -1,0 +1,19 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+
+description: busco configuration
+
+type: object
+
+definitions:
+
+  busco:
+    type: object
+    description: Main busco configuration
+    properties:
+      lineage:
+        type: string
+    required:
+      - lineage
+  busco_run:
+    description: busco configuration
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"

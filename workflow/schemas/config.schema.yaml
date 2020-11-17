@@ -25,13 +25,22 @@ properties:
     $ref: "definitions.schema.yaml#/definitions/fs"
     default: {}
 
+  ##############################
+  # Workflow: top-level configurations for each application
+  ##############################
+  jellyfish:
+    type: object
+    $ref: "jellyfish.schema.yaml#/definitions/jellyfish"
+  busco:
+    type: object
+    $ref: "busco.schema.yaml#/definitions/busco"
   btk:
+    type: object
     $ref: "btk.schema.yaml#/definitions/btk"
-    default: {}
-
   genecovr:
-    $ref: "genecovr.schema.yaml#/definitions/genecovr_workflow"
+    type: object
     default: {}
+    $ref: "genecovr.schema.yaml#/definitions/genecovr_workflow"
 
   ##############################
   # Resources and rules

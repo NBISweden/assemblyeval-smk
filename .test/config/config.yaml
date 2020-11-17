@@ -3,12 +3,21 @@ transcripts: config/transcripts.tsv
 reads: config/reads.tsv
 datasources: config/datasources.tsv
 
+
 genecovr:
   dataset1:
     csvfile: config/genecovr.csv
   dataset2:
     assemblies: ["foo_v1", "foo_v2"]
     transcripts: ["A", "B"]
+
+busco:
+  lineage: viridiplantae_odb10
+
+jellyfish:
+  kmer: [21]
+
+
 btk:
   blobdir_foo_v1:
     fasta:

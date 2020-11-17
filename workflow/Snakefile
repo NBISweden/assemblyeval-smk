@@ -4,6 +4,10 @@ include: "rules/common.smk"
 include: "rules/genecovr.smk"
 include: "rules/gmap.smk"
 include: "rules/btk.smk"
+include: "rules/quast.smk"
+include: "rules/jellyfish.smk"
+include: "rules/busco.smk"
+include: "rules/multiqc.smk"
 include: "rules/utils.smk"
 
 ##############################

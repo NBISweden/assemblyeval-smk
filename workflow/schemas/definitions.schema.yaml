@@ -207,6 +207,41 @@ definitions:
 
 
       ##############################
+      # multiqc
+      ##############################
+      multiqc:
+        default: {}
+        $ref: "multiqc.schema.yaml#/definitions/multiqc"
+
+
+      ##############################
+      # quast
+      ##############################
+      quast:
+        default: {}
+        $ref: "quast.schema.yaml#/definitions/quast"
+
+
+      ##############################
+      # jellyfish
+      ##############################
+      jellyfish_count:
+        default:
+          options: -s 100M -C
+        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_count"
+
+      jellyfish_histo:
+        default: {}
+        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_histo"
+
+      ##############################
+      # busco
+      ##############################
+      busco_run:
+        default: {}
+        $ref: "busco.schema.yaml#/definitions/busco_run"
+
+      ##############################
       # Assemblyeval utils
       ##############################
       assemblyeval_samtools_faidx:

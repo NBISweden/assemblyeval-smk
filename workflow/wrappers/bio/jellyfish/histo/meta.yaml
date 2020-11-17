@@ -1,0 +1,4 @@
+name: "jellyfish histo"
+description: Make kmer histogram with jellyfish
+authors:
+  - Per Unneberg
