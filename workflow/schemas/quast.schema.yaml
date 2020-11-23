@@ -7,5 +7,5 @@ type: object
 definitions:
 
   quast:
-    description: quast configuration
+    description: quast resource configuration
     $ref: "definitions.schema.yaml#/definitions/resources.rule"

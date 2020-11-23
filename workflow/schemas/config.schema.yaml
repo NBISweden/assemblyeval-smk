@@ -34,6 +34,8 @@ properties:
   busco:
     type: object
     $ref: "busco.schema.yaml#/definitions/busco"
+  quast:
+    type: string
   btk:
     type: object
     $ref: "btk.schema.yaml#/definitions/btk"
@@ -41,6 +43,19 @@ properties:
     type: object
     default: {}
     $ref: "genecovr.schema.yaml#/definitions/genecovr_workflow"
+
+  # FIXME: tools could also list assemblies by id such that one could
+  # exclude assemblies for a tool
+  tools:
+    type: array
+    description: >-
+      List of tools that lack configuration options. Listing a tool
+      here will run it.
+    items:
+      type: string
+      uniqueItems: true
+      enum:
+        - quast
 
   ##############################
   # Resources and rules

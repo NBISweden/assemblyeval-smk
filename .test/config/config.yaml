@@ -17,6 +17,8 @@ busco:
 jellyfish:
   kmer: [21]
 
+tools:
+  - quast
 
 btk:
   blobdir_foo_v1:
