@@ -2,6 +2,11 @@ $schema: "http://json-schema.org/draft-07/schema#"
 description: Genome assembly schema definition. Describe basic features of an assembly.
 type: object
 properties:
+  id:
+    type: string
+    description: >-
+        assembly id. If not provided an id column formatted as
+        species_version will be generated.
   species:
     type: string
     description: the biological species whose genome has been sequenced and assembled

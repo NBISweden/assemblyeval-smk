@@ -28,17 +28,22 @@ configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
 
-def _read_tsv(infile, index, schema):
+def _read_tsv(infile, index, schema, idcols=None):
     if infile is None:
         return None
-    df = pd.read_csv(infile, sep="\t").set_index(index, drop=False)
+    df = pd.read_csv(infile, sep="\t")
+    if "id" not in df.columns and index == ["id"]:
+        logger.info(f"generating id column from {idcols}")
+        df["id"] = "_".join(df[idcols])
+        df["id"] = df[idcols].agg('_'.join, axis=1)
+    df.set_index(index, drop=False, inplace=True)
     df = df.replace({np.nan: None})
     df.index.names = index
     validate(df, schema=schema)
     return df
 
-assemblies = _read_tsv(config["assemblies"], ["species", "version"],
-                       "../schemas/assemblies.schema.yaml")
+assemblies = _read_tsv(config["assemblies"], ["id"],
+                       "../schemas/assemblies.schema.yaml", idcols=["species", "version"])
 datasources = _read_tsv(config["datasources"], ["data"],
                         "../schemas/datasources.schema.yaml")
 transcripts = _read_tsv(config["transcripts"], ["id"],

@@ -35,9 +35,9 @@ def check_blobdir_keys():
     for blobdir in config["btk"].keys():
         if not blobdir.startswith("blobdir_"):
             continue
-        species, version = re.sub("blobdir_", "", blobdir).split("_")
-        if (species, version) not in assemblies.index:
-            logger.error(f"error in blobdir configuration: {species}_{version} not in {config['assemblies']}")
+        blobid = re.sub("blobdir_", "", blobdir)
+        if blobid not in assemblies.index:
+            logger.error(f"error in blobdir configuration: key {blobid} not in {config['assemblies']}")
             sys.exit(1)
 
 
@@ -46,15 +46,13 @@ def check_blobdir_keys():
 ##################################################
 def make_assembly_ids():
     """Make a complete list of assembly ids"""
-    val = [f"{species}_{version}" for species, version in assemblies.index]
-    return val
+    return assemblies.index.to_list()
 
 def get_assembly(wildcards):
     """Retrieve the sequence file for a given assembly id"""
     # In principle could use ensembl wrapper if db not present:
     # file:// would be better
-    species, version = wildcards.assembly.split("_")
-    return assemblies.loc[species, version]["fasta"]
+    return assemblies.loc[wildcards.assembly]["fasta"]
 
 def get_transcriptome(wildcards):
     """Retrieve the sequence file for a given transcriptome id"""
