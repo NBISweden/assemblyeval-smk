@@ -5,10 +5,10 @@ rule all_quast:
 rule quast:
     """Run quast"""
     output:
-        tsv = "{results}/qc/quast/{assembly}/report.tsv",
-        tsv_trans = "{results}/qc/quast/{assembly}/transposed_report.tsv",
-        txt = "{results}/qc/quast/{assembly}/report.txt",
-        txt_trans = "{results}/qc/quast/{assembly}/transposed_report.txt"
+        tsv = "{results}/quast/{assembly}/report.tsv",
+        tsv_trans = "{results}/quast/{assembly}/transposed_report.tsv",
+        txt = "{results}/quast/{assembly}/report.txt",
+        txt_trans = "{results}/quast/{assembly}/transposed_report.txt"
     input:
         seq = get_assembly
     resources:
@@ -17,6 +17,6 @@ rule quast:
     threads:
         lambda wildcards, attempt: resources("quast", "threads", attempt)
     log:
-        "logs/{results}/qc/quast/{assembly}.log"
+        "logs/{results}/quast/{assembly}.log"
     wrapper:
         f"{WRAPPER_PREFIX}/bio/quast/quast"

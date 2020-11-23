@@ -1,12 +1,12 @@
 rule jellyfish_count:
-    output: jf = temp("{results}/qc/jellyfish/{assembly}{gz}.{kmer}mer_counts.jf")
+    output: jf = temp("{results}/jellyfish/{assembly}{gz}.{kmer}mer_counts.jf")
     input: seq = get_assembly
     resources:
         runtime = lambda wildcards, attempt: resources("jellyfish_count", "runtime", attempt)
     params:
         options = get_params("jellyfish_count", "options")
     threads: get_params("jellyfish_count", "threads")
-    log: "logs/{results}/qc/jellyfish/{assembly}{gz}.{kmer}mer_counts.log"
+    log: "logs/{results}/jellyfish/{assembly}{gz}.{kmer}mer_counts.log"
     wrapper: f"{WRAPPER_PREFIX}/bio/jellyfish/count"
 
 

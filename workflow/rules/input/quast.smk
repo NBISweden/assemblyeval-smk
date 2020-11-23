@@ -1,5 +1,8 @@
 def all_quast(wildcards):
-    pfx = str(__RESULTS__ / "qc/quast/{assembly}/{rpt}")
+    if "quast" not in config.get("tools", []):
+        logger.info("quast not in tools section; no quast analyses will be run")
+        return {}
+    pfx = str(__RESULTS__ / "quast/{assembly}/{rpt}")
     rpt = ["report.tsv", "transposed_report.tsv", "report.txt",
            "transposed_report.txt"]
     val = {

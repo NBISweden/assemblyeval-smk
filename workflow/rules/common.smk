@@ -124,7 +124,7 @@ include: "core/uri.smk"
 ##################################################
 def all(wildcards):
     d = {
-        'multiqc': [str(__REPORTS__ / "qc/multiqc.html")],
+        'multiqc': [str(__REPORTS__ / "multiqc.html")],
         'genecovr': all_genecovr_input(wildcards),
     }
     d['config'] = "config/assemblyeval.config.yaml"
