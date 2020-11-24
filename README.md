@@ -175,10 +175,10 @@ or defines a combination of assemblies and transcripts:
 
 	genecovr:
 	  dataset1:
-		csvfile: config/genecovr.csv
+        csvfile: config/genecovr.csv
 	  dataset2:
         assemblies: ["foo_v2", "foo_v1"]
-		transcripts: ["A", "B"]
+        transcripts: ["A", "B"]
 
 The `genecovr.csv` file consists of columns `dataset` (an identifier
 name), `psl` that gives a path to a psl file of mapped transcripts,
