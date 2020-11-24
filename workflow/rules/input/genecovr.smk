@@ -5,10 +5,8 @@ def all_genecovr_input(wildcards):
 
 def genecovr_make_csv_inputfile_input(wildcards):
     assembly_keys = config["genecovr"][wildcards.dataset]["assemblies"]
-    species = [k.split("_")[0] for k in assembly_keys]
-    version = [k.split("_")[1] for k in assembly_keys]
     trx_keys = config["genecovr"][wildcards.dataset]["transcripts"]
-    assembly_fasta = assemblies.loc[(species, version), "fasta"].tolist()
+    assembly_fasta = assemblies.loc[assembly_keys]["fasta"].tolist()
     trx_fasta = transcripts.loc[trx_keys, "fasta"].tolist()
     retval = {
         'psl': [str(__INTERIM__ / f"gmap/map/{a}-{b}.psl") for a, b in itertools.product(assembly_keys, trx_keys)],
