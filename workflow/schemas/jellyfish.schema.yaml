@@ -6,17 +6,20 @@ type: object
 
 definitions:
 
-  jellyfish:
+  jellyfish.config:
     type: object
     description: top-level jellyfish configuration
-    default: {}
     properties:
       kmer:
         type: array
         items:
           type: integer
         uniqueItems: true
-        default: [21]
+      ids:
+        $ref: "definitions.schema.yaml#/definitions/ids"
+    required:
+      - kmer
+
 
   jellyfish_count:
     description: jellyfish count config

@@ -53,7 +53,7 @@ definitions:
         items:
           type: string
     additionalProperties: false
-  btk:
+  btk.config:
     title: btk workflow configuration
     description: btk workflow configuration
     type: object

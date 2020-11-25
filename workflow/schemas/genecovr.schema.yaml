@@ -14,7 +14,7 @@ definitions:
     description: genecovr rule configuration
     $ref: "definitions.schema.yaml#/definitions/resources.rule"
 
-  genecovr_workflow:
+  genecovr.config:
     title: genecovr workflow configuration
     description: genecovr workflow configuration
     type: object

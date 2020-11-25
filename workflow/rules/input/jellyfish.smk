@@ -4,4 +4,5 @@ def all_jellyfish(wildcards):
         return []
     pfx = str(__RESULTS__ / "jellyfish/{assembly}.{kmer}_jf.hist")
     kmer = get_workflow_params("jellyfish", "kmer")
-    return expand(pfx, assembly=make_assembly_ids(), kmer=kmer)
+    ids = make_assembly_ids(config["jellyfish"].get("ids", []))
+    return expand(pfx, assembly=ids, kmer=kmer)

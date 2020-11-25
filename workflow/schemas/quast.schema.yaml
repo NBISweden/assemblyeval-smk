@@ -6,6 +6,14 @@ type: object
 
 definitions:
 
+  quast.config:
+    type: [object, 'null']
+    description: Main quast tool configuration
+    properties:
+      ids:
+        $ref: "definitions.schema.yaml#/definitions/ids"
+
+
   quast:
     description: quast resource configuration
     $ref: "definitions.schema.yaml#/definitions/resources.rule"

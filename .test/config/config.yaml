@@ -13,12 +13,14 @@ genecovr:
 
 busco:
   lineage: viridiplantae_odb10
+  ids: ["foo_v1"]
 
 jellyfish:
   kmer: [21]
+  ids: ["foo_v1"]
 
-tools:
-  - quast
+quast:
+  ids: ["foo_v2"]
 
 btk:
   blobdir_foo_v1:

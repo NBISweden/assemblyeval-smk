@@ -29,33 +29,16 @@ properties:
   # Workflow: top-level configurations for each application
   ##############################
   jellyfish:
-    type: object
-    $ref: "jellyfish.schema.yaml#/definitions/jellyfish"
+    $ref: "jellyfish.schema.yaml#/definitions/jellyfish.config"
   busco:
-    type: object
-    $ref: "busco.schema.yaml#/definitions/busco"
+    $ref: "busco.schema.yaml#/definitions/busco.config"
   quast:
-    type: string
+    $ref: "quast.schema.yaml#/definitions/quast.config"
   btk:
-    type: object
-    $ref: "btk.schema.yaml#/definitions/btk"
+    $ref: "btk.schema.yaml#/definitions/btk.config"
   genecovr:
-    type: object
     default: {}
-    $ref: "genecovr.schema.yaml#/definitions/genecovr_workflow"
-
-  # FIXME: tools could also list assemblies by id such that one could
-  # exclude assemblies for a tool
-  tools:
-    type: array
-    description: >-
-      List of tools that lack configuration options. Listing a tool
-      here will run it.
-    items:
-      type: string
-      uniqueItems: true
-      enum:
-        - quast
+    $ref: "genecovr.schema.yaml#/definitions/genecovr.config"
 
   ##############################
   # Resources and rules

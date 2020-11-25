@@ -44,6 +44,13 @@ definitions:
     items:
       type: integer
 
+  ids:
+    description: generic property to list identifiers
+    type: array
+    items:
+      type: string
+      uniqueItems: true
+
   ##############################
   # Default resources
   ##############################

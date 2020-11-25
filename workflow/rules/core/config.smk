@@ -44,9 +44,22 @@ def check_blobdir_keys():
 ##################################################
 ## Getters for assembly and transcriptome
 ##################################################
-def make_assembly_ids():
-    """Make a complete list of assembly ids"""
-    return assemblies.index.to_list()
+def make_assembly_ids(ids=[]):
+    """Make a complete list of assembly ids
+
+    :param list ids: assembly identifier list
+
+    :return list ids:  assembly identifier list
+    """
+    if len(ids) == 0:
+        return assemblies.index.to_list()
+    try:
+        assert set(ids) <= set(assemblies.index.to_list())
+    except AssertionError as e:
+        logger.error(f"undefined assembly identifiers in ids: \'{', '.join(ids)}\'")
+        raise
+    return ids
+
 
 def get_assembly(wildcards):
     """Retrieve the sequence file for a given assembly id"""

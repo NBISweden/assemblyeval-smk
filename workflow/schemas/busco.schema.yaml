@@ -6,12 +6,14 @@ type: object
 
 definitions:
 
-  busco:
-    type: object
+  busco.config:
+    type: [object, 'null']
     description: Main busco configuration
     properties:
       lineage:
         type: string
+      ids:
+        $ref: "definitions.schema.yaml#/definitions/ids"
     required:
       - lineage
   busco_run:
