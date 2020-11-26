@@ -17,6 +17,8 @@ seqin = snakemake.input.seq
 out = snakemake.output.jf
 kmer = snakemake.wildcards.kmer
 options = snakemake.params.options
+if options == "":
+    options = "-s 100M -C"
 
 cat = "cat"
 
