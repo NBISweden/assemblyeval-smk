@@ -5,6 +5,7 @@ import itertools
 import urllib
 import pandas as pd
 import numpy as np
+import subprocess as sp
 from snakemake.utils import validate
 from snakemake.logging import logger
 from snakemake.utils import logger, validate

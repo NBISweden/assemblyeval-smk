@@ -84,7 +84,8 @@ def cd(path, logger):
     os.chdir(path)
     try:
         yield
-    except:
+    except Exception as e:
+        logger.warning(e)
         logger.warning("Exception caught: ".format(sys.exc_info()[0]))
     finally:
         logger.info("Changing directory back to {}".format(CWD))
