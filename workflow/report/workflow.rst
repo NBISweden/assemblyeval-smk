@@ -93,5 +93,5 @@ and other QC programs for which `MultiQC tools`_ exist.
 .. _jellyfish: http://www.genome.umd.edu/jellyfish.html
 .. _busco: https://busco.ezlab.org/
 .. _Snakemake wrappers: https://snakemake-wrappers.readthedocs.io/en/stable/
-.. _MultiQC report: file://{{ snakemake.config["__workflow_workdir__"] }}/reports/multiqc.html
+.. _MultiQC report: ./reports/multiqc.html
 .. _MultiQC tools: https://multiqc.info/#supported-tools

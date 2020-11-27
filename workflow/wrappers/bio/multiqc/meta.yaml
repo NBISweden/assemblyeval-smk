@@ -1,0 +1,4 @@
+name: "multiqc"
+description: multiqc tool for collecting qc reports
+authors:
+  - Per Unneberg
