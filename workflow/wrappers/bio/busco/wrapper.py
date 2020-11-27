@@ -12,15 +12,13 @@ augustus = os.path.join(conda_prefix, "etc/conda/activate.d/augustus.sh")
 if os.path.exists(augustus):
     shell("source {augustus}")
 
-log = snakemake.log_fmt_shell(stdout=True, stderr=True)
-rsynclog = snakemake.log_fmt_shell(stdout=True, stderr=True, append=True)
+log = snakemake.log_fmt_shell(stdout=True, stderr=True, append=True)
 
 options = snakemake.params.get("options", "")
 lineage = snakemake.wildcards.lineage
 mode = snakemake.wildcards.mode
 assembly = snakemake.input[0]
 
-rsyncdir = os.path.dirname(snakemake.output.tsv)
 
 out_path = os.path.dirname(os.path.dirname(os.path.dirname(snakemake.output.tsv)))
 outdir = snakemake.wildcards.mode
@@ -31,3 +29,12 @@ shell(
     "--out {outdir} --out_path {out_path} --cpu {snakemake.threads} --mode {mode} "
     "{options} {log}"
 )
+
+short_source = snakemake.output.summary
+short_multiqc = os.path.join(
+    out_path,
+    outdir,
+    f"run_{snakemake.wildcards.lineage}",
+    f"short_summary_{snakemake.wildcards.assembly}.txt",
+)
+shell("cp {short_source} {short_multiqc} {log}")
