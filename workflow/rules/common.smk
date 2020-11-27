@@ -18,7 +18,7 @@ SMK_WRAPPER_PREFIX = f"{SMK_WRAPPER_PREFIX_RAW}/{SMK_WRAPPER_VERSION}"
 WRAPPER_PREFIX = workflow.wrapper_prefix
 if WRAPPER_PREFIX == SMK_WRAPPER_PREFIX:
     # Change main to version number once we start sem-versioning
-    WRAPPER_PREFIX = "https://raw.githubusercontent.com/percyfal/assemblyeval-smk/main/workflow/wrappers"
+    WRAPPER_PREFIX = "https://raw.githubusercontent.com/NBISweden/assemblyeval-smk/main/workflow/wrappers"
 
 # this container defines the underlying OS for each job when using the workflow
 # with --use-conda --use-singularity
