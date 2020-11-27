@@ -23,9 +23,7 @@ rule genecovr_make_csv_inputfile:
         unpack(genecovr_make_csv_inputfile_input)
     log:
         "logs/{outprefix}.{dataset}.log"
-    run:
-        df = genecovr_make_csv_inputfile_dataframe(dict(input), wildcards)
-        df.to_csv(output.csv, index=False, header=False)
+    script: "../scripts/assemblyeval_genecovr_make_csv_inputfile_input.py"
 
 
 rule genecovr_run:
