@@ -23,12 +23,12 @@ def get_genecovr_input(wildcards):
         data = pd.read_csv(csvfile, header=None).set_index(0, drop=False)
         data.columns = ["dataset", "psl", "assembly", "trxset"]
         try:
-            assert data["assembly"].str.replace(r".fai", "").isin(assemblies["fasta"]).all()
+            assert data["assembly"].str.replace(r".fai", "", regex=True).isin(assemblies["fasta"]).all()
         except AssertionError as e:
             logger.error(e)
             logger.error("some values in 'assembly' column not present in assemblies input file")
         try:
-            assert data["trxset"].str.replace(r".fai", "").isin(transcripts["fasta"]).all()
+            assert data["trxset"].str.replace(r".fai", "", regex=True).isin(transcripts["fasta"]).all()
         except AssertionError as e:
             logger.error(e)
             logger.error("some values in 'trxset' column not present in transcripts input file")
