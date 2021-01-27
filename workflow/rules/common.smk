@@ -88,6 +88,8 @@ wildcard_constraints:
 wildcard_constraints:
     assembly = "|".join(make_assembly_ids()),
     blobdir = "[^/]+",
+    length = "[0-9]+",
+    partition = "[0-9]+",
     region = "[0-9]+"
 
 ## File extensions
@@ -118,7 +120,6 @@ check_blobdir_keys()
 ## Uri parsing functions
 ##################################################
 include: "core/uri.smk"
-
 
 ##################################################
 # Input collection functions
@@ -155,6 +156,11 @@ include: "input/jellyfish.smk"
 # busco
 ##############################
 include: "input/busco.smk"
+
+##############################
+# kraken2
+##############################
+include: "input/kraken2.smk"
 
 ##############################
 # multiqc

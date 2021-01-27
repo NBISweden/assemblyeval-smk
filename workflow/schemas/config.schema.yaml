@@ -36,6 +36,8 @@ properties:
     $ref: "quast.schema.yaml#/definitions/quast.config"
   btk:
     $ref: "btk.schema.yaml#/definitions/btk.config"
+  kraken2:
+    $ref: "kraken2.schema.yaml#/definitions/kraken2.config"
   genecovr:
     default: {}
     $ref: "genecovr.schema.yaml#/definitions/genecovr.config"

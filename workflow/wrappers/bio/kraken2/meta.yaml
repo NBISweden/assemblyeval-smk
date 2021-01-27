@@ -1,0 +1,4 @@
+name: "kraken2"
+description: Taxonomical classification of sequences with kraken2
+authors:
+  - Per Unneberg

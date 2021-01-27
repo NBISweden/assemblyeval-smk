@@ -67,6 +67,14 @@ def get_assembly(wildcards):
     # file:// would be better
     return assemblies.loc[wildcards.assembly]["fasta"]
 
+
+def get_assembly_index(wildcards):
+    """Retrieve the sequence file for a given assembly id"""
+    # In principle could use ensembl wrapper if db not present:
+    # file:// would be better
+    return assemblies.loc[wildcards.assembly]["fasta"] + ".fai"
+
+
 def get_transcriptome(wildcards):
     """Retrieve the sequence file for a given transcriptome id"""
     value = transcripts.loc[wildcards.transcriptome]["fasta"]

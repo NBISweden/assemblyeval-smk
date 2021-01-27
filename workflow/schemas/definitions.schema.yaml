@@ -254,3 +254,11 @@ definitions:
       assemblyeval_samtools_faidx:
         default: {}
         $ref: "utils.schema.yaml#/definitions/assemblyeval_samtools_faidx"
+
+
+      ##############################
+      # Kraken2
+      ##############################
+      kraken2_parallel:
+        default: {}
+        $ref: "kraken2.schema.yaml#/definitions/kraken2_parallel"
