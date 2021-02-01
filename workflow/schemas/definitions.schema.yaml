@@ -262,3 +262,7 @@ definitions:
       kraken2_parallel:
         default: {}
         $ref: "kraken2.schema.yaml#/definitions/kraken2_parallel"
+
+      kraken2_gather_reports:
+        default: {}
+        $ref: "kraken2.schema.yaml#/definitions/kraken2_gather_reports"

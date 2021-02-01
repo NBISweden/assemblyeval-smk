@@ -12,6 +12,7 @@ inputs = snakemake.input
 output_dir = path.dirname(snakemake.output[0])
 output_name = path.basename(snakemake.output[0])
 log = snakemake.log_fmt_shell(stdout=True, stderr=True)
+modules = [f"-m {k}" for k, v in inputs.items() if len(v) > 0]
 
 shell(
     "multiqc"
@@ -19,6 +20,7 @@ shell(
     " --force"
     " -o {output_dir}"
     " -n {output_name}"
+    " {modules}"
     " {inputs}"
     " {log}"
 )

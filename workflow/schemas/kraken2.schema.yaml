@@ -28,3 +28,7 @@ definitions:
   kraken2_parallel:
     description: kraken2 parallel config
     $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  kraken2_gather_reports:
+    description: kraken2 gather reports config
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"

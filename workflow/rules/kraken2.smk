@@ -57,12 +57,18 @@ rule kraken2_gather_results:
 
 rule kraken2_gather_reports:
     output:
-        txt = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.report.txt.gz"
+        txt = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.report.txt"
     input:
         output = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.output.txt.gz",
         unclassified = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.unclassified.fasta.gz",
         txt = expand(__INTERIM__ / "kraken2/{{assembly}}/{{db}}.{{length}}.{partition}.report.txt", partition=range(0, config["kraken2"]["npartitions"]))
-    script: "../scripts/assemblyeval_kraken2_gather_results.py"
+    resources:
+        runtime = lambda wildcards, attempt: resources("kraken2_gather_reports", "runtime", attempt),
+        mem_mb = lambda wildcards, attempt: resources("kraken2_gather_reports", "mem_mb", attempt)
+    log: "logs/kraken2/{assembly}/{db}.{length}.report.log"
+    threads:
+        get_params("kraken2_gather_reports", "threads")
+    script: "../scripts/assemblyeval_kraken2_gather_reports.py"
 
 
-localrules: kraken2_bedtools_make_windows, kraken2_python_make_windows
+localrules: kraken2_bedtools_make_windows, kraken2_python_make_windows, kraken2_gather_results
