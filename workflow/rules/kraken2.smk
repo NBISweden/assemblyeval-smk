@@ -57,7 +57,7 @@ rule kraken2_gather_results:
 
 rule kraken2_gather_reports:
     output:
-        txt = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.report.txt"
+        txt = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.report.txt"
     input:
         output = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.output.txt.gz",
         unclassified = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.unclassified.fasta.gz",
