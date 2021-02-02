@@ -1,6 +1,7 @@
 import sys
 import re
 import os
+import yaml
 import itertools
 import urllib
 import pandas as pd
@@ -29,10 +30,16 @@ configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
 
-def _read_tsv(infile, index, schema, idcols=None):
+def _read(infile, index, schema, idcols=None):
     if infile is None:
         return None
-    df = pd.read_csv(infile, sep="\t")
+    if os.path.splitext(infile)[1] == ".yaml":
+        with open(infile) as fh:
+            data = yaml.load(fh, yaml.Loader)
+        assert(isinstance(data, list))
+        df = pd.DataFrame(data)
+    elif os.path.splitext(infile)[1] == ".tsv":
+        df = pd.read_csv(infile, sep="\t")
     if "id" not in df.columns and index == ["id"]:
         logger.info(f"generating id column from {idcols}")
         df["id"] = "_".join(df[idcols])
@@ -43,15 +50,15 @@ def _read_tsv(infile, index, schema, idcols=None):
     validate(df, schema=schema)
     return df
 
-assemblies = _read_tsv(config["assemblies"], ["id"],
-                       "../schemas/assemblies.schema.yaml", idcols=["species", "version"])
-datasources = _read_tsv(config["datasources"], ["data"],
-                        "../schemas/datasources.schema.yaml")
-transcripts = _read_tsv(config["transcripts"], ["id"],
-                        "../schemas/transcripts.schema.yaml")
-reads = _read_tsv(config["reads"], ["id"],
-                  "../schemas/reads.schema.yaml")
 
+assemblies = _read(config["assemblies"], ["id"],
+                   "../schemas/assemblies.schema.yaml", idcols=["species", "version"])
+datasources = _read(config["datasources"], ["data"],
+                        "../schemas/datasources.schema.yaml")
+transcripts = _read(config["transcripts"], ["id"],
+                        "../schemas/transcripts.schema.yaml")
+reads = _read(config["reads"], ["id"],
+                  "../schemas/reads.schema.yaml")
 
 # Save current base dir for later validation in functions
 BASEDIR=workflow.current_basedir
