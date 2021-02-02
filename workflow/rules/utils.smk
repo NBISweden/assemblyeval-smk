@@ -51,5 +51,4 @@ rule assemblyeval_save_config:
     script: "../scripts/assemblyeval_save_config.py"
 
 
-
 localrules: assemblyeval_get_external

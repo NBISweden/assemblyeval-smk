@@ -7,3 +7,17 @@ def all_kraken2_input(wildcards):
     val = expand(pfx, assembly=ids, window_size=config["kraken2"]["window_size"],
                  db=os.path.basename(config["kraken2"]["db"]))
     return val
+
+
+def kraken2_gather_results_input(wildcards):
+    fmt = __INTERIM__ / f"kraken2/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.output.txt"
+    d = {
+        'output': expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions"))),
+        'unclassified': expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions")))
+    }
+    return d
+
+
+def kraken2_gather_reports_input(wildcards):
+    fmt = __INTERIM__ / f"kraken2/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.output.txt"
+    return expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions")))

@@ -7,7 +7,7 @@ rule kraken2_parallel:
     input:
         "{interim}/kraken2/{assembly}/{db}.{length}.{partition}.fasta"
     params:
-        db = lambda wildcards: config["kraken2"]["db"],
+        db = get_workflow_params("kraken2", "db"),
         options = get_params("kraken2_parallel", "options")
     resources:
         runtime = lambda wildcards, attempt: resources("kraken2_parallel", "runtime", attempt),
@@ -37,7 +37,7 @@ rule kraken2_python_make_windows:
         fasta = get_assembly,
         bed = "{interim}/kraken2/{assembly}/{db}.{length}.bed"
     params:
-        npart = config["kraken2"]["npartitions"]
+        npart = get_workflow_params("kraken2", "npartitions")
     conda:
         "../envs/pybedtools.yaml"
     script: "../scripts/assemblyeval_kraken2_python_make_windows.py"
@@ -48,8 +48,7 @@ rule kraken2_gather_results:
         output = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.output.txt.gz",
         unclassified = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.unclassified.fasta.gz"
     input:
-        output = expand(__INTERIM__ / "kraken2/{{assembly}}/{{db}}.{{length}}.{partition}.output.txt", partition=range(0, config["kraken2"]["npartitions"])),
-        unclassified = expand(__INTERIM__ / "kraken2/{{assembly}}/{{db}}.{{length}}.{partition}.unclassified.fasta", partition=range(0, config["kraken2"]["npartitions"]))
+        unpack(kraken2_gather_results_input)
     shell:
         "cat {input.output} | gzip -v - > {output.output}; "
         "cat {input.unclassified} | gzip -v - > {output.unclassified}"

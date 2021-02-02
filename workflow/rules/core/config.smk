@@ -23,6 +23,8 @@ def get_params(rule, resource, wildcards=None, **kwargs):
 
 def get_workflow_params(section, option, **kwargs):
     """Retrieve workflow settings"""
+    if section not in config.keys():
+        return
     val = config[section].get(option, None)
     return val
 
