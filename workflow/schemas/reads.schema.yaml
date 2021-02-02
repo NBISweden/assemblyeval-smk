@@ -9,6 +9,10 @@ properties:
     type: string
     format: uri
     description: fastq/sam/bam/cram file
+    pattern: .+\.(fastq|fastq\.gz|sam|bam|cram)$
+  description:
+    type: [string, 'null']
+    default: null
 
 required:
   - id

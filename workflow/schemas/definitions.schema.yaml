@@ -16,6 +16,12 @@ definitions:
     items:
       type: string
     uniqueItems: true
+  envmodules:
+    description: environment module list
+    type: array
+    items:
+      type: string
+    uniqueItems: true
   runtime:
     description: rule runtime in minutes
     type: integer
@@ -43,7 +49,6 @@ definitions:
     minItems: 1
     items:
       type: integer
-
   ids:
     description: generic property to list identifiers
     type: array
@@ -75,6 +80,9 @@ definitions:
       options:
         $ref: "#/definitions/options"
         default: ""
+      envmodules:
+        $ref: "#/definitions/envmodules"
+        default: []
       java_options:
         $ref: "#/definitions/java_options"
         default: ""
@@ -94,6 +102,8 @@ definitions:
     properties:
       options:
         $ref: "#/definitions/options"
+      envmodules:
+        $ref: "#/definitions/envmodules"
       threads:
         $ref: "#/definitions/threads"
       mem_mb:
@@ -113,6 +123,8 @@ definitions:
     properties:
       options:
         $ref: "#/definitions/options"
+      envmodules:
+        $ref: "#/definitions/envmodules"
       threads:
         $ref: "#/definitions/threads"
       mem_mb:
@@ -136,6 +148,8 @@ definitions:
     properties:
       options:
         $ref: "#/definitions/options"
+      envmodules:
+        $ref: "#/definitions/envmodules"
       threads:
         $ref: "#/definitions/threads"
       mem_mb:
@@ -266,3 +280,15 @@ definitions:
       kraken2_gather_reports:
         default: {}
         $ref: "kraken2.schema.yaml#/definitions/kraken2_gather_reports"
+
+
+      ##############################
+      # repeatmasker
+      ##############################
+      repeatmasker_chunk:
+        default: {}
+        $ref: "repeatmasker.schema.yaml#/definitions/repeatmasker_chunk"
+
+      repeatmasker_make_chunked_input:
+        default: {}
+        $ref: "repeatmasker.schema.yaml#/definitions/repeatmasker_make_chunked_input"

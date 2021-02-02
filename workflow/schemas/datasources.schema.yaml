@@ -17,6 +17,9 @@ properties:
       - file://data/raw/reads_1.fastq.gz
       - rsync:///datastore/reads_1.fastq.gz
       - sftp://user@datastore.com:/datastore/reads_1.fastq.gz
+  description:
+    type: [string, 'null']
+    default: null
 
 required:
   - data

@@ -8,17 +8,21 @@ properties:
 
   assemblies:
     type: string
+    pattern: .+\.(tsv|yaml)
 
   transcripts:
     type: [string, 'null']
+    pattern: .+\.(tsv|yaml)
     default: null
 
   reads:
     type: [string, 'null']
+    pattern: .+\.(tsv|yaml)
     default: null
 
   datasources:
     type: [string, 'null']
+    pattern: .+\.(tsv|yaml)
     default: null
 
   fs:
@@ -38,6 +42,8 @@ properties:
     $ref: "btk.schema.yaml#/definitions/btk.config"
   kraken2:
     $ref: "kraken2.schema.yaml#/definitions/kraken2.config"
+  repeatmasker:
+    $ref: "repeatmasker.schema.yaml#/definitions/repeatmasker.config"
   genecovr:
     default: {}
     $ref: "genecovr.schema.yaml#/definitions/genecovr.config"

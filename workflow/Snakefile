@@ -10,6 +10,7 @@ include: "rules/busco.smk"
 include: "rules/multiqc.smk"
 include: "rules/utils.smk"
 include: "rules/kraken2.smk"
+include: "rules/repeatmasker.smk"
 
 ##############################
 ## Report

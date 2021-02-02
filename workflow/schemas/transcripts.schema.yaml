@@ -11,8 +11,10 @@ properties:
   fasta:
     type: string
     description: transcript set fasta file
+    pattern: .+\.(fasta|fa|fasta.gz|fa.gz)
   description:
-    type: string
+    type: [string, 'null']
+    default: null
 
 required:
   - id
