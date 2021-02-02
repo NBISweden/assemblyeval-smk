@@ -28,4 +28,4 @@ data = load(reports[0])
 for fn in tqdm(reports[1:len(reports)]):
     data = merge(data, load(fn))
 
-data.to_csv(snakemake.output.txt, compression="gzip", index=False, sep="\t", header=False, float_format="%6.2f")
+data.to_csv(snakemake.output.txt, index=False, sep="\t", header=False, float_format="%6.2f")

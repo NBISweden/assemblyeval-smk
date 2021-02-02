@@ -45,8 +45,8 @@ rule kraken2_python_make_windows:
 
 rule kraken2_gather_results:
     output:
-        output = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.output.txt.gz",
-        unclassified = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.unclassified.fasta.gz"
+        output = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.output.txt.gz",
+        unclassified = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.unclassified.fasta.gz"
     input:
         output = expand(__INTERIM__ / "kraken2/{{assembly}}/{{db}}.{{length}}.{partition}.output.txt", partition=range(0, config["kraken2"]["npartitions"])),
         unclassified = expand(__INTERIM__ / "kraken2/{{assembly}}/{{db}}.{{length}}.{partition}.unclassified.fasta", partition=range(0, config["kraken2"]["npartitions"]))
@@ -59,8 +59,8 @@ rule kraken2_gather_reports:
     output:
         txt = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.report.txt"
     input:
-        output = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.output.txt.gz",
-        unclassified = __RESULTS__ / "kraken2/{assembly}/{db}.{length}.unclassified.fasta.gz",
+        output = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.output.txt.gz",
+        unclassified = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.unclassified.fasta.gz",
         txt = expand(__INTERIM__ / "kraken2/{{assembly}}/{{db}}.{{length}}.{partition}.report.txt", partition=range(0, config["kraken2"]["npartitions"]))
     resources:
         runtime = lambda wildcards, attempt: resources("kraken2_gather_reports", "runtime", attempt),
