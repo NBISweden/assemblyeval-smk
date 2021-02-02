@@ -13,9 +13,9 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 ## Features
 
-- align transcripts to a reference sequence
+- align transcripts to a reference sequence with [gmap](http://research-pub.gene.com/gmap/)
 - estimate gene body coverage with [genecovr](https://github.com/NBISweden/genecovr)
-- run [quast](http://bioinf.spbau.ru/quast), [jellyfish](http://www.genome.umd.edu/jellyfish.html), and [busco](https://busco.ezlab.org)
+- run [quast](http://bioinf.spbau.ru/quast), [jellyfish](http://www.genome.umd.edu/jellyfish.html), [busco](https://busco.ezlab.org), and [kraken2](https://ccb.jhu.edu/software/kraken2/)
 - summarize quality metrics with [MultiQC](https://multiqc.info)
 - (WIP): run some of the steps for adding reads, coverage files, and
   sequences to the [blobtoolkit](https://blobtoolkit.genomehubs.org) viewer
@@ -31,18 +31,19 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 Configure the workflow according to your needs via editing the files
 in the `config/` folder. Adjust `config.yaml` to configure the
-workflow execution. In addition, edit the following files:
+workflow execution (see section `Configuration` section below for more
+details) . In addition, edit the following files:
 
 `assemblies.tsv`
-    Assembly definition file which lists species, version, and assembly
+	Assembly definition file which lists species, version, and assembly
 	fasta file. Mandatory.
 
 `transcripts.tsv`
-    Transcripts definition file that lists transcript fasta files and
-    connects them to a given species
+	Transcripts definition file that lists transcript fasta files and
+	connects them to a given species
 
 `reads.tsv`
-    Raw sequence read files.
+	Raw sequence read files.
 
 `datasources.tsv`
 	data-source key-value pairs definining workflow files and sources
@@ -61,7 +62,7 @@ to the Snakemake file:
 Install Snakemake using
 [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html):
 
-    conda create -c bioconda -c conda-forge -n snakemake snakemake
+	conda create -c bioconda -c conda-forge -n snakemake snakemake
 
 For installation details, see the [instructions in the Snakemake
 documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
@@ -70,23 +71,23 @@ documentation](https://snakemake.readthedocs.io/en/stable/getting_started/instal
 
 Activate the conda environment:
 
-    conda activate snakemake
+	conda activate snakemake
 
 Test your configuration by performing a dry-run via
 
-    snakemake --use-conda -n
+	snakemake --use-conda -n
 
 Execute the workflow locally via
 
-    snakemake --use-conda --cores $N
+	snakemake --use-conda --cores $N
 
 using `$N` cores or run it in a cluster environment via
 
-    snakemake --use-conda --cluster qsub --jobs 100
+	snakemake --use-conda --cluster qsub --jobs 100
 
 or
 
-    snakemake --use-conda --drmaa --jobs 100
+	snakemake --use-conda --drmaa --jobs 100
 
 You can also use a [snakemake
 profile](https://github.com/snakemake-profiles/) for fine-tuning
@@ -98,7 +99,7 @@ profile](https://github.com/Snakemake-Profiles/slurm) run
 
 If you not only want to fix the software stack but also the underlying OS, use
 
-    snakemake --use-conda --use-singularity
+	snakemake --use-conda --use-singularity
 
 in combination with any of the modes above. See the [Snakemake
 documentation](https://snakemake.readthedocs.io/en/stable/executable.html)
@@ -109,7 +110,7 @@ for further details.
 After successful execution, you can create a self-contained
 interactive HTML report with all results via:
 
-    snakemake --report report.html
+	snakemake --report report.html
 
 The report contains documentation and results from the workflow.
 
@@ -175,10 +176,10 @@ or defines a combination of assemblies and transcripts:
 
 	genecovr:
 	  dataset1:
-        csvfile: config/genecovr.csv
+		csvfile: config/genecovr.csv
 	  dataset2:
-        assemblies: ["foo_v2", "foo_v1"]
-        transcripts: ["A", "B"]
+		assemblies: ["foo_v2", "foo_v1"]
+		transcripts: ["A", "B"]
 
 The `genecovr.csv` file consists of columns `dataset` (an identifier
 name), `psl` that gives a path to a psl file of mapped transcripts,
@@ -193,7 +194,8 @@ Busco needs a lineage to run which at current is the only property
 needed here.
 
 	busco:
-      lineage: viridiplantae_odb10
+	  lineage: viridiplantae_odb10
+	  ids: ["foo_v2", "foo_v1"]
 
 #### jellyfish
 
@@ -202,18 +204,42 @@ lists what kmer sizes to use:
 
 	jellyfish:
 	  kmer: [21]
+	  ids: ["foo_v2", "foo_v1"]
 
-#### tools
+#### quast
 
-Some tools, including `quast`, don't have any configurable options at
-present. To run them, simply include the name in the `tools` property:
+Quast will calculate quality metrics of an assembly.
 
-	tools:
-	  - quast
+	quast:
+	  ids: ["foo_v2", "foo_v1"]
 
-#### btk
 
-WIP.
+#### kraken2
+
+kraken2 assigns taxonomic ids to sequences and is used for
+contamination screening. Analyses are performed in parallel over
+windows (default size 10kb). The results shows the distribution of
+taxids over windows.
+
+	kraken2:
+	  ids: ["foo_v2"]
+	  db: /path/to/Kraken2/database
+	  window_size: 20000
+	  npartitions: 50
+
+
+#### MultiQC
+
+MultiQC doesn't have a configuration section per se. Instead, it will
+collect and plot results for the following applications:
+
+- busco
+- jellyfish
+- quast
+- kraken2
+
+Plot configurations can be tweaked in a multiqc configuration file
+`multiqc_config.yaml`.
 
 
 ### Resource configuration
@@ -225,13 +251,13 @@ cases, these values are not initialized, in which case resources fall
 back on default values defined in the `resources.default`
 configuration section:
 
-    resources.default:
-      threads: 1
-      mem_mb: 8192
-      runtime: 120
-      options: ""
-      java_options: ""
-      java_tmpdir: "/tmp"
+	resources.default:
+	  threads: 1
+	  mem_mb: 8192
+	  runtime: 120
+	  options: ""
+	  java_options: ""
+	  java_tmpdir: "/tmp"
 
 Consequently, changing settings in `resources.default` will affect all
 resource settings.
@@ -240,11 +266,11 @@ To modify resources for a rule, add the corresponding property in the
 `resources` section under the rule name. For instance, to change
 runtime, memory use, and threads for `gmap_map`, add
 
-    resources:
-      gmap_map:
-        threads: 10
-        runtime: 600
-        mem_mb: 16000
+	resources:
+	  gmap_map:
+	    threads: 10
+	    runtime: 600
+	    mem_mb: 16000
 
 
 
