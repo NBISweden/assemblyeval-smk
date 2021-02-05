@@ -20,3 +20,5 @@ shell(
     "--report {snakemake.output.report} --report-zero-counts --unclassified-out {snakemake.output.unclassified} "
     "{options} {seqinput} {log}"
 )
+shell("gzip -v {snakemake.output.output} {log}")
+shell("gzip -v {snakemake.output.unclassified} {log}")

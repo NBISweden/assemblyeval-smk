@@ -17,7 +17,7 @@ def load(fn):
 def merge(data, df):
     data.total = data.total + df.total
     data.assigned = data.assigned + df.assigned
-    data.percent = data.total / data.total[1] * 100
+    data.percent = data.total / (data.total[0] + data.total[1]) * 100
     return data
 
 
