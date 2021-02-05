@@ -12,5 +12,5 @@ log = snakemake.log_fmt_shell(stdout=True, stderr=True, append=True)
 outdir = os.path.dirname(snakemake.output.align)
 
 shell(
-    "RepeatMasker -dir {outdir} -pa {snakemake.threads} {snakemake.params.options} {snakemake.input} {log} "
+    "RepeatMasker -dir {outdir} -a -pa {snakemake.threads} {snakemake.params.options} {snakemake.input} {log} "
 )
