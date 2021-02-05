@@ -19,5 +19,5 @@ def kraken2_gather_results_input(wildcards):
 
 
 def kraken2_gather_reports_input(wildcards):
-    fmt = __INTERIM__ / f"kraken2/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.output.txt"
+    fmt = __INTERIM__ / f"kraken2/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.report.txt"
     return expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions")))

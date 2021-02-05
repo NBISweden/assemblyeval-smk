@@ -66,7 +66,7 @@ rule kraken2_gather_reports:
     input:
         output = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.output.txt.gz",
         unclassified = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.unclassified.fasta.gz",
-        txt = expand(__INTERIM__ / "kraken2/{{assembly}}/{{db}}.{{length}}.{partition}.report.txt", partition=range(0, config["kraken2"]["npartitions"]))
+        txt = kraken2_gather_reports_input
     resources:
         runtime = lambda wildcards, attempt: resources("kraken2_gather_reports", "runtime", attempt),
         mem_mb = lambda wildcards, attempt: resources("kraken2_gather_reports", "mem_mb", attempt)
