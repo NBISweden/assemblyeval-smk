@@ -32,3 +32,7 @@ definitions:
   kraken2_gather_reports:
     description: kraken2 gather reports config
     $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  kraken2_gather_results:
+    description: kraken2 gather results config
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"

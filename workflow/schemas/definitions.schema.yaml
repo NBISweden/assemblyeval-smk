@@ -281,6 +281,10 @@ definitions:
         default: {}
         $ref: "kraken2.schema.yaml#/definitions/kraken2_gather_reports"
 
+      kraken2_gather_results:
+        default: {}
+        $ref: "kraken2.schema.yaml#/definitions/kraken2_gather_results"
+
 
       ##############################
       # repeatmasker

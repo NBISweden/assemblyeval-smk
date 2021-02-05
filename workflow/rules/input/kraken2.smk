@@ -10,10 +10,10 @@ def all_kraken2_input(wildcards):
 
 
 def kraken2_gather_results_input(wildcards):
-    fmt = __INTERIM__ / f"kraken2/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.output.txt"
+    fmt = __INTERIM__ / f"kraken2/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.{{suffix}}"
     d = {
-        'output': expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions"))),
-        'unclassified': expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions")))
+        'output': expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions")), suffix="output.txt.gz"),
+        'unclassified': expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions")), suffix="unclassified.fasta.gz")
     }
     return d
 

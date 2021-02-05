@@ -1,8 +1,8 @@
 rule kraken2_parallel:
     """Run kraken2 in parallel"""
     output:
-        output = temp("{interim}/kraken2/{assembly}/{db}.{length}.{partition}.output.txt"),
-        unclassified = temp("{interim}/kraken2/{assembly}/{db}.{length}.{partition}.unclassified.fasta"),
+        output = temp("{interim}/kraken2/{assembly}/{db}.{length}.{partition}.output.txt.gz"),
+        unclassified = temp("{interim}/kraken2/{assembly}/{db}.{length}.{partition}.unclassified.fasta.gz"),
         report = temp("{interim}/kraken2/{assembly}/{db}.{length}.{partition}.report.txt"),
     input:
         "{interim}/kraken2/{assembly}/{db}.{length}.{partition}.fasta"
@@ -49,9 +49,15 @@ rule kraken2_gather_results:
         unclassified = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.unclassified.fasta.gz"
     input:
         unpack(kraken2_gather_results_input)
+    resources:
+        runtime = lambda wildcards, attempt: resources("kraken2_gather_results", "runtime", attempt),
+        mem_mb = lambda wildcards, attempt: resources("kraken2_gather_results", "mem_mb", attempt)
+    log: "logs/kraken2/{assembly}/{db}.{length}.results.log"
+    threads:
+        get_params("kraken2_gather_results", "threads")
     shell:
-        "cat {input.output} | gzip -v - > {output.output}; "
-        "cat {input.unclassified} | gzip -v - > {output.unclassified}"
+        "cat {input.output} > {output.output}; "
+        "cat {input.unclassified} > {output.unclassified}"
 
 
 rule kraken2_gather_reports:
@@ -70,4 +76,4 @@ rule kraken2_gather_reports:
     script: "../scripts/assemblyeval_kraken2_gather_reports.py"
 
 
-localrules: kraken2_bedtools_make_windows, kraken2_python_make_windows, kraken2_gather_results
+localrules: kraken2_bedtools_make_windows, kraken2_python_make_windows
