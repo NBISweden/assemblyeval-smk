@@ -24,6 +24,9 @@ definitions:
       db:
         type: string
         description: full path to kraken2 database
+    required:
+      - ids
+      - db
 
   kraken2_parallel:
     description: kraken2 parallel config

@@ -1,0 +1,7 @@
+TAXID	scaffold1|kraken:taxid|15	15
+TAXID	scaffold2|kraken:taxid|15	15
+TAXID	scaffold3|kraken:taxid|15	15
+TAXID	scaffold12|kraken:taxid|12	12
+TAXID	scaffold13|kraken:taxid|12	12
+TAXID	scaffold14|kraken:taxid|12	12
+TAXID	kraken:taxid|15	15

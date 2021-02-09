@@ -46,5 +46,6 @@ rule repeatmasker_chunk:
 rule repeatmasker_all:
     output: "results/repeatmasker/{assembly}/repeatmasker.ok"
     input: expand(__INTERIM__ / "repeatmasker/{{assembly}}/{partition}.fasta.align", partition=range(100))
+    log: "logs/results/repeatmasker/{assembly}/repeatmasker.log"
     shell:
         "touch {output}"

@@ -15,18 +15,18 @@ rule kraken2_parallel:
     threads:
         get_params("kraken2_parallel", "threads")
     log: "logs/{interim}/kraken2/{assembly}/{db}.{length}.{partition}.log"
-    wrapper: f"{WRAPPER_PREFIX}/bio/kraken2"
+    wrapper: f"{WRAPPER_PREFIX}/bio/kraken2/kraken2"
 
 
 rule kraken2_bedtools_make_windows:
     """Convert assembly fai to bed file defining windows"""
     output:
-        temp("{interim}/kraken2/{assembly}/{db}.{length}.bed")
+        bed = temp("{interim}/kraken2/{assembly}/{db}.{length}.bed")
     input:
-        get_assembly_index
+        seq = get_assembly_index
     log: "logs/{interim}/kraken2/{assembly}/{db}.{length}.bed.log"
     shell:
-        "cat {input[0]} | awk -v OFS='\\t' '{{print $1, $2}}' | bedtools makewindows -g - -w {wildcards.length} > {output[0]}"
+        "cat {input.seq} | awk -v OFS='\\t' '{{print $1, $2}}' | bedtools makewindows -g - -w {wildcards.length} > {output.bed}"
 
 
 rule kraken2_python_make_windows:
@@ -40,6 +40,7 @@ rule kraken2_python_make_windows:
         npart = get_workflow_params("kraken2", "npartitions")
     conda:
         "../envs/pybedtools.yaml"
+    log: "logs/{interim}/kraken2/{assembly}/{db}.{length}.{partition}.fasta.log"
     script: "../scripts/assemblyeval_kraken2_python_make_windows.py"
 
 

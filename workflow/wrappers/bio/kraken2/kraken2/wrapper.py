@@ -14,11 +14,13 @@ db = snakemake.params.db
 
 seqinput = snakemake.input[0]
 
+output = re.sub(r".gz$", "", snakemake.output.output)
+unclassified = re.sub(r".gz$", "", snakemake.output.unclassified)
 
 shell(
-    "kraken2 --db {db} --threads {snakemake.threads} --output {snakemake.output.output} "
-    "--report {snakemake.output.report} --report-zero-counts --unclassified-out {snakemake.output.unclassified} "
+    "kraken2 --db {db} --threads {snakemake.threads} --output {output} "
+    "--report {snakemake.output.report} --use-names --report-zero-counts --unclassified-out {unclassified} "
     "{options} {seqinput} {log}"
 )
-shell("gzip -v {snakemake.output.output} {log}")
-shell("gzip -v {snakemake.output.unclassified} {log}")
+shell("gzip -v {output} {log}")
+shell("gzip -v {unclassified} {log}")
