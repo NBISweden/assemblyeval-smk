@@ -1,0 +1,23 @@
+1	|	1	|	no rank	|	-	|
+2	|	1	|	no rank	|	-	|
+3	|	2	|	superkingdom	|	-	|
+4	|	2	|	superkingdom	|	-	|
+5	|	2	|	superkingdom	|	-	|
+6	|	1	|	superkingdom	|	-	|
+7	|	1	|	no rank	|	-	|
+8	|	1	|	no rank	|	-	|
+9	|	3	|	phylum	|	-	|
+10	|	9	|	class	|	-	|
+11	|	10	|	order	|	-	|
+12	|	11	|	family	|	-	|
+13	|	12	|	genus	|	-	|
+14	|	13	|	species	|	-	|
+15	|	12	|	genus	|	-	|
+16	|	15	|	species	|	-	|
+17	|	3	|	phylum	|	-	|
+18	|	17	|	class	|	-	|
+19	|	18	|	order	|	-	|
+20	|	19	|	family	|	-	|
+21	|	20	|	genus	|	-	|
+22	|	21	|	species	|	-	|
+23	|	18	|	order	|	-	|
