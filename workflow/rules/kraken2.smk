@@ -74,6 +74,8 @@ rule kraken2_gather_reports:
         runtime = lambda wildcards, attempt: resources("kraken2_gather_reports", "runtime", attempt),
         mem_mb = lambda wildcards, attempt: resources("kraken2_gather_reports", "mem_mb", attempt)
     log: "logs/kraken2/{assembly}/{db}.{length}.report.log"
+    conda:
+        "../envs/pandas.yaml"
     threads:
         get_params("kraken2_gather_reports", "threads")
     script: "../scripts/assemblyeval_kraken2_gather_reports.py"

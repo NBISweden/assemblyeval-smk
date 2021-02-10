@@ -21,6 +21,8 @@ rule genecovr_make_csv_inputfile:
         csv = "{outprefix}.{dataset}.csv"
     input:
         unpack(genecovr_make_csv_inputfile_input)
+    conda:
+        "../envs/pandas.yaml"
     log:
         "logs/{outprefix}.{dataset}.log"
     script: "../scripts/assemblyeval_genecovr_make_csv_inputfile_input.py"
