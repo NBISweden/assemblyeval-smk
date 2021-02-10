@@ -18,5 +18,6 @@ rule quast:
         lambda wildcards, attempt: resources("quast", "threads", attempt)
     log:
         "logs/{results}/quast/{assembly}.log"
+    envmodules: *get_params("quast", "envmodules")
     wrapper:
         f"{WRAPPER_PREFIX}/bio/quast/quast"

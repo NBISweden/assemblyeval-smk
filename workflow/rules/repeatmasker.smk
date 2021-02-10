@@ -29,10 +29,7 @@ rule repeatmasker_chunk:
         "{interim}/repeatmasker/{assembly}/fasta/{partition}.fasta"
     params:
         options = get_params("repeatmasker_chunk", "options")
-    #envmodules: "\n".join([f"\"{x}\"" for x in get_params("repeatmasker_chunk", "envmodules")])
-    envmodules:
-        "bioinfo-tools",
-        "RepeatMasker"
+    envmodules: *get_params("repeatmasker_chunk", "envmodules")
     resources:
         runtime = lambda wildcards, attempt: resources("repeatmasker_chunk", "runtime", attempt),
         mem_mb = lambda wildcards, attempt: resources("repeatmasker_chunk", "mem_mb", attempt),

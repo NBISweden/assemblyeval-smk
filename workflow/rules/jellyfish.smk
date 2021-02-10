@@ -7,6 +7,7 @@ rule jellyfish_count:
         options = get_params("jellyfish_count", "options")
     threads: get_params("jellyfish_count", "threads")
     log: "logs/{results}/jellyfish/{assembly}{gz}.{kmer}mer_counts.log"
+    envmodules: *get_params("jellyfish_count", "envmodules")
     wrapper: f"{WRAPPER_PREFIX}/bio/jellyfish/count"
 
 
@@ -19,4 +20,5 @@ rule jellyfish_histo:
         options = get_params("jellyfish_histo", "options")
     threads: get_params("jellyfish_histo", "threads")
     log: "logs/{prefix}.{kmer}mer_counts.jf.log"
+    envmodules: *get_params("jellyfish_histo", "envmodules")
     wrapper: f"{WRAPPER_PREFIX}/bio/jellyfish/histo"

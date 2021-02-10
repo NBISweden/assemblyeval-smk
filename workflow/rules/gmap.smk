@@ -12,6 +12,7 @@ rule gmap_build:
         lambda wildcards, attempt: resources("gmap_build", "threads", attempt)
     log:
         "logs/gmap_build/{assembly}.log"
+    envmodules: *get_params("gmap_build", "envmodules")
     wrapper:
         f"{WRAPPER_PREFIX}/bio/gmap/build"
 
@@ -31,5 +32,6 @@ rule gmap_map:
         lambda wildcards, attempt: resources("gmap_map", "threads", attempt)
     log:
         "logs/gmap_map/{assembly}-{transcriptome}.psl.log"
+    envmodules: *get_params("gmap_map", "envmodules")
     wrapper:
         f"{WRAPPER_PREFIX}/bio/gmap/map"

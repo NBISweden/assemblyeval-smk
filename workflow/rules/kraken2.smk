@@ -15,6 +15,7 @@ rule kraken2_parallel:
     threads:
         get_params("kraken2_parallel", "threads")
     log: "logs/{interim}/kraken2/{assembly}/{db}.{length}.{partition}.log"
+    envmodules: *get_params("kraken2_parallel", "envmodules")
     wrapper: f"{WRAPPER_PREFIX}/bio/kraken2/kraken2"
 
 

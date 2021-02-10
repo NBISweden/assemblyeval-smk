@@ -17,6 +17,7 @@ rule busco_run:
         mem_mb = lambda wildcards, attempt: resources("busco_run", "mem_mb", attempt),
     params:
         options = get_params("busco_run", "options")
+    envmodules: *get_params("busco_run", "envmodules")
     threads:
         get_params("busco_run", "threads")
     log: "logs/{results}/busco/{assembly}/{mode}/run_{lineage}.log"
