@@ -24,6 +24,8 @@ rule kraken2_bedtools_make_windows:
         bed = temp("{interim}/kraken2/{assembly}/{db}.{length}.bed")
     input:
         seq = get_assembly_index
+    conda:
+        "../envs/bedtools.yaml"
     log: "logs/{interim}/kraken2/{assembly}/{db}.{length}.bed.log"
     shell:
         "cat {input.seq} | awk -v OFS='\\t' '{{print $1, $2}}' | bedtools makewindows -g - -w {wildcards.length} > {output.bed}"
