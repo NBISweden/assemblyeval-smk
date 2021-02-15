@@ -63,6 +63,12 @@ def make_assembly_ids(ids=[]):
     return ids
 
 
+def make_analysis_ids():
+    """Make a complete list of analysis ids"""
+    ids = [k.lstrip("analysis/") for k in config.key() if k.startswith("analysis/")]
+    return ids
+
+
 def get_assembly(wildcards):
     """Retrieve the sequence file for a given assembly id"""
     # In principle could use ensembl wrapper if db not present:
@@ -83,6 +89,13 @@ def get_transcriptome(wildcards):
     if isinstance(value, str):
         value = [value]
     return value
+
+
+def get_reads(ids=None):
+    """Retrieve the sequence files for a set of read ids"""
+    if ids is None or len(ids) == 0:
+        return reads["reads"]
+    return reads.loc[ids]["reads"]
 
 
 # context manager for cd
