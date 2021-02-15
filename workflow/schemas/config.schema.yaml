@@ -60,6 +60,14 @@ properties:
     default: {}
 
 
+##############################
+# Analysis
+##############################
+patternProperties:
+  '^analysis/[0-9a-zA-Z\-_]+$':
+    type: object
+    $ref: "definitions.schema.yaml#/definitions/analysis"
+
 additionalProperties: false
 required:
   - assemblies

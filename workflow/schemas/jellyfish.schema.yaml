@@ -28,3 +28,7 @@ definitions:
   jellyfish_histo:
     description: jellyfish histo config
     $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  jellyfish_plot:
+    description: jellyfish plot config
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"

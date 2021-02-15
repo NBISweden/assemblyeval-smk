@@ -4,3 +4,4 @@ channels:
   - default
 dependencies:
   - multiqc
+  - pyyaml>=4.0

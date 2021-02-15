@@ -48,6 +48,7 @@ The workflow has rules to:
   with the R package genecovr_
 - run quast_, jellyfish_, and busco_
 - summarize quality metrics with MultiQC_
+- produce kmer-plots of assembly and reads
 - (WIP): run some of the steps for adding reads, coverage files,
   sequences to the blobtoolkit_ viewer
 

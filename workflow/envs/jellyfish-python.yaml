@@ -1,0 +1,10 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+  - percyfal
+dependencies:
+  - kmer-jellyfish-python
+  - pandas
+  - seaborn
+  - tqdm

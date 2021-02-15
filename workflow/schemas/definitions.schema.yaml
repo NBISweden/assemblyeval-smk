@@ -255,6 +255,10 @@ definitions:
         default: {}
         $ref: "jellyfish.schema.yaml#/definitions/jellyfish_histo"
 
+      jellyfish_plot:
+        default: {}
+        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_plot"
+
       ##############################
       # busco
       ##############################
@@ -296,3 +300,46 @@ definitions:
       repeatmasker_make_chunked_input:
         default: {}
         $ref: "repeatmasker.schema.yaml#/definitions/repeatmasker_make_chunked_input"
+
+
+  ##############################
+  # tool
+  ##############################
+  tool:
+    type: object
+    properties:
+      name:
+        type: string
+      resources:
+        type: object
+        $ref: "#/definitions/resources.rule"
+    required:
+      - name
+
+  ##############################
+  # Analysis id
+  ##############################
+  analysis:
+    type: object
+    properties:
+      description:
+        type: string
+      label:
+        type: string
+      reads:
+        type: array
+        description: read ids
+        items:
+          type: string
+      ids:
+        type: array
+        description: assembly ids
+        items:
+          type: string
+      tools:
+        type: array
+        items:
+          type: object
+          $ref: "#/definitions/tool"
+    required:
+      - ids
