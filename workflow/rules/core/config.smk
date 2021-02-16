@@ -65,7 +65,7 @@ def make_assembly_ids(ids=[]):
 
 def make_analysis_ids():
     """Make a complete list of analysis ids"""
-    ids = [k.lstrip("analysis/") for k in config.key() if k.startswith("analysis/")]
+    ids = [k.lstrip("analysis/") for k in config.keys() if k.startswith("analysis/")]
     return ids
 
 

@@ -93,6 +93,7 @@ wildcard_constraints:
 
 ## Assemblies etc
 wildcard_constraints:
+    analysis = "|".join(make_analysis_ids()),
     assembly = "|".join(make_assembly_ids()),
     blobdir = "[^/]+",
     length = "[0-9]+",
