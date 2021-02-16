@@ -94,8 +94,8 @@ def get_transcriptome(wildcards):
 def get_reads(ids=None):
     """Retrieve the sequence files for a set of read ids"""
     if ids is None or len(ids) == 0:
-        return reads["reads"]
-    return reads.loc[ids]["reads"]
+        return reads["reads"].to_list()
+    return reads.loc[ids]["reads"].to_list()
 
 
 # context manager for cd
