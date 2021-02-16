@@ -39,4 +39,4 @@ jobs:
       with:
         directory: .test
         snakefile: workflow/Snakefile
-        args: "--report report.zip --wrapper-prefix file:///github/workspace/worfklow/wrappers"
+        args: "--report report.zip --wrapper-prefix file:///github/workspace/workflow/wrappers"
