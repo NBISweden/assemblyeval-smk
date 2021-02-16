@@ -37,7 +37,7 @@ def jellyfish_count_input(wildcards):
     try:
         read_ids = config[analysis].get("reads", [])
     except KeyError as e:
-        print(e)
+        print(f"No such key '{e}' in config")
         raise
     reads = get_reads(read_ids)
     return {'seq': reads}
