@@ -36,6 +36,8 @@ rule jellyfish_plot:
         reads = "{results}/jellyfish/reads/{analysis}.{kmer}mer_counts.jf"
     conda:
         "../envs/jellyfish-python.yaml"
+    resources:
+        runtime = lambda wildcards, attempt: resources("jellyfish_plot", "runtime", attempt)
     threads: get_params("jellyfish_plot", "threads")
     log: "logs/{results}/jellyfish/{assembly}.{analysis}.{kmer}_jf.log"
     script:
