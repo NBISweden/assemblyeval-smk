@@ -1,5 +1,5 @@
 def all_kmer_comparison(wildcards):
-    pfx = str(__RESULTS__ / "jellyfish/{assembly}.{analysis}.{kmer}_jf.png")
+    pfx = str(__RESULTS__ / "jellyfish/kmer_comparison/{assembly}.{analysis}.{kmer}_jf.png")
     val = []
     for analysis in config.keys():
         if not analysis.startswith("analysis"):

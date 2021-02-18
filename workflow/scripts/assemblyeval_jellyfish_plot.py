@@ -37,5 +37,5 @@ p.set(xlim=(0, None), title="k-mer comparison plot")
 p.set_xlabel("read k-mer multiplicity")
 p.set_ylabel("Number of distinct k-mers")
 p.legend(llab, title="Assembly k-mer multiplicity")
-
-p.savefig(snakemake.output.png)
+fig = p.get_figure()
+fig.savefig(snakemake.output.png)

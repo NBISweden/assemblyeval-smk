@@ -28,9 +28,9 @@ rule jellyfish_histo:
 
 rule jellyfish_plot:
     output:
-        png = report("{results}/jellyfish/{assembly}.{analysis}.{kmer}_jf.png",
+        png = report("{results}/jellyfish/kmer_comparison/{assembly}.{analysis}.{kmer}_jf.png",
                      caption="../report/kmer_comparison.rst", category="Kmer comparison"),
-        tsv = "{results}/jellyfish/{assembly}.{analysis}.{kmer}_jf.tsv"
+        tsv = "{results}/jellyfish/kmer_comparison/{assembly}.{analysis}.{kmer}_jf.tsv"
     input:
         assembly = "{results}/jellyfish/assembly/{assembly}.{kmer}mer_counts.jf",
         reads = "{results}/jellyfish/reads/{analysis}.{kmer}mer_counts.jf"
