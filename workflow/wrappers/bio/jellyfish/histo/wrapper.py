@@ -20,11 +20,11 @@ tmpdir = snakemake.params.tmpdir
 
 if tmpdir is not None:
     incounts = os.path.join(tmpdir, os.path.basename(counts))
-    cmd = "cp {counts} {incounts} {log}"
+    cmd = "cp {counts} {incounts} {log};"
 else:
     incounts = counts
     cmd = ""
 
-cmd = f"{cmd}; jellyfish histo {{options}} {{incounts}} -o {{hist}} {{log}}"
+cmd = f"{cmd} jellyfish histo {{options}} {{incounts}} -o {{hist}} {{log}}"
 
 shell(cmd)
