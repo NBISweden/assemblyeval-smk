@@ -14,7 +14,7 @@ tsv_file = snakemake.output.tsv
 exe = "kmer_count_pairs"
 if shutil.which(exe) is None:
     logger.error(
-        "[assemblyeval_jellyfish_plot]: no such binary '{exe}'; install in PATH"
+        f"[assemblyeval_jellyfish_plot]: no such binary '{exe}'; install in PATH"
     )
     sys.exit(1)
 
