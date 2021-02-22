@@ -16,5 +16,15 @@ log = snakemake.log_fmt_shell(stdout=True, stderr=True)
 counts = snakemake.input.counts
 hist = snakemake.output.hist
 options = snakemake.params.options
+tmpdir = snakemake.params.tmpdir
 
-shell("jellyfish histo {options} {counts} -o {hist} {log}")
+if tmpdir is not None:
+    incounts = os.path.join(tmpdir, os.path.basename(counts))
+    cmd = "cp {counts} {incounts} {log}"
+else:
+    incounts = counts
+    cmd = ""
+
+cmd = f"{cmd}; jellyfish histo {{options}} {{incounts}} -o {{hist}} {{log}}"
+
+shell(cmd)

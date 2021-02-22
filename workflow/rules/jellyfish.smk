@@ -4,7 +4,8 @@ rule jellyfish_count:
     resources:
         runtime = lambda wildcards, attempt: resources("jellyfish_count", "runtime", attempt)
     params:
-        options = get_params("jellyfish_count", "options")
+        options = get_params("jellyfish_count", "options"),
+        tmpdir = get_workflow_params("jellyfish", "tmpdir")
     wildcard_constraints:
         datatype = "(assembly|reads)"
     threads: get_params("jellyfish_count", "threads")
@@ -19,9 +20,10 @@ rule jellyfish_histo:
     resources:
         runtime = lambda wildcards, attempt: resources("jellyfish_histo", "runtime", attempt)
     params:
-        options = get_params("jellyfish_histo", "options")
+        options = get_params("jellyfish_histo", "options"),
+        tmpdir = get_workflow_params("jellyfish", "tmpdir")
     threads: get_params("jellyfish_histo", "threads")
-    log: "logs/{prefix}.{kmer}mer_counts.jf.log"
+    log: "logs/{prefix}.{kmer}_jf.hist.log"
     envmodules: *get_params("jellyfish_histo", "envmodules")
     wrapper: f"{WRAPPER_PREFIX}/bio/jellyfish/histo"
 
@@ -34,6 +36,8 @@ rule jellyfish_plot:
     input:
         assembly = "{results}/jellyfish/assembly/{assembly}.{kmer}mer_counts.jf",
         reads = "{results}/jellyfish/reads/{analysis}.{kmer}mer_counts.jf"
+    params:
+        tmpdir = get_workflow_params("jellyfish", "tmpdir")
     conda:
         "../envs/jellyfish-python.yaml"
     resources:

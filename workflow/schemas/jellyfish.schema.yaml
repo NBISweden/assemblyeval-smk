@@ -17,6 +17,8 @@ definitions:
         uniqueItems: true
       ids:
         $ref: "definitions.schema.yaml#/definitions/ids"
+      tmpdir:
+        type: string
     required:
       - kmer
 
