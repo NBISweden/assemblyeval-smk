@@ -2,8 +2,6 @@ channels:
   - conda-forge
   - bioconda
   - defaults
-  - percyfal
 dependencies:
-  - kmer-utils
   - pandas
   - seaborn
