@@ -255,9 +255,13 @@ definitions:
         default: {}
         $ref: "jellyfish.schema.yaml#/definitions/jellyfish_histo"
 
-      jellyfish_plot:
+      jellyfish_kmer_count_pairs:
         default: {}
-        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_plot"
+        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_kmer_count_pairs"
+
+      jellyfish_kmer_pairs_plot:
+        default: {}
+        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_kmer_pairs_plot"
 
       ##############################
       # busco

@@ -31,6 +31,10 @@ definitions:
     description: jellyfish histo config
     $ref: "definitions.schema.yaml#/definitions/resources.rule"
 
-  jellyfish_plot:
+  jellyfish_kmer_count_pairs:
+    description: jellyfish kmer count pairs config
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  jellyfish_kmer_pairs_plot:
     description: jellyfish plot config
     $ref: "definitions.schema.yaml#/definitions/resources.rule"
