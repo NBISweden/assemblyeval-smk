@@ -5,15 +5,20 @@ properties:
   id:
     type: string
     description: read set identifier
-  reads:
+  read1:
+    description: fastq/sam/bam/cram file
     type: string
     format: uri
-    description: fastq/sam/bam/cram file
     pattern: .+\.(fastq|fastq\.gz|sam|bam|cram)$
+  read2:
+    description: fastq file
+    type: string
+    format: uri
+    pattern: .+\.(fastq|fastq\.gz)$
   description:
     type: [string, 'null']
     default: null
 
 required:
   - id
-  - reads
+  - read1
