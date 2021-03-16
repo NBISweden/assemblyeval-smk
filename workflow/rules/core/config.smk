@@ -22,7 +22,9 @@ def get_params(rule, resource, wildcards=None, **kwargs):
 
 
 def get_workflow_params(section, option, **kwargs):
-    """Retrieve workflow settings"""
+    """Retrieve workflow settings.
+
+    This function works on parameters that cannot be set in the analysis sections"""
     if section not in config.keys():
         return
     val = config[section].get(option, None)
@@ -91,11 +93,16 @@ def get_transcriptome(wildcards):
     return value
 
 
-def get_reads(ids=None):
+def get_reads(ids=None, name=None):
     """Retrieve the sequence files for a set of read ids"""
+    allreads = reads["read1"].to_list() + reads["read2"].dropna().to_list()
+    if name is not None:
+        r = re.compile(f".+/{name}$")
+        readlist = list(filter(r.search, allreads))
+        return readlist
     if ids is None or len(ids) == 0:
-        return reads["reads"].to_list()
-    return reads.loc[ids]["reads"].to_list()
+        return allreads
+    return reads.loc[ids]["read1"].to_list() + reads.loc[ids]["read2"].dropna().to_list()
 
 
 # context manager for cd
