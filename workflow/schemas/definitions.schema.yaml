@@ -246,10 +246,13 @@ definitions:
       ##############################
       # jellyfish
       ##############################
-      jellyfish_count:
-        default:
-          options: -s 100M -C
-        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_count"
+      jellyfish_make_chunked_input:
+        default: {}
+        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_make_chunked_input"
+        
+      jellyfish_count_chunk:
+        default: {}
+        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_count_chunk"
 
       jellyfish_histo:
         default: {}
@@ -262,6 +265,10 @@ definitions:
       jellyfish_kmer_pairs_plot:
         default: {}
         $ref: "jellyfish.schema.yaml#/definitions/jellyfish_kmer_pairs_plot"
+
+      jellyfish_merge:
+        default: {}
+        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_merge"
 
       ##############################
       # busco

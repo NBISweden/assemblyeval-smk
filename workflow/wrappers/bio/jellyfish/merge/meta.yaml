@@ -1,0 +1,4 @@
+name: "jellyfish merge"
+description: merge kmers with jellyfish
+authors:
+  - Per Unneberg

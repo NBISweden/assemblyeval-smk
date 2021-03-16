@@ -19,12 +19,20 @@ definitions:
         $ref: "definitions.schema.yaml#/definitions/ids"
       tmpdir:
         type: string
+      npartitions:
+        type: integer
+        description: number of partitions for parallel execution of kmer counting
+        default: 1
     required:
       - kmer
 
 
-  jellyfish_count:
-    description: jellyfish count config
+  jellyfish_count_chunk:
+    description: jellyfish count chunk config
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  jellyfish_make_chunked_input:
+    description: jellyfish make chunked input
     $ref: "definitions.schema.yaml#/definitions/resources.rule"
 
   jellyfish_histo:
@@ -37,4 +45,8 @@ definitions:
 
   jellyfish_kmer_pairs_plot:
     description: jellyfish plot config
+    $ref: "definitions.schema.yaml#/definitions/resources.rule"
+
+  jellyfish_merge:
+    description: jellyfish merge config
     $ref: "definitions.schema.yaml#/definitions/resources.rule"
