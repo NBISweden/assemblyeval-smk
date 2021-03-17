@@ -1,5 +1,3 @@
-id	reads
-A.reads	data/raw/reads/A.reads_1.fastq.gz
-A.reads	data/raw/reads/A.reads_2.fastq.gz
-B.reads	data/raw/reads/B.reads_1.fastq.gz
-B.reads	data/raw/reads/B.reads_2.fastq.gz
+id	read1	read2
+A.reads	data/raw/reads/A.reads_1.fastq.gz	data/raw/reads/A.reads_2.fastq.gz
+B.reads	data/raw/reads/B.reads_1.fastq.gz	data/raw/reads/B.reads_2.fastq.gz

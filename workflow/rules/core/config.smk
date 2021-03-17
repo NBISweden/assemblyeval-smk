@@ -21,12 +21,12 @@ def get_params(rule, resource, wildcards=None, **kwargs):
     return val
 
 
-def get_workflow_params(section, option, **kwargs):
+def get_workflow_params(section, option, default=None, **kwargs):
     """Retrieve workflow settings.
 
     This function works on parameters that cannot be set in the analysis sections"""
     if section not in config.keys():
-        return
+        return default
     val = config[section].get(option, None)
     return val
 
