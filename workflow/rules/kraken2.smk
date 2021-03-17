@@ -12,6 +12,8 @@ rule kraken2_parallel:
     resources:
         runtime = lambda wildcards, attempt: resources("kraken2_parallel", "runtime", attempt),
         mem_mb = lambda wildcards, attempt: resources("kraken2_parallel", "mem_mb", attempt),
+    wildcard_constraints:
+        db = os.path.basename(get_workflow_params("kraken2", "db"))
     threads:
         get_params("kraken2_parallel", "threads")
     log: "logs/{interim}/kraken2/{assembly}/{db}.{length}.{partition}.log"
@@ -27,6 +29,8 @@ rule kraken2_bedtools_make_windows:
         seq = get_assembly_index
     conda:
         "../envs/bedtools.yaml"
+    wildcard_constraints:
+        db = os.path.basename(get_workflow_params("kraken2", "db"))
     log: "logs/{interim}/kraken2/{assembly}/{db}.{length}.bed.log"
     shell:
         "cat {input.seq} | awk -v OFS='\\t' '{{print $1, $2}}' | bedtools makewindows -g - -w {wildcards.length} > {output.bed}"
@@ -43,6 +47,8 @@ rule kraken2_python_make_windows:
         npart = get_workflow_params("kraken2", "npartitions")
     conda:
         "../envs/pybedtools.yaml"
+    wildcard_constraints:
+        db = os.path.basename(get_workflow_params("kraken2", "db"))
     log: "logs/{interim}/kraken2/{assembly}/{db}.{length}.{partition}.fasta.log"
     script: "../scripts/assemblyeval_kraken2_python_make_windows.py"
 
@@ -57,6 +63,8 @@ rule kraken2_gather_results:
         runtime = lambda wildcards, attempt: resources("kraken2_gather_results", "runtime", attempt),
         mem_mb = lambda wildcards, attempt: resources("kraken2_gather_results", "mem_mb", attempt)
     log: "logs/kraken2/{assembly}/{db}.{length}.results.log"
+    wildcard_constraints:
+        db = os.path.basename(get_workflow_params("kraken2", "db"))
     threads:
         get_params("kraken2_gather_results", "threads")
     shell:
@@ -71,6 +79,8 @@ rule kraken2_gather_reports:
         output = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.output.txt.gz",
         unclassified = __RESULTS__ / "kraken2/{assembly}.{db}.{length}.unclassified.fasta.gz",
         txt = kraken2_gather_reports_input
+    wildcard_constraints:
+        db = os.path.basename(get_workflow_params("kraken2", "db"))
     resources:
         runtime = lambda wildcards, attempt: resources("kraken2_gather_reports", "runtime", attempt),
         mem_mb = lambda wildcards, attempt: resources("kraken2_gather_reports", "mem_mb", attempt)
