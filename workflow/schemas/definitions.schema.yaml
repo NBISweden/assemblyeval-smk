@@ -54,7 +54,7 @@ definitions:
     type: array
     items:
       type: string
-      uniqueItems: true
+    uniqueItems: true
 
   ##############################
   # Default resources
@@ -92,10 +92,10 @@ definitions:
     additionalProperties: false
 
   ##############################
-  # Rule resources
+  # Rule definitions
   ##############################
 
-  resources.rule:
+  rule.config:
     title: Rule configuration
     description: generic configuration for rules
     type: object
@@ -113,10 +113,10 @@ definitions:
 
 
   ##############################
-  # Java rule resources
+  # Java rule
   ##############################
 
-  resources.rule.java:
+  rule.java.config:
     title: Java rule configuration
     description: generic configuration for java rules
     type: object
@@ -138,10 +138,10 @@ definitions:
 
 
   ##############################
-  # Windowed rule resources
+  # Windowed rule
   ##############################
 
-  resources.rule.window:
+  rule.window.config:
     title: Windowed rule configuration
     description: generic configuration for rules that do sliding window analyses
     type: object
@@ -160,6 +160,43 @@ definitions:
         $ref: "#/definitions/step_size"
       window_size:
         $ref: "#/definitions/window_size"
+
+
+
+  ##############################
+  # Resources configurations
+  #
+  # NB: resources hold both resource configs as well as rule configs
+  # (e.g. options)
+  ##############################
+  rules.config:
+    type: object
+    patternProperties:
+      ^(busco_run)$:
+        description: busco rule resources
+        $ref: "definitions.schema.yaml#/definitions/rule.config"
+        #$ref: "/home/peru/dev/snakemake-workflows/snakemake-schema/definitions.schema.yaml#/definitions/rule.config"
+      ^(genecovr_make_csv_inputfile|genecovr_run)$:
+        description: genecovr rule resources
+        $ref: "definitions.schema.yaml#/definitions/rule.config"
+      ^(gmap_build|gmap_map):
+        description: gmap rule resources
+        $ref: "definitions.schema.yaml#/definitions/rule.config"
+      ^(jellyfish_count_chunk|jellyfish_make_chunked_input|jellyfish_histo|jellyfish_kmer_count_pairs|jellyfish_kmers_plot|jellyfish_merge)$:
+        description: jellyfish rule resources
+        $ref: "definitions.schema.yaml#/definitions/rule.config"
+      ^(kraken2_parallel|kraken2_gather_reports|kraken2_gather_results)$:
+        description: kraken rule resources
+        $ref: "definitions.schema.yaml#/definitions/rule.config"
+      ^(assemblyeval_samtools_faidx|multiqc)$:
+        description: miscellaneous resource configurations
+        $ref: "definitions.schema.yaml#/definitions/rule.config"
+      ^(quast)$:
+        description: quast rule resources
+        $ref: "definitions.schema.yaml#/definitions/rule.config"
+      ^(repeatmasker_chunk|repeatmasker_make_chunked_input)$:
+        description: repeatmasker rule resources
+        $ref: "definitions.schema.yaml#/definitions/rule.config"
 
 
   ##############################
@@ -190,145 +227,7 @@ definitions:
         default: resources
 
   ##############################
-  # Resources; defines property for the vast majority of workflow
-  # rules. This section is reused in its entirety in
-  # config.schema.yaml in the patternProperties property listing
-  ##############################
-
-  resources:
-    title: Resources configuration
-    description: >
-      This schema defines rule schemas for all rules in the workflow.
-    type: object
-    properties:
-
-      ##############################
-      # gmap
-      ##############################
-      gmap_build:
-        default: {}
-        $ref: "gmap.schema.yaml#/definitions/gmap_build"
-
-      gmap_map:
-        default: {}
-        $ref: "gmap.schema.yaml#/definitions/gmap_map"
-
-
-      ##############################
-      # genecovr
-      ##############################
-      genecovr_make_csv_inputfile:
-        default: {}
-        $ref: "genecovr.schema.yaml#/definitions/genecovr_make_csv_inputfile"
-
-      genecovr_run:
-        default:
-          options: --height 14 --width 14
-        $ref: "genecovr.schema.yaml#/definitions/genecovr_run"
-
-
-      ##############################
-      # multiqc
-      ##############################
-      multiqc:
-        default: {}
-        $ref: "multiqc.schema.yaml#/definitions/multiqc"
-
-
-      ##############################
-      # quast
-      ##############################
-      quast:
-        default: {}
-        $ref: "quast.schema.yaml#/definitions/quast"
-
-
-      ##############################
-      # jellyfish
-      ##############################
-      jellyfish_make_chunked_input:
-        default: {}
-        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_make_chunked_input"
-        
-      jellyfish_count_chunk:
-        default: {}
-        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_count_chunk"
-
-      jellyfish_histo:
-        default: {}
-        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_histo"
-
-      jellyfish_kmer_count_pairs:
-        default: {}
-        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_kmer_count_pairs"
-
-      jellyfish_kmer_pairs_plot:
-        default: {}
-        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_kmer_pairs_plot"
-
-      jellyfish_merge:
-        default: {}
-        $ref: "jellyfish.schema.yaml#/definitions/jellyfish_merge"
-
-      ##############################
-      # busco
-      ##############################
-      busco_run:
-        default: {}
-        $ref: "busco.schema.yaml#/definitions/busco_run"
-
-      ##############################
-      # Assemblyeval utils
-      ##############################
-      assemblyeval_samtools_faidx:
-        default: {}
-        $ref: "utils.schema.yaml#/definitions/assemblyeval_samtools_faidx"
-
-
-      ##############################
-      # Kraken2
-      ##############################
-      kraken2_parallel:
-        default: {}
-        $ref: "kraken2.schema.yaml#/definitions/kraken2_parallel"
-
-      kraken2_gather_reports:
-        default: {}
-        $ref: "kraken2.schema.yaml#/definitions/kraken2_gather_reports"
-
-      kraken2_gather_results:
-        default: {}
-        $ref: "kraken2.schema.yaml#/definitions/kraken2_gather_results"
-
-
-      ##############################
-      # repeatmasker
-      ##############################
-      repeatmasker_chunk:
-        default: {}
-        $ref: "repeatmasker.schema.yaml#/definitions/repeatmasker_chunk"
-
-      repeatmasker_make_chunked_input:
-        default: {}
-        $ref: "repeatmasker.schema.yaml#/definitions/repeatmasker_make_chunked_input"
-
-
-  ##############################
-  # tool
-  ##############################
-  tool:
-    type: object
-    properties:
-      name:
-        type: string
-      resources:
-        type: object
-        $ref: "#/definitions/resources.rule"
-    required:
-      - name
-
-  ##############################
-  # Analysis id
+  # Analysis set
   ##############################
   analysis:
     type: object
@@ -337,20 +236,20 @@ definitions:
         type: string
       label:
         type: string
-      reads:
-        type: array
+      read_ids:
+        $ref: "#/definitions/ids"
         description: read ids
-        items:
-          type: string
-      ids:
-        type: array
+      assembly_ids:
+        $ref: "#/definitions/ids"
         description: assembly ids
-        items:
-          type: string
+      transcript_ids:
+        $ref: "#/definitions/ids"
+        description: transcript ids
       tools:
-        type: array
-        items:
-          type: object
-          $ref: "#/definitions/tool"
+        $ref: "tools.schema.yaml#/definitions/tools.config"
+
+      rules:
+        $ref: "#/definitions/rules.config"
+    additionalProperties: false
     required:
-      - ids
+      - assembly_ids

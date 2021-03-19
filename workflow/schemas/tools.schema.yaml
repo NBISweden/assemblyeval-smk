@@ -1,0 +1,130 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+
+description: tool configurations
+
+type: object
+
+definitions:
+
+  blast:
+    title: blast tool configuration
+    description: blast tool configuration
+    type: object
+    properties:
+      database:
+        type: array
+        description: >-
+            list of known blast database ids. Typically blast
+            databases are stored in a directory pointed to by the
+            $BLASTDB environment variable.
+        items:
+          type: string
+          uniqueItems: true
+    required:
+      - database
+
+  busco.config:
+    title: Busco tool configuration
+    description: Busco tool configuration
+    type: object
+    properties:
+      lineage:
+        type: string
+    required:
+      - lineage
+
+  jellyfish.config:
+    title: Jellyfish tool configuration
+    description: Jellyfish tool configuration
+    type: object
+    properties:
+      kmer:
+        type: array
+        default: [21]
+        items:
+          type: integer
+        uniqueItems: true
+      tmpdir:
+        type: string
+      npartitions:
+        type: integer
+        description: number of partitions for parallel execution of kmer counting
+        default: 1
+    required:
+      - kmer
+
+  kraken2.config:
+    title: kraken2 tool configuration
+    description: kraken2 tool configuration
+    type: object
+    properties:
+      window_size:
+        type: array
+        items:
+          type: integer
+          uniqueItems: true
+        description: size of windows on which kraken2 is run
+        default:
+          - 10000
+      npartitions:
+        type: integer
+        description: number of partitions for parallel execution
+        default: 100
+      db:
+        type: string
+        description: full path to kraken2 database
+    required:
+      - db
+
+  genecovr.config:
+    title: genecovr tool configuration
+    description: genecovr tool configuration
+    type: [object, boolean]
+    patternProperties:
+      properties:
+        csvfile:
+          type: [string, 'null']
+          description: location of manually provided csv file
+          default: null
+          examples: config/genecovr.csv
+        outprefix:
+          type: string
+          description: >
+            output prefix for csvfile. The csv file will be
+            formatted as prefix + dataset key + .csv
+          default: config/genecovr
+
+  quast.config:
+    type: boolean
+    description: Main quast tool configuration
+
+  repeatmasker.config:
+    title: repeatmasker configuration
+    description: repeatmasker configuration
+    type: object
+    properties:
+      npartitions:
+        type: integer
+        description: number of partitions for parallel execution
+        default: 50
+      db:
+        type: string
+        description: full path to repeatmasker database
+      options:
+        $ref: "definitions.schema.yaml#/definitions/options"
+
+
+  ##############################
+  # Toolset configuration
+  ##############################
+  tools.config:
+    title: Generic tool configuration
+    properties:
+      busco:
+        $ref: "#/definitions/busco.config"
+      genecovr:
+        $ref: "#/definitions/genecovr.config"
+      jellyfish:
+        $ref: "#/definitions/jellyfish.config"
+      kraken2:
+        $ref: "#/definitions/kraken2.config"

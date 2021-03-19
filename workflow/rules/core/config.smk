@@ -3,9 +3,8 @@ import contextlib
 
 def resources(rule, resource, attempt=1, wildcards=None, **kwargs):
     """Retrieve resources for rule multiplying the value by attempt"""
-    # TODO: Add prior checks to resource
-    if config['resources'][rule].get(resource, None):
-        val = config['resources'][rule][resource]
+    if config.get('rules', {}).get(rule, {}).get(resource, None):
+        val = config['rules'][rule][resource]
     else:
         val = config['resources.default'][resource]
 
@@ -14,7 +13,9 @@ def resources(rule, resource, attempt=1, wildcards=None, **kwargs):
 
 def get_params(rule, resource, wildcards=None, **kwargs):
     """Retrieve rule parameters"""
-    val = config["resources"][rule].get(resource, None)
+    val = None
+    if "rules" in config.keys():
+        val = config["rules"][rule].get(resource, None)
     if val is not None:
         return val
     val = config['resources.default'][resource]
@@ -67,8 +68,49 @@ def make_assembly_ids(ids=[]):
 
 def make_analysis_ids():
     """Make a complete list of analysis ids"""
-    ids = [k.lstrip("analysis/") for k in config.keys() if k.startswith("analysis/")]
+    ids = ["default"] + [k.lstrip("analysis/") for k in config.keys() if k.startswith("analysis/")]
     return ids
+
+
+def make_read_ids(ids=None):
+    if len(ids) == 0 or ids is None:
+        return reads.index.to_list()
+    try:
+        assert set(ids) <= set(reads.index.to_list())
+    except AssertionError as e:
+        logger.error(f"undefined read identifiers in ids: \'{', '.join(ids)}\'")
+        raise
+    return ids
+
+
+def make_transcript_ids(ids=None):
+    if len(ids) == 0 or ids is None:
+        return transcripts.index.to_list()
+    try:
+        assert set(ids) <= set(transcripts.index.to_list())
+    except AssertionError as e:
+        logger.error(f"undefined transcript identifiers in ids: \'{', '.join(ids)}\'")
+        raise
+    return ids
+
+
+def iter_analyses(tool):
+    """Iterate analyses and retrieve tool configuration, assembly, transcript, and read ids"""
+    for k, analysis in config.items():
+        if not k.startswith("analysis/") and not k == "tools":
+            continue
+        # Top-level analysis definition
+        if tool in config[k].keys():
+            analysis = config
+            k = "default"
+        if tool not in analysis.get("tools", {}).keys():
+            continue
+        toolconf = analysis["tools"][tool]
+        assembly_ids = make_assembly_ids(analysis.get("assembly_ids", []))
+        read_ids = make_read_ids(analysis.get("read_ids", []))
+        transcript_ids = make_transcript_ids(analysis.get("transcript_ids", []))
+        yield k.replace("analysis/", ""), toolconf, assembly_ids, read_ids, transcript_ids
+
 
 
 def get_assembly(wildcards):

@@ -1,48 +1,35 @@
-wildcard_constraints:
-    genecovr_results = str(__RESULTS__ / "genecovr")
-
-__GENECOVR_MINMATCH__ = [0.75, 0.85, 0.9, 0.95]
-__GENECOVR_NCONTIGS__ = ["bar"]
-__GENECOVR_MATCH_INDEL__ = ["violin", "boxplot", "boxplot.log10"]
-__GENECOVR_FN__ = ["width_violin.pdf", "qnuminsert.pdf"]
-__GENECOVR_DEPTH_BREADTH__ = ["coverage", "jitter", "hist", "seqlengths"]
-__GENECOVR_CSV_GZ__ = ["gene_body_coverage.csv.gz", "psldata.csv.gz", "gbc_summary.csv.gz", "ncontigs_per_transcripts.csv.gz"]
-
-
 rule all_genecovr:
-    input: all_genecovr_input
-
-
-rule genecovr_make_csv_inputfile:
-    """Generate csv input file from dataset key"""
-    wildcard_constraints:
-        outprefix = "({})".format("|".join([config["genecovr"][x]["outprefix"] for x in config["genecovr"].keys() if x.startswith("dataset")]))
-    output:
-        csv = "{outprefix}.{dataset}.csv"
-    input:
-        unpack(genecovr_make_csv_inputfile_input)
-    conda:
-        "../envs/pandas.yaml"
-    log:
-        "logs/{outprefix}.{dataset}.log"
-    script: "../scripts/assemblyeval_genecovr_make_csv_inputfile_input.py"
+    input: all_genecovr
 
 
 rule genecovr_run:
     """Calculate gene body coverage"""
     output:
-        genecovr_output()
+        report(expand("{{genecovr_results}}/{{analysis}}/gene_body_coverage.minmatch.{mm}.pdf", mm=__GENECOVR_MINMATCH__),
+               caption="../report/genecovr_gbc.rst", category="Gene body coverages"),
+        report(expand("{{genecovr_results}}/{{analysis}}/ncontigs_per_transcripts.{type}.mm0.75.pdf",
+                      type=__GENECOVR_NCONTIGS__),
+               caption="../report/genecovr_ncontigs.rst", category="Number of contigs per transcript"),
+        report(expand("{{genecovr_results}}/{{analysis}}/depth_breadth_{type}.mm0.75.pdf",
+                      type=__GENECOVR_DEPTH_BREADTH__),
+               caption="../report/genecovr_depth_breadth.rst", category="Depth and breadth of coverage"),
+        report(expand("{{genecovr_results}}/{{analysis}}/match_indel.{type}.pdf",
+                      type=__GENECOVR_MATCH_INDEL__),
+               caption="../report/genecovr_match_indel.rst", category="Match and indel distributions"),
+        report(expand("{{genecovr_results}}/{{analysis}}/{fn}", fn=__GENECOVR_FN__),
+               caption="../report/genecovr_match_indel.rst", category="Match and indel distributions"),
+        report(expand("{{genecovr_results}}/{{analysis}}/{fn}", fn=__GENECOVR_CSV_GZ__),
+               caption="../report/genecovr_data.rst", category="Data files")
     input:
         unpack(get_genecovr_input)
     params:
         options = get_params("genecovr_run", "options")
     resources:
         runtime = lambda wildcards, attempt: resources("genecovr_run", "runtime", attempt)
-    log: "logs/{genecovr_results}/{dataset}.log"
+    wildcard_constraints:
+        genecovr_results = str(__RESULTS__ / "genecovr")
+    log: "logs/{genecovr_results}/{analysis}.log"
     threads:
         lambda wildcards, attempt: resources("genecovr_run", "threads", attempt)
     wrapper:
         f"{WRAPPER_PREFIX}/bio/genecovr"
-
-
-localrules: genecovr_make_csv_inputfile

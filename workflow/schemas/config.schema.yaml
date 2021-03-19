@@ -26,38 +26,34 @@ properties:
     default: null
 
   fs:
+    default: {}
     $ref: "definitions.schema.yaml#/definitions/fs"
-    default: {}
 
   ##############################
-  # Workflow: top-level configurations for each application
-  ##############################
-  jellyfish:
-    $ref: "jellyfish.schema.yaml#/definitions/jellyfish.config"
-  busco:
-    $ref: "busco.schema.yaml#/definitions/busco.config"
-  quast:
-    $ref: "quast.schema.yaml#/definitions/quast.config"
-  btk:
-    $ref: "btk.schema.yaml#/definitions/btk.config"
-  kraken2:
-    $ref: "kraken2.schema.yaml#/definitions/kraken2.config"
-  repeatmasker:
-    $ref: "repeatmasker.schema.yaml#/definitions/repeatmasker.config"
-  genecovr:
-    default: {}
-    $ref: "genecovr.schema.yaml#/definitions/genecovr.config"
-
-  ##############################
-  # Resources and rules
+  # Resources, rules and tools
   ##############################
   resources.default:
+    default: {}
     $ref: "definitions.schema.yaml#/definitions/resources.default"
-    default: {}
 
-  resources:
-    $ref: "definitions.schema.yaml#/definitions/resources"
-    default: {}
+  rules:
+    $ref: "definitions.schema.yaml#/definitions/rules.config"
+
+  tools:
+    $ref: "tools.schema.yaml#/definitions/tools.config"
+
+  ##############################
+  # Assembly, read and transcript identifiers
+  ##############################
+  read_ids:
+    $ref: "definitions.schema.yaml#/definitions/ids"
+    description: read ids
+  assembly_ids:
+    $ref: "definitions.schema.yaml#/definitions/ids"
+    description: assembly ids
+  transcript_ids:
+    $ref: "definitions.schema.yaml#/definitions/ids"
+    description: transcript ids
 
 
 ##############################

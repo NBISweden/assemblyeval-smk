@@ -9,8 +9,8 @@ from snakemake.shell import shell
 options = snakemake.params.get("options", "")
 log = snakemake.log_fmt_shell(stdout=True, stderr=True)
 
-dataset = snakemake.wildcards.dataset
-outdir = os.path.join("results", "genecovr", dataset)
+analysis = snakemake.wildcards.analysis
+outdir = os.path.join("results", "genecovr", analysis)
 
 shell(
     "genecovr -p {snakemake.threads} "
