@@ -7,10 +7,10 @@ include: "rules/btk.smk"
 include: "rules/quast.smk"
 include: "rules/jellyfish.smk"
 include: "rules/busco.smk"
-include: "rules/multiqc.smk"
 include: "rules/utils.smk"
 include: "rules/kraken2.smk"
 include: "rules/repeatmasker.smk"
+include: "rules/multiqc.smk"
 
 ##############################
 ## Report
