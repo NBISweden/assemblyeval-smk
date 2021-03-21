@@ -1,23 +1,25 @@
 def all_kraken2_input(wildcards):
-    if "kraken2" not in config.keys():
-        logger.info("kraken2 config section missing; no kraken2 analyses will be run")
-        return []
-    pfx = str(__RESULTS__ / "kraken2/{assembly}.{db}.{window_size}.report.txt")
-    ids = make_assembly_ids(config["kraken2"].get("ids", []))
-    val = expand(pfx, assembly=ids, window_size=config["kraken2"]["window_size"],
-                 db=os.path.basename(config["kraken2"]["db"]))
+    val = []
+    for analysis, toolconf, assembly_ids, _, _ in iter_analyses("kraken2"):
+        pfx = __RESULTS__ / "kraken2/{analysis}/{assembly}/{db}.{window_size}.report.txt"
+        ids = make_assembly_ids(assembly_ids)
+        tmp = expand(pfx, analysis=analysis, assembly=ids,
+                     window_size=get_toolconf("kraken2",
+                                              "window_size"),
+                     db=os.path.basename(toolconf["db"]))
+        val.extend(tmp)
     return val
 
 
 def kraken2_gather_results_input(wildcards):
-    fmt = __INTERIM__ / f"kraken2/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.{{suffix}}"
+    fmt = __INTERIM__ / f"kraken2/{wildcards.analysis}/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.{{suffix}}"
     d = {
-        'output': expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions")), suffix="output.txt.gz"),
-        'unclassified': expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions")), suffix="unclassified.fasta.gz")
+        'output': expand(fmt, partition=range(0, get_toolconf("kraken2", "npartitions", wildcards.analysis)), suffix="output.txt.gz"),
+        'unclassified': expand(fmt, partition=range(0, get_toolconf("kraken2", "npartitions", wildcards.analysis)), suffix="unclassified.fasta.gz")
     }
     return d
 
 
 def kraken2_gather_reports_input(wildcards):
-    fmt = __INTERIM__ / f"kraken2/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.report.txt"
-    return expand(fmt, partition=range(0, get_workflow_params("kraken2", "npartitions")))
+    fmt = __INTERIM__ / f"kraken2/{wildcards.analysis}/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.report.txt"
+    return expand(fmt, partition=range(0, get_toolconf("kraken2", "npartitions", wildcards.analysis)))

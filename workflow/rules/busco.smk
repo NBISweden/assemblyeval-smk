@@ -4,10 +4,10 @@ rule all_busco:
 
 rule busco_run:
     output:
-        tsv = "{results}/busco/{assembly}/{mode}/run_{lineage}/full_table.tsv",
-        missing = "{results}/busco/{assembly}/{mode}/run_{lineage}/missing_busco_list.tsv",
-        summary = "{results}/busco/{assembly}/{mode}/run_{lineage}/short_summary.txt",
-        multiqc_summary = "{results}/busco/{assembly}/{mode}/run_{lineage}/short_summary_{assembly}.txt"
+        tsv = "{results}/busco/{analysis}/{assembly}/{mode}/run_{lineage}/full_table.tsv",
+        missing = "{results}/busco/{analysis}/{assembly}/{mode}/run_{lineage}/missing_busco_list.tsv",
+        summary = "{results}/busco/{analysis}/{assembly}/{mode}/run_{lineage}/short_summary.txt",
+        multiqc_summary = "{results}/busco/{analysis}/{assembly}/{mode}/run_{lineage}/short_summary_{assembly}.txt"
     input:
         get_assembly
     wildcard_constraints:
@@ -20,5 +20,5 @@ rule busco_run:
     envmodules: *get_params("busco_run", "envmodules")
     threads:
         get_params("busco_run", "threads")
-    log: "logs/{results}/busco/{assembly}/{mode}/run_{lineage}.log"
+    log: "logs/{results}/busco/{analysis}/{assembly}/{mode}/run_{lineage}.log"
     wrapper: f"{WRAPPER_PREFIX}/bio/busco"

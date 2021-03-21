@@ -1,10 +1,29 @@
 import contextlib
 
+##############################
+# Get configuration options
+##############################
+def get_toolconf(tool, option, analysis="default"):
+    """Retrieve tool configuration
 
-def resources(rule, resource, attempt=1, wildcards=None, **kwargs):
+    This function should only be called if there is a rule that can
+    generate results, i.e. the values should be set.
+
+    """
+    akey = f"analysis/{analysis}"
+    if analysis == "default":
+        toolconf = config["tools"][tool]
+    else:
+        toolconf = config[akey]["tools"][tool]
+    return toolconf[option]
+
+
+def resources(rule, resource, attempt=1, analysis="default", wildcards=None, **kwargs):
     """Retrieve resources for rule multiplying the value by attempt"""
-    if config.get('rules', {}).get(rule, {}).get(resource, None):
-        val = config['rules'][rule][resource]
+    akey = f"analysis/{analysis}"
+    subconf = config.get(akey, config)
+    if subconf.get('rules', {}).get(rule, {}).get(resource, None):
+        val = subconf['rules'][rule][resource]
     else:
         val = config['resources.default'][resource]
 
@@ -12,7 +31,7 @@ def resources(rule, resource, attempt=1, wildcards=None, **kwargs):
 
 
 def get_params(rule, resource, wildcards=None, **kwargs):
-    """Retrieve rule parameters"""
+    """Retrieve rule parameters from top-level configuration"""
     val = None
     if "rules" in config.keys():
         val = config["rules"][rule].get(resource, None)
@@ -22,6 +41,8 @@ def get_params(rule, resource, wildcards=None, **kwargs):
     return val
 
 
+
+# NB: target for deletion?
 def get_workflow_params(section, option, default=None, **kwargs):
     """Retrieve workflow settings.
 

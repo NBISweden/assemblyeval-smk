@@ -30,6 +30,13 @@ definitions:
     properties:
       lineage:
         type: string
+      mode:
+        type: string
+        enum:
+          - genome
+          - transcriptome
+          - proteins
+        default: genome
     required:
       - lineage
 
