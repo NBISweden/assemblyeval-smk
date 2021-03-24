@@ -13,15 +13,19 @@ from snakemake.utils import logger
 
 log = snakemake.log_fmt_shell(stdout=True, stderr=True, append=True)
 
-seqin = snakemake.input.seq
+jfin = snakemake.input.jf
 jfout = snakemake.output.jf
 kmer = snakemake.wildcards.kmer
 options = snakemake.params.options
 out = jfout
 
-if not isinstance(seqin, list):
-    seqin = [seqin]
+if not isinstance(jfin, list):
+    seqin = [jfin]
 
-cmd = "jellyfish merge {seqin} -o {out} {log}"
+npartitions = snakemake.params.npartitions
+if npartitions > 1:
+    cmd = "jellyfish merge {jfin} -o {out} {log}"
+else:
+    cmd = "cp {jfin} {jfout}"
 
 shell(cmd)
