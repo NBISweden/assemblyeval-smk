@@ -98,7 +98,8 @@ wildcard_constraints:
     blobdir = "[^/]+",
     length = "[0-9]+",
     partition = "[0-9]+",
-    region = "[0-9]+"
+    region = "[0-9]+",
+    sep = "(|/)"
 
 ## File extensions
 wildcard_constraints:
@@ -119,11 +120,6 @@ except Exception as e:
     print(e)
     raise
 
-##############################
-## Config checks
-##############################
-check_blobdir_keys()
-
 ##################################################
 ## Uri parsing functions
 ##################################################
@@ -135,8 +131,7 @@ include: "core/uri.smk"
 def all(wildcards):
     d = {
         'multiqc': [str(__REPORTS__ / "multiqc.html")],
-        'genecovr': all_genecovr(wildcards),
-        #'kmer_comparison': all_kmer_comparison(wildcards)
+        'genecovr': all_genecovr(wildcards)
     }
     d['config'] = "config/assemblyeval.config.yaml"
     return d

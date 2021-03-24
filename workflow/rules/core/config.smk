@@ -15,7 +15,7 @@ def get_toolconf(tool, option, analysis="default"):
         toolconf = config["tools"][tool]
     else:
         toolconf = config[akey]["tools"][tool]
-    return toolconf[option]
+    return toolconf.get(option)
 
 
 def resources(rule, resource, attempt=1, analysis="default", wildcards=None, **kwargs):
@@ -34,37 +34,11 @@ def get_params(rule, resource, wildcards=None, **kwargs):
     """Retrieve rule parameters from top-level configuration"""
     val = None
     if "rules" in config.keys():
-        val = config["rules"][rule].get(resource, None)
+        val = config["rules"].get(rule, {}).get(resource, None)
     if val is not None:
         return val
     val = config['resources.default'][resource]
     return val
-
-
-
-# NB: target for deletion?
-def get_workflow_params(section, option, default=None, **kwargs):
-    """Retrieve workflow settings.
-
-    This function works on parameters that cannot be set in the analysis sections"""
-    if section not in config.keys():
-        return default
-    val = config[section].get(option, None)
-    return val
-
-
-def check_blobdir_keys():
-    """Check that blobdir key is formatted correctly and that species and version exist"""
-    if "btk" not in config.keys():
-        return
-    blobdir_assemblies = []
-    for blobdir in config["btk"].keys():
-        if not blobdir.startswith("blobdir_"):
-            continue
-        blobid = re.sub("blobdir_", "", blobdir)
-        if blobid not in assemblies.index:
-            logger.error(f"error in blobdir configuration: key {blobid} not in {config['assemblies']}")
-            sys.exit(1)
 
 
 ##################################################
@@ -89,7 +63,7 @@ def make_assembly_ids(ids=[]):
 
 def make_analysis_ids():
     """Make a complete list of analysis ids"""
-    ids = ["default"] + [k.lstrip("analysis/") for k in config.keys() if k.startswith("analysis/")]
+    ids = ["default"] + [k.replace("analysis/", "") for k in config.keys() if k.startswith("analysis/")]
     return ids
 
 

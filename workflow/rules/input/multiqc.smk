@@ -5,5 +5,4 @@ def all_multiqc(wildcards):
         'busco': all_busco_input(wildcards),
         'kraken': all_kraken2_input(wildcards)
     }
-    print(val)
     return val
