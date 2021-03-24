@@ -3,43 +3,29 @@ transcripts: config/transcripts.tsv
 reads: config/reads.tsv
 datasources: config/datasources.tsv
 
+tools:
+  genecovr: true
+  busco:
+    lineage: viridiplantae_odb10
+  kraken2:
+    db: resources/kraken2db
+    npartitions: 1
 
-genecovr:
-  dataset1:
-    csvfile: config/genecovr.csv
-  dataset2:
-    assemblies: ["foo_v1", "foo_v2"]
-    transcripts: ["A", "B"]
+rules:
+  busco_run:
+    threads: 2
 
-busco:
-  lineage: viridiplantae_odb10
-  ids: ["foo_v1"]
-
-jellyfish:
-  kmer: [21]
-  ids: ["foo_v1"]
-
-quast:
-  ids: ["foo_v2"]
-
-kraken2:
-  ids: ["foo_v1"]
-  db: resources/kraken2db
-  npartitions: 2
-
-analysis/all:
-  ids: ["foo_v1"]
+analysis/small:
+  assembly_ids: ["foo_v1"]
   tools:
-    - name: jellyfish_plot
-
-
-# Additions
-#
-# Plot read depth + gc + taxid
-#
-# blobplot: # list of objects with keys as below; ideally this should be a bokeh plot such that taxids could be excluded
-#           # would need to parse kraken report to separate classes (domain/phylum/class/...)
-#   - reads: ["readid"]
-#     ids: [""] -> create both gc and taxid
-#     window_size: [1e3, 1e4] -> windowsize for all analyses; get via input function where it is used to set window size in all
-#
+    busco:
+      lineage: viridiplantae_odb10
+    kraken2:
+      db: resources/kraken2db
+      npartitions: 2
+    jellyfish:
+      kmer: [21]
+      count_pairs: true
+      npartitions: 2
+    quast: true
+    genecovr: true

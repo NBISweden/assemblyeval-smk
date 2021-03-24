@@ -57,6 +57,10 @@ definitions:
         type: integer
         description: number of partitions for parallel execution of kmer counting
         default: 1
+      count_pairs:
+        description: count kmer pairs between assembly and reads
+        type: boolean
+        default: false
     required:
       - kmer
 
