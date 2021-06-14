@@ -20,14 +20,15 @@ with open(faidx) as fh:
         i = pybedtools.Interval(fields[0], 0, int(fields[1]))
         regions.append(i)
 
+bed = pybedtools.BedTool(regions)
 npart = snakemake.params.npartitions
 
 try:
-    assert len(regions) >= npart
+    assert len(bed) >= npart
 except AssertionError as e:
     logger.warning(
         (
-            f"Number of regions smaller than number of partitions: '{len(regions)} < {npart}': "
+            f"Number of regions smaller than number of partitions: '{len(bed)} < {npart}': "
             f"lower the number of partitions "
         )
     )
@@ -43,15 +44,8 @@ except AssertionError as e:
     )
     raise
 
-regions.sort(key=lambda r: len(r), reverse=True)
-out = [[regions[i]] for i in range(npart)]
-outlen = [len(r[0]) for r in out]
-for j in tqdm(range(npart, len(regions))):
-    imin = outlen.index(min(outlen))
-    out[imin].append(regions[j])
-    outlen[imin] += len(regions[j])
-
 logger.info(f"saving chunk {partition} to {snakemake.output.fasta}...")
-bed = pybedtools.BedTool(out[partition])
+out = bed.splitbed(n=npart).bedtools
+bed = out[partition]
 logger.info(f"reading input {snakemake.input.seq}")
 bed.sequence(fi=snakemake.input.seq).save_seqs(snakemake.output.fasta)
