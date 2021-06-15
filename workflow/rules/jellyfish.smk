@@ -56,7 +56,7 @@ rule jellyfish_histo:
         runtime = lambda wildcards, attempt: resources("jellyfish_histo", "runtime", attempt)
     params:
         options = get_params("jellyfish_histo", "options"),
-        tmpdir = lambda wildcards: get_toolconf("jellyfish", "tmpdir", wildcards.analysis)
+        tmpdir = lambda wildcards: get_toolconf("jellyfish", "tmpdir", wildcards.analysis),
     threads: get_params("jellyfish_histo", "threads")
     log: "logs/{results}/jellyfish/{analysis}/{dataset}/{kmer}_jf.hist.log"
     envmodules: *get_params("jellyfish_histo", "envmodules")
@@ -69,6 +69,8 @@ rule jellyfish_kmer_count_pairs:
     input:
         assembly = "{results}/jellyfish/{analysis}/{assembly}/merged.{kmer}mer_counts.jf",
         reads = "{results}/jellyfish/{analysis}/kmer_comparison/merged.{kmer}mer_counts.jf"
+    params:
+        prefix = "{results}/jellyfish/{analysis}/kmer_comparison/{assembly}.{kmer}_jf"
     conda:
         "../envs/jellyfish-kmer-utils.yaml"
     resources:
@@ -76,7 +78,7 @@ rule jellyfish_kmer_count_pairs:
     threads: get_params("jellyfish_kmer_count_pairs", "threads")
     log: "logs/{results}/jellyfish/{analysis}/{assembly}.{kmer}_jf.log"
     shell:
-        "kmer_count_pairs {input.assembly} {input.reads} > {output.tsv}"
+        "kmer_count_pairs {input.assembly} {input.reads} {params.prefix}"
 
 
 rule jellyfish_kmer_pairs_plot:
