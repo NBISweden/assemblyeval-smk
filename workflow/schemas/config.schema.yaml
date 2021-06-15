@@ -20,11 +20,6 @@ properties:
     pattern: .+\.(tsv|yaml)
     default: null
 
-  datasources:
-    type: [string, 'null']
-    pattern: .+\.(tsv|yaml)
-    default: null
-
   fs:
     default: {}
     $ref: "definitions.schema.yaml#/definitions/fs"
@@ -64,6 +59,5 @@ patternProperties:
     type: object
     $ref: "definitions.schema.yaml#/definitions/analysis"
 
-additionalProperties: false
 required:
   - assemblies

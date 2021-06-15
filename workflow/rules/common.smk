@@ -7,9 +7,8 @@ import urllib
 import pandas as pd
 import numpy as np
 import subprocess as sp
-from snakemake.utils import validate
 from snakemake.logging import logger
-from snakemake.utils import logger, validate
+from snakemake.utils import validate
 
 # Determine wrapper prefix since we mix local wrappers with wrappers
 # from snakemake-wrappers
@@ -53,8 +52,6 @@ def _read(infile, index, schema, idcols=None):
 
 assemblies = _read(config["assemblies"], ["id"],
                    "../schemas/assemblies.schema.yaml", idcols=["species", "version"])
-datasources = _read(config["datasources"], ["data"],
-                        "../schemas/datasources.schema.yaml")
 transcripts = _read(config["transcripts"], ["id"],
                         "../schemas/transcripts.schema.yaml")
 reads = _read(config["reads"], ["id"],
@@ -119,11 +116,6 @@ try:
 except Exception as e:
     print(e)
     raise
-
-##################################################
-## Uri parsing functions
-##################################################
-include: "core/uri.smk"
 
 ##################################################
 # Input collection functions

@@ -35,26 +35,22 @@ workflow execution (see section `Configuration` section below for more
 details) . In addition, edit the following files:
 
 `assemblies.tsv`
-	Assembly definition file which lists species, version, and assembly
-	fasta file. Mandatory.
+    Assembly definition file which lists species, version, and assembly
+    fasta file. Mandatory.
 
 `transcripts.tsv`
-	Transcripts definition file that lists transcript fasta files and
-	connects them to a given species
+    Transcripts definition file that lists transcript fasta files and
+    connects them to a given species
 
 `reads.tsv`
-	Raw sequence read files.
+    Raw sequence read files.
 
-`datasources.tsv`
-	data-source key-value pairs definining workflow files and sources
-	specified as [Uniform Resource Identifiers
-	(uri)](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier)
 
 NOTE: the config directory doesn't have to be in the workflow source
 directory, in which case snakemake must be invoked with the full path
 to the Snakemake file:
 
-	snakemake -s /path/to/manticore-smk/workflow/Snakefile
+    snakemake -s /path/to/manticore-smk/workflow/Snakefile
 
 
 ### Step 3: Install Snakemake
@@ -144,26 +140,41 @@ four defined properties: `id` (identifier), `species`, `version`, and
 `fasta`, of which `species`, `version` and `fasta` are required (`id`
 will be auto-generated from `species`_`version` if missing).
 
-
 See the tutorial [understanding
 jsonschema](https://json-schema.org/understanding-json-schema/) for an
 accessible introduction to schemas.
 
 ### Workflow configuration
 
-The workflow is configured by defining up to four input data files and
-what applications to run. The input files are `assemblies`,
-`transcripts`, `reads`, and `datasources`, where only `assemblies` is
-mandatory:
+The workflow is configured by defining up to three input data files
+and what applications to run. The input files are `assemblies`,
+`transcripts`, and `reads`, where only `assemblies` is mandatory:
 
-	assemblies: config/assemblies.tsv
-	transcripts: config/transcripts.tsv
-	reads: config/reads.tsv
-	datasources: config/datasources.tsv
+    assemblies: config/assemblies.tsv
+    transcripts: config/transcripts.tsv
+    reads: config/reads.tsv
 
 Each input data file is a tab-separated file listing file names and
 associated metadata. See the schemas for details or tests for
 examples.
+
+The tabular input files can also be represented as lists in yaml
+format. For instance, the following tabular data
+
+    species	version	fasta
+    foo	v1	resources/assembly.v1.fasta
+    foo	v2	resources/assembly.v2.fasta
+
+would be represented as follows in yaml format
+
+    - species: foo
+      description: Version 1 assembly of foo
+      version: v1
+      fasta: resources/assembly.v1.fasta
+    - species: foo
+      description: Version 2 assembly of foo
+      version: v2
+      fasta: resources/assembly.v2.fasta
 
 Tool configurations are listed below.
 
