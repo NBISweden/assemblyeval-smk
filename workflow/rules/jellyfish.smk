@@ -3,16 +3,16 @@ rule jellyfish_make_chunked_input:
     output:
         fasta = temp("{interim}/jellyfish/{analysis}/{assembly}/{partition}.fasta")
     input:
-        seq = get_assembly,
-        faidx = get_assembly_index
+        seq = lambda wildcards: cfg.get_assembly(wildcards.assembly),
+        faidx = lambda wildcards: cfg.get_assembly(wildcards.assembly, fai=True)
     params:
-        npartitions = lambda wildcards: get_toolconf("jellyfish", "npartitions", wildcards.analysis)
+        npartitions = lambda wildcards: cfg.analysis(wildcards.analysis).tools["jellyfish"].npartitions
     conda:
         "../envs/pybedtools.yaml"
     resources:
-        runtime = lambda wildcards, attempt: resources("jellyfish_make_chunked_input", "runtime", attempt)
+        runtime = cfg.ruleconf("jellyfish_make_chunked_input").xruntime
     threads:
-        get_params("jellyfish_make_chunked_input", "threads")
+        cfg.ruleconf("jellyfish_make_chunked_input").threads
     log: "logs/{interim}/jellyfish/{analysis}/{assembly}/{partition}.fasta.log"
     script:
         "../scripts/assemblyeval_pybedtools_make_chunks.py"
@@ -23,13 +23,13 @@ rule jellyfish_count_chunk:
     output: jf = temp("{interim}/jellyfish/{analysis}/{dataset}/{prefix}.{kmer}mer_counts.jf")
     input: unpack(jellyfish_count_input)
     resources:
-        runtime = lambda wildcards, attempt: resources("jellyfish_count_chunk", "runtime", attempt)
+        runtime = cfg.ruleconf("jellyfish_count_chunk").xruntime
     params:
-        options = get_params("jellyfish_count_chunk", "options"),
-        tmpdir = lambda wildcards: get_toolconf("jellyfish", "tmpdir", wildcards.analysis)
-    threads: lambda wildcards, attempt: resources("jellyfish_count_chunk", "threads", attempt)
+        options = cfg.ruleconf("jellyfish_count_chunk").options,
+        tmpdir = lambda wildcards: cfg.analysis(wildcards.analysis).tools["jellyfish"].tmpdir
+    threads: cfg.ruleconf("jellyfish_count_chunk").xthreads
     log: "logs/{interim}/jellyfish/{analysis}/{dataset}/{prefix}.{kmer}mer_counts.log"
-    envmodules: *get_params("jellyfish_count_chunk", "envmodules")
+    envmodules: *cfg.ruleconf("jellyfish_count_chunk").envmodules
     wrapper: f"{WRAPPER_PREFIX}/bio/jellyfish/count"
 
 
@@ -39,13 +39,13 @@ rule jellyfish_merge:
     output: jf = "{results}/jellyfish/{analysis}/{dataset}/merged.{kmer}mer_counts.jf"
     input: unpack(jellyfish_merge_input)
     resources:
-        runtime = lambda wildcards, attempt: resources("jellyfish_merge", "runtime", attempt)
+        runtime = cfg.ruleconf("jellyfish_merge").xruntime
     params:
-        options = get_params("jellyfish_merge", "options"),
-        tmpdir = lambda wildcards: get_toolconf("jellyfish", "tmpdir", wildcards.analysis),
-        npartitions = lambda wildcards: get_toolconf("jellyfish", "npartitions", wildcards.analysis)
+        options = cfg.ruleconf("jellyfish_merge").options,
+        tmpdir = lambda wildcards: cfg.analysis(wildcards.analysis).tools["jellyfish"].tmpdir,
+        npartitions = lambda wildcards: cfg.analysis(wildcards.analysis).tools["jellyfish"].npartitions
     log: "logs/{results}/jellyfish/{analysis}/{dataset}/merged.{kmer}mer_counts.jf.log"
-    envmodules: *get_params("jellyfish_merge", "envmodules")
+    envmodules: *cfg.ruleconf("jellyfish_merge").envmodules
     wrapper: f"{WRAPPER_PREFIX}/bio/jellyfish/merge"
 
 
@@ -53,13 +53,13 @@ rule jellyfish_histo:
     output: hist = "{results}/jellyfish/{analysis}/{dataset}/{kmer}_jf.hist"
     input: counts = "{results}/jellyfish/{analysis}/{dataset}/{kmer}mer_counts.jf"
     resources:
-        runtime = lambda wildcards, attempt: resources("jellyfish_histo", "runtime", attempt)
+        runtime = cfg.ruleconf("jellyfish_histo").xruntime
     params:
-        options = get_params("jellyfish_histo", "options"),
-        tmpdir = lambda wildcards: get_toolconf("jellyfish", "tmpdir", wildcards.analysis),
-    threads: get_params("jellyfish_histo", "threads")
+        options = cfg.ruleconf("jellyfish_histo").options,
+        tmpdir = lambda wildcards: cfg.analysis(wildcards.analysis).tools["jellyfish"].tmpdir
+    threads: cfg.ruleconf("jellyfish_histo").threads
     log: "logs/{results}/jellyfish/{analysis}/{dataset}/{kmer}_jf.hist.log"
-    envmodules: *get_params("jellyfish_histo", "envmodules")
+    envmodules: *cfg.ruleconf("jellyfish_histo").envmodules
     wrapper: f"{WRAPPER_PREFIX}/bio/jellyfish/histo"
 
 
@@ -74,8 +74,8 @@ rule jellyfish_kmer_count_pairs:
     conda:
         "../envs/jellyfish-kmer-utils.yaml"
     resources:
-        runtime = lambda wildcards, attempt: resources("jellyfish_kmer_count_pairs", "runtime", attempt)
-    threads: get_params("jellyfish_kmer_count_pairs", "threads")
+        runtime = cfg.ruleconf("jellyfish_kmer_count_pairs").xruntime
+    threads: cfg.ruleconf("jellyfish_kmer_count_pairs").threads
     log: "logs/{results}/jellyfish/{analysis}/{assembly}.{kmer}_jf.log"
     shell:
         "kmer_count_pairs {input.assembly} {input.reads} {params.prefix}"
@@ -92,8 +92,8 @@ rule jellyfish_kmer_pairs_plot:
         tsv = "{results}/jellyfish/{analysis}/kmer_comparison/{assembly}.{kmer}_jf.tsv"
     conda:
         "../envs/jellyfish-R.yaml"
-    envmodules: *get_params("jellyfish_kmer_pairs_plot", "envmodules")
-    threads: get_params("jellyfish_kmer_pairs_plot", "threads")
+    envmodules: *cfg.ruleconf("jellyfish_kmer_pairs_plot").envmodules
+    threads: cfg.ruleconf("jellyfish_kmer_pairs_plot").threads
     log: "logs/{results}/jellyfish/{analysis}/kmer_comparison/{assembly}.{kmer}_jf.png.log"
     script:
         "../scripts/assemblyeval_jellyfish_kmer_pairs_plot.R"

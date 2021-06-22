@@ -5,7 +5,9 @@
 
 Snakemake workflow for genome assembly evaluation.
 
-If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) repository and, if available, its DOI (see above; currently N/A).
+If you use this workflow in a paper, don't forget to give credits to
+the authors by citing the URL of this (original) repository and, if
+available, its DOI (see above; currently N/A).
 
 ## Authors
 
@@ -24,8 +26,11 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 ### Step 1: Obtain a copy of this workflow
 
-1. Create a new github repository using this workflow [as a template](https://help.github.com/en/articles/creating-a-repository-from-a-template).
-2. [Clone](https://help.github.com/en/articles/cloning-a-repository) the newly created repository to your local system, into the place where you want to perform the data analysis.
+1. Create a new github repository using this workflow [as a
+   template](https://help.github.com/en/articles/creating-a-repository-from-a-template).
+2. [Clone](https://help.github.com/en/articles/cloning-a-repository)
+   the newly created repository to your local system, into the place
+   where you want to perform the data analysis.
 
 ### Step 2: Configure workflow
 
@@ -58,7 +63,7 @@ to the Snakemake file:
 Install Snakemake using
 [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html):
 
-	conda create -c bioconda -c conda-forge -n snakemake snakemake
+    conda create -c bioconda -c conda-forge -n snakemake snakemake
 
 For installation details, see the [instructions in the Snakemake
 documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
@@ -67,35 +72,35 @@ documentation](https://snakemake.readthedocs.io/en/stable/getting_started/instal
 
 Activate the conda environment:
 
-	conda activate snakemake
+    conda activate snakemake
 
 Test your configuration by performing a dry-run via
 
-	snakemake --use-conda -n
+    snakemake --use-conda -n
 
 Execute the workflow locally via
 
-	snakemake --use-conda --cores $N
+    snakemake --use-conda --cores $N
 
 using `$N` cores or run it in a cluster environment via
 
-	snakemake --use-conda --cluster qsub --jobs 100
+    snakemake --use-conda --cluster qsub --jobs 100
 
 or
 
-	snakemake --use-conda --drmaa --jobs 100
+    snakemake --use-conda --drmaa --jobs 100
 
 You can also use a [snakemake
 profile](https://github.com/snakemake-profiles/) for fine-tuning
 executions. For instance, to use the [slurm
 profile](https://github.com/Snakemake-Profiles/slurm) run
 
-	cookiecutter https://github.com/Snakemake-Profiles/slurm.git
-	snakemake --use-conda --profile slurm --jobs 100
+    cookiecutter https://github.com/Snakemake-Profiles/slurm.git
+    snakemake --use-conda --profile slurm --jobs 100
 
 If you not only want to fix the software stack but also the underlying OS, use
 
-	snakemake --use-conda --use-singularity
+    snakemake --use-conda --use-singularity
 
 in combination with any of the modes above. See the [Snakemake
 documentation](https://snakemake.readthedocs.io/en/stable/executable.html)
@@ -106,7 +111,7 @@ for further details.
 After successful execution, you can create a self-contained
 interactive HTML report with all results via:
 
-	snakemake --report report.html
+    snakemake --report report.html
 
 The report contains documentation and results from the workflow.
 
@@ -114,15 +119,26 @@ The report contains documentation and results from the workflow.
 
 In case you have also changed or added steps, please consider contributing them back to the original repository:
 
-1. [Fork](https://help.github.com/en/articles/fork-a-repo) the original repo to a personal or lab account.
-2. [Clone](https://help.github.com/en/articles/cloning-a-repository) the fork to your local system, to a different place than where you ran your analysis.
-3. Copy the modified files from your analysis to the clone of your fork, e.g., `cp -r workflow path/to/fork`. Make sure to **not** accidentally copy config file contents or sample sheets. Instead, manually update the example config files if necessary.
+1. [Fork](https://help.github.com/en/articles/fork-a-repo) the
+   original repo to a personal or lab account.
+2. [Clone](https://help.github.com/en/articles/cloning-a-repository)
+   the fork to your local system, to a different place than where you
+   ran your analysis.
+3. Copy the modified files from your analysis to the clone of your
+   fork, e.g., `cp -r workflow path/to/fork`. Make sure to **not**
+   accidentally copy config file contents or sample sheets. Instead,
+   manually update the example config files if necessary.
 4. Commit and push your changes to your fork.
-5. Create a [pull request](https://help.github.com/en/articles/creating-a-pull-request) against the original repository.
+5. Create a [pull
+   request](https://help.github.com/en/articles/creating-a-pull-request)
+   against the original repository.
 
 ## Configuration
 
-For a quick overview of example configuration files, see [config/config.yaml](https://github.com/NBISweden/assemblyeval-smk/blob/main/config/config.yaml) and the test configuration [.test/config/config.yaml](https://github.com/NBISweden/assemblyeval-smk/blob/main/.test/config/config.yaml)
+For a quick overview of example configuration files, see
+[config/config.yaml](https://github.com/NBISweden/assemblyeval-smk/blob/main/config/config.yaml)
+and the test configuration
+[.test/config/config.yaml](https://github.com/NBISweden/assemblyeval-smk/blob/main/.test/config/config.yaml)
 
 
 ### Schemas
@@ -185,12 +201,12 @@ and transcripts to use for gene body coverage calculations. Briefly,
 it consists of sections that either list an input file to `genecovr`
 or defines a combination of assemblies and transcripts:
 
-	genecovr:
-	  dataset1:
-		csvfile: config/genecovr.csv
-	  dataset2:
-		assemblies: ["foo_v2", "foo_v1"]
-		transcripts: ["A", "B"]
+    genecovr:
+      dataset1:
+        csvfile: config/genecovr.csv
+      dataset2:
+        assemblies: ["foo_v2", "foo_v1"]
+        transcripts: ["A", "B"]
 
 The `genecovr.csv` file consists of columns `dataset` (an identifier
 name), `psl` that gives a path to a psl file of mapped transcripts,
@@ -204,25 +220,25 @@ and transcript files described in the previous section.
 Busco needs a lineage to run which at current is the only property
 needed here.
 
-	busco:
-	  lineage: viridiplantae_odb10
-	  ids: ["foo_v2", "foo_v1"]
+    busco:
+      lineage: viridiplantae_odb10
+      ids: ["foo_v2", "foo_v1"]
 
 #### jellyfish
 
 Jellyfish will count kmers of given sizes. The configuration section
 lists what kmer sizes to use:
 
-	jellyfish:
-	  kmer: [21]
-	  ids: ["foo_v2", "foo_v1"]
+    jellyfish:
+      kmer: [21]
+      ids: ["foo_v2", "foo_v1"]
 
 #### quast
 
 Quast will calculate quality metrics of an assembly.
 
-	quast:
-	  ids: ["foo_v2", "foo_v1"]
+    quast:
+      ids: ["foo_v2", "foo_v1"]
 
 
 #### kraken2
@@ -232,11 +248,11 @@ contamination screening. Analyses are performed in parallel over
 windows (default size 10kb). The results shows the distribution of
 taxids over windows.
 
-	kraken2:
-	  ids: ["foo_v2"]
-	  db: /path/to/Kraken2/database
-	  window_size: 20000
-	  npartitions: 50
+    kraken2:
+      ids: ["foo_v2"]
+      db: /path/to/Kraken2/database
+      window_size: 20000
+      npartitions: 50
 
 
 #### MultiQC
@@ -262,13 +278,13 @@ cases, these values are not initialized, in which case resources fall
 back on default values defined in the `resources.default`
 configuration section:
 
-	resources.default:
-	  threads: 1
-	  mem_mb: 8192
-	  runtime: 120
-	  options: ""
-	  java_options: ""
-	  java_tmpdir: "/tmp"
+    resources.default:
+      threads: 1
+      mem_mb: 8192
+      runtime: 120
+      options: ""
+      java_options: ""
+      java_tmpdir: "/tmp"
 
 Consequently, changing settings in `resources.default` will affect all
 resource settings.
@@ -277,11 +293,11 @@ To modify resources for a rule, add the corresponding property in the
 `resources` section under the rule name. For instance, to change
 runtime, memory use, and threads for `gmap_map`, add
 
-	resources:
-	  gmap_map:
-	    threads: 10
-	    runtime: 600
-	    mem_mb: 16000
+    resources:
+      gmap_map:
+        threads: 10
+        runtime: 600
+        mem_mb: 16000
 
 
 
@@ -292,8 +308,8 @@ executed via continuous integration with [Github
 Actions](https://github.com/features/actions). To run the tests, cd to
 `.test` and issue
 
-	snakemake --use-conda --conda-frontend mamba --show-failed-logs --cores 2 --conda-cleanup-pkgs cache -s ../workflow/Snakefile --wrapper-prefix file://$(pwd)/../workflow/wrappers
+    snakemake --use-conda --conda-frontend mamba --show-failed-logs --cores 2 --conda-cleanup-pkgs cache -s ../workflow/Snakefile --wrapper-prefix file://$(pwd)/../workflow/wrappers
 
 Once the test run has finished, create a report and view it:
 
-	snakemake --cores 1 -s ../workflow/Snakefile --wrapper-prefix file://$(pwd)/../workflow/wrappers --report report.html
+    snakemake --cores 1 -s ../workflow/Snakefile --wrapper-prefix file://$(pwd)/../workflow/wrappers --report report.html

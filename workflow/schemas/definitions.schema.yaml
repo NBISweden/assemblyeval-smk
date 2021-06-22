@@ -222,9 +222,15 @@ definitions:
       raw:
         type: string
         default: data/raw
+      reports:
+        type: string
+        default: reports
       resources:
         type: string
         default: resources
+      results:
+        type: string
+        default: results
 
   ##############################
   # Analysis set

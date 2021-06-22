@@ -7,8 +7,6 @@ import urllib
 import pandas as pd
 import numpy as np
 import subprocess as sp
-from snakemake.logging import logger
-from snakemake.utils import validate
 
 # Determine wrapper prefix since we mix local wrappers with wrappers
 # from snakemake-wrappers
@@ -24,57 +22,49 @@ if WRAPPER_PREFIX == SMK_WRAPPER_PREFIX:
 # with --use-conda --use-singularity
 container: "docker://continuumio/miniconda3"
 
+##############################
+# Core configuration
+##############################
+include: "core/config.smk"
+
 ##### load config and sample sheets #####
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
+# If these are handled by config, try to get rid of them
+#assemblies = Assemblies(config["assemblies"])
+#transcripts = Transcripts(config["transcripts"])
+#reads = Reads(config["reads"])
 
-def _read(infile, index, schema, idcols=None):
-    if infile is None:
-        return None
-    if os.path.splitext(infile)[1] == ".yaml":
-        with open(infile) as fh:
-            data = yaml.load(fh, yaml.Loader)
-        assert(isinstance(data, list))
-        df = pd.DataFrame(data)
-    elif os.path.splitext(infile)[1] == ".tsv":
-        df = pd.read_csv(infile, sep="\t")
-    if "id" not in df.columns and index == ["id"]:
-        logger.info(f"generating id column from {idcols}")
-        df["id"] = "_".join(df[idcols])
-        df["id"] = df[idcols].agg('_'.join, axis=1)
-    df.set_index(index, drop=False, inplace=True)
-    df = df.replace({np.nan: None})
-    df.index.names = index
-    validate(df, schema=schema)
-    return df
+## Store some workflow metadata
+config["__workflow_basedir__"] = workflow.basedir
+config["__workflow_workdir__"] = os.getcwd()
+config["__worfklow_commit__"] = None
+config["__workflow_commit_link__"] = None
 
+try:
+    with cd(workflow.basedir, logger):
+        commit = sp.check_output(["git", "rev-parse", "HEAD"]).decode().strip()
+        commit_short = sp.check_output(["git", "rev-parse", "--short", "HEAD"]).decode().strip()
+        config["__workflow_commit__"] = commit_short
+        config["__workflow_commit_link__"] = f"https://github.com/NBISweden/manticore-smk/commit/{commit}"
+except Exception as e:
+    print(e)
+    raise
 
-assemblies = _read(config["assemblies"], ["id"],
-                   "../schemas/assemblies.schema.yaml", idcols=["species", "version"])
-transcripts = _read(config["transcripts"], ["id"],
-                        "../schemas/transcripts.schema.yaml")
-reads = _read(config["reads"], ["id"],
-                  "../schemas/reads.schema.yaml")
-
-# Save current base dir for later validation in functions
-BASEDIR=workflow.current_basedir
-
-##################################################
-## Core configuration
-##################################################
-include: "core/config.smk"
+# Wrap config dictionary
+cfg = Config(config)
 
 ##############################
 ## Paths
 ##############################
-__EXTERNAL__ = Path(config["fs"]["external"])
-__INTERIM__ = Path(config["fs"]["interim"])
-__METADATA__ = Path(config["fs"]["metadata"])
-__RAW__ = Path(config["fs"]["raw"])
-__REPORTS__ = Path("reports")
-__RESOURCES__ = Path(config["fs"]["resources"])
-__RESULTS__ = Path("results")
+__EXTERNAL__ = Path(cfg.fs.external)
+__INTERIM__ = Path(cfg.fs.interim)
+__METADATA__ = Path(cfg.fs.metadata)
+__RAW__ = Path(cfg.fs.raw)
+__REPORTS__ = Path(cfg.fs.reports)
+__RESOURCES__ = Path(cfg.fs.resources)
+__RESULTS__ = Path(cfg.fs.results)
 
 ##############################
 ## Wildcard constraints
@@ -88,10 +78,11 @@ wildcard_constraints:
     resources = str(__RESOURCES__),
     results = str(__RESULTS__)
 
+
 ## Assemblies etc
 wildcard_constraints:
-    analysis = "|".join(make_analysis_ids()),
-    assembly = "|".join(make_assembly_ids()),
+    analysis = "|".join(cfg.analysisnames),
+    assembly = "|".join(cfg._assemblies.ids),
     blobdir = "[^/]+",
     length = "[0-9]+",
     partition = "[0-9]+",
@@ -103,19 +94,6 @@ wildcard_constraints:
     fa = "(.fa|.fasta)",
     gz = "(|.gz)"
 
-## Store some workflow metadata
-config["__workflow_basedir__"] = workflow.basedir
-config["__workflow_workdir__"] = os.getcwd()
-config["__worfklow_commit__"] = None
-
-try:
-    with cd(workflow.basedir, logger):
-        logger.info(f"cd to {workflow.basedir}")
-        out = sp.check_output(["git", "rev-parse", "--short", "HEAD"])
-        config["__worfklow_commit__"] = out.decode().strip()
-except Exception as e:
-    print(e)
-    raise
 
 ##################################################
 # Input collection functions

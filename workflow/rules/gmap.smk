@@ -3,16 +3,16 @@ rule gmap_build:
     output:
         db = __INTERIM__ / "gmap/db/{assembly}.db.ok"
     input:
-        seq = get_assembly
+        seq = lambda wildcards: cfg.get_assembly(wildcards.assembly)
     cache: True
     resources:
-        runtime = lambda wildcards, attempt: resources("gmap_build", "runtime", attempt),
-        mem_mb = lambda wildcards, attempt: resources("gmap_build", "mem_mb", attempt),
+        runtime = cfg.ruleconf("gmap_build").xruntime,
+        mem_mb = cfg.ruleconf("gmap_build").xmem
     threads:
-        lambda wildcards, attempt: resources("gmap_build", "threads", attempt)
+        cfg.ruleconf("gmap_build").xthreads
     log:
         "logs/gmap_build/{assembly}.log"
-    envmodules: *get_params("gmap_build", "envmodules")
+    envmodules: *cfg.ruleconf("gmap_build").envmodules
     wrapper:
         f"{WRAPPER_PREFIX}/bio/gmap/build"
 
@@ -23,15 +23,15 @@ rule gmap_map:
         res = report(__INTERIM__ / "gmap/map/{assembly}-{transcriptome}.psl", caption="../report/gmap.rst", category="Gmap mapping")
     input:
         db = __INTERIM__ / "gmap/db/{assembly}.db.ok",
-        transcriptome = get_transcriptome,
+        transcriptome = lambda wildcards: cfg.get_transcriptome(wildcards.transcriptome),
         log = "logs/gmap_build/{assembly}.log"
     resources:
-        runtime = lambda wildcards, attempt: resources("gmap_map", "runtime", attempt),
-        mem_mb = lambda wildcards, attempt: resources("gmap_map", "mem_mb", attempt),
+        runtime = cfg.ruleconf("gmap_map").xruntime,
+        mem_mb = cfg.ruleconf("gmap_map").xruntime
     threads:
-        lambda wildcards, attempt: resources("gmap_map", "threads", attempt)
+        cfg.ruleconf("gmap_map").xthreads
     log:
         "logs/gmap_map/{assembly}-{transcriptome}.psl.log"
-    envmodules: *get_params("gmap_map", "envmodules")
+    envmodules: *cfg.ruleconf("gmap_map").envmodules
     wrapper:
         f"{WRAPPER_PREFIX}/bio/gmap/map"

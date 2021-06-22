@@ -6,7 +6,7 @@ type: object
 
 definitions:
 
-  blast:
+  blast.config:
     title: blast tool configuration
     description: blast tool configuration
     type: object

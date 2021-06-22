@@ -3,14 +3,14 @@ rule repeatmasker_make_chunked_input:
     output:
         temp(expand("{{interim}}/repeatmasker/{{assembly}}/fasta/{partition}.fasta", partition=range(config.get("repeatmasker", {}).get("npartitions", 1))))
     input:
-        seq = get_assembly,
-        faidx = get_assembly_index
+        seq = lambda wildcards: cfg.get_assembly(wildcards.assembly),
+        faidx = lambda wildcards: cfg.get_assembly(wildcards.assembly, fai=True)
     conda:
         "../envs/pybedtools.yaml"
     resources:
-        runtime = lambda wildcards: resources("repeatmasker_make_chunked_input", "runtime")
+        runtime = cfg.ruleconf("repeatmasker_make_chunked_input").xruntime
     threads:
-        get_params("repeatmasker_make_chunked_input", "threads")
+        cfg.ruleconf("repeatmasker_make_chunked_input").threads
     log: "logs/{interim}/repeatmasker/{assembly}/fasta/repeatmasker_make_chunked_input.log"
     script:
         "../scripts/assemblyeval_pybedtools_make_chunks.py"
@@ -28,14 +28,14 @@ rule repeatmasker_chunk:
     input:
         "{interim}/repeatmasker/{assembly}/fasta/{partition}.fasta"
     params:
-        options = get_params("repeatmasker_chunk", "options")
-    envmodules: *get_params("repeatmasker_chunk", "envmodules")
+        options = cfg.ruleconf("repeatmasker_chunk").options
+    envmodules: *cfg.ruleconf("repeatmasker_chunk").envmodules
     resources:
-        runtime = lambda wildcards, attempt: resources("repeatmasker_chunk", "runtime", attempt),
-        mem_mb = lambda wildcards, attempt: resources("repeatmasker_chunk", "mem_mb", attempt),
+        runtime = cfg.ruleconf("repeatmasker_chunk").xruntime,
+        mem_mb = cfg.ruleconf("repeatmasker_chunk").xmem
     log: "logs/{interim}/repeatmasker/{assembly}/{partition}.log"
     threads:
-        get_params("repeatmasker_chunk", "threads")
+        cfg.ruleconf("repeatmasker_chunk").threads
     wrapper:
         f"{WRAPPER_PREFIX}/bio/repeatmasker"
 

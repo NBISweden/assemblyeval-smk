@@ -9,16 +9,16 @@ rule busco_run:
         summary = "{results}/busco/{analysis}/{assembly}/{mode}/run_{lineage}/short_summary.txt",
         multiqc_summary = "{results}/busco/{analysis}/{assembly}/{mode}/run_{lineage}/short_summary_{assembly}.txt"
     input:
-        get_assembly
+        lambda wildcards: cfg.get_assembly(wildcards.assembly)
     wildcard_constraints:
         mode = "(genome|transcriptome|proteins)"
     resources:
-        runtime = lambda wildcards, attempt: resources("busco_run", "runtime", attempt),
-        mem_mb = lambda wildcards, attempt: resources("busco_run", "mem_mb", attempt),
+        runtime = cfg.ruleconf("busco_run").xruntime,
+        mem_mb = cfg.ruleconf("busco_run").xmem
     params:
-        options = get_params("busco_run", "options")
-    envmodules: *get_params("busco_run", "envmodules")
+        options = cfg.ruleconf("busco_run").options
+    envmodules: *cfg.ruleconf("busco_run").envmodules
     threads:
-        get_params("busco_run", "threads")
+        cfg.ruleconf("busco_run").xthreads
     log: "logs/{results}/busco/{analysis}/{assembly}/{mode}/run_{lineage}.log"
     wrapper: f"{WRAPPER_PREFIX}/bio/busco"

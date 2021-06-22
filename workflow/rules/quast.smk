@@ -10,14 +10,14 @@ rule quast:
         txt = "{results}/quast/{analysis}/{assembly}/report.txt",
         txt_trans = "{results}/quast/{analysis}/{assembly}/transposed_report.txt"
     input:
-        seq = get_assembly
+        seq = lambda wildcards: cfg.analysis(wildcards.analysis).get_assembly(wildcards.assembly)
     resources:
-        runtime = lambda wildcards, attempt: resources("quast", "runtime", attempt, wildcards.analysis),
-        mem_mb = lambda wildcards, attempt: resources("quast", "mem_mb", attempt, wildcards.analysis),
+        runtime = cfg.ruleconf("quast").xruntime,
+        mem_mb = cfg.ruleconf("quast").xmem
     threads:
-        lambda wildcards, attempt: resources("quast", "threads", attempt, wildcards.analysis)
+        cfg.ruleconf("quast").xthreads
     log:
         "logs/{results}/quast/{analysis}/{assembly}.log"
-    envmodules: *get_params("quast", "envmodules")
+    envmodules: *cfg.ruleconf("quast").envmodules
     wrapper:
         f"{WRAPPER_PREFIX}/bio/quast/quast"

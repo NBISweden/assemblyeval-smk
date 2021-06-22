@@ -5,7 +5,7 @@ rule assemblyeval_samtools_faidx:
     input:
         "{prefix}{fa}{gz}"
     resources:
-        runtime = lambda wildcards, attempt: resources("assemblyeval_samtools_faidx", "runtime", attempt)
+        runtime = cfg.ruleconf("assemblyeval_samtools_faidx").xruntime
     conda:
         "../envs/samtools.yaml"
     log:
