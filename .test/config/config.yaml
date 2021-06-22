@@ -1,4 +1,4 @@
-assemblies: config/assemblies.tsv
+assemblies: config/assemblies.yaml
 transcripts: config/transcripts.tsv
 reads: config/reads.tsv
 datasources: config/datasources.tsv
