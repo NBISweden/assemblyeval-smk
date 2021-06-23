@@ -1,0 +1,8 @@
+- species: foo
+  description: Version 1 assembly of foo
+  version: v1
+  fasta: resources/assembly.v1.fasta
+- species: foo
+  description: Version 2 assembly of foo
+  version: v2
+  fasta: resources/assembly.v2.fasta
