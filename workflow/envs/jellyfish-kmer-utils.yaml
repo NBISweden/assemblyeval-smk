@@ -1,4 +1,7 @@
 channels:
+  - conda-forge
+  - bioconda
+  - defaults
   - percyfal
 dependencies:
   - kmer-utils==0.0.0.9003
