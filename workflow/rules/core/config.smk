@@ -1,16 +1,21 @@
 from collections import OrderedDict
+
 import contextlib
-import typing
+from typing import Union, List
 import types
 from snakemake.utils import logger, validate
 from snakemake.io import _load_configfile
 from dataclasses import dataclass, field, asdict
 
-WORKFLOW_DIR = workflow.current_basedir
-SCHEMA_DIR = os.path.realpath(os.path.join(WORKFLOW_DIR, os.pardir, os.pardir, "schemas"))
+WORKFLOW_DIR = str(workflow.current_basedir)
+SCHEMA_DIR = os.path.realpath(
+    os.path.join(WORKFLOW_DIR, os.pardir, os.pardir, "schemas")
+)
+
 
 class PropertyDict(OrderedDict):
     """Simple class that allows for property access"""
+
     def __init__(self, data=dict()):
         super().__init__(data)
         if isinstance(data, types.GeneratorType):
@@ -61,6 +66,7 @@ definitions_schema = Schema(os.path.join(SCHEMA_DIR, "definitions.schema.yaml"))
 tools_schema = Schema(os.path.join(SCHEMA_DIR, "tools.schema.yaml"))
 config_schema = Schema(os.path.join(SCHEMA_DIR, "config.schema.yaml"))
 
+
 class SampleData:
     _index = ["id"]
     _idcols = ["id"]
@@ -78,8 +84,9 @@ class SampleData:
             else:
                 self._load_data(args)
         elif len(args) > 1:
-            assert all(isinstance(x, SampleData) for x in args), \
-                logger.error("all instances must be SampleData")
+            assert all(isinstance(x, SampleData) for x in args), logger.error(
+                "all instances must be SampleData"
+            )
             self._index = args[0]._index
             self.schema = args[0].schema
             self._data = pd.concat(x.data for x in args)
@@ -89,25 +96,23 @@ class SampleData:
         if "id" not in self._data.columns and self._index == ["id"]:
             logger.info(f"generating id column from {self._idcols}")
             self._data["id"] = "_".join(self._data[self._idcols])
-            self._data["id"] = self._data[self._idcols].agg('_'.join, axis=1)
+            self._data["id"] = self._data[self._idcols].agg("_".join, axis=1)
         self._data.set_index(self._index, inplace=True, drop=False)
         self._data = self._data.replace({np.nan: None})
         self._data.index.names = self._index
-
 
     def _load_data(self, infile):
         if infile is None:
             self._data = pd.DataFrame(columns=self._index)
             return
         ext = os.path.splitext(infile)[1]
-        if ext  == ".yaml":
+        if ext == ".yaml":
             with open(infile) as fh:
                 data = yaml.load(fh, yaml.Loader)
-            assert(isinstance(data, list))
+            assert isinstance(data, list)
             self._data = pd.DataFrame(data)
         elif ext == ".tsv":
             self._data = pd.read_csv(infile, sep="\t")
-
 
     def subset(self, invert=False, **kw):
         keep = self.data.index.isin(self.data.index)
@@ -157,7 +162,6 @@ class Transcripts(SampleData):
     schema = transcripts_schema
 
 
-
 @dataclass
 class Tool:
     _default = None
@@ -167,17 +171,14 @@ class Tool:
 
     def __post_init__(self):
         self._fmt = {
-            'input': self._all_input,
+            "input": self._all_input,
         }
 
     def _extra(self):
         return
 
     def to_dict(self):
-        d = {
-            **asdict(self),
-            **self._analysis.to_dict()
-        }
+        d = {**asdict(self), **self._analysis.to_dict()}
         if self._extra() is not None:
             d.update(**self._extra())
         return d
@@ -186,16 +187,15 @@ class Tool:
         fmt = self._fmt[key]
         return expand(fmt, **self.to_dict())
 
-
     @property
-    def input(self) -> list[str]:
+    def input(self) -> List[str]:
         return self.format("input")
 
 
 @dataclass
 class Blast(Tool):
     _default = tools_schema.definitions["blast.config"].properties
-    database: list[str]
+    database: List[str]
 
 
 @dataclass
@@ -211,12 +211,12 @@ class Jellyfish(Tool):
     _default = tools_schema.definitions["jellyfish.config"].properties
     _all_input = "{results}/jellyfish/{analysis}/{assembly_ids}/merged.{kmer}_jf.hist"
     tmpdir: str = None
-    kmer: list[int] = field(default_factory=lambda: _default.kmer.default)
+    kmer: List[int] = field(default_factory=lambda: _default.kmer.default)
     npartitions: int = _default.npartitions.default
     count_pairs: str = _default.count_pairs.default
 
     def _extra(self):
-        d = {'partition': range(0, self.npartitions)}
+        d = {"partition": range(0, self.npartitions)}
         return d
 
     def format(self, key):
@@ -229,37 +229,53 @@ class Jellyfish(Tool):
 
     def count_input(self, wildcards):
         if wildcards.dataset in self._analysis.assembly_ids:
-            return {'seq': "{interim}/jellyfish/{analysis}/{dataset}/{prefix}.fasta".format(**wildcards)}
-        return {'seq': self._analysis.get_reads()}
+            return {
+                "seq": "{interim}/jellyfish/{analysis}/{dataset}/{prefix}.fasta".format(
+                    **wildcards
+                )
+            }
+        return {"seq": self._analysis.get_reads()}
 
     def merge_input(self, wildcards):
         if wildcards.dataset in self._analysis.assembly_ids:
-            fmt = "{{interim}}/jellyfish/{analysis}/{dataset}/{{partition}}.{kmer}mer_counts.jf".format(**wildcards)
-            return {'jf': expand(fmt, **self.to_dict())}
-        fmt = "{{interim}}/jellyfish/{analysis}/{dataset}/{{prefix}}.{kmer}mer_counts.jf".format(**wildcards)
-        return {'jf': expand(fmt, prefix=[os.path.basename(x) for x in self._analysis.get_reads()], **self.to_dict())}
+            fmt = "{{interim}}/jellyfish/{analysis}/{dataset}/{{partition}}.{kmer}mer_counts.jf".format(
+                **wildcards
+            )
+            return {"jf": expand(fmt, **self.to_dict())}
+        fmt = "{{interim}}/jellyfish/{analysis}/{dataset}/{{prefix}}.{kmer}mer_counts.jf".format(
+            **wildcards
+        )
+        return {
+            "jf": expand(
+                fmt,
+                prefix=[os.path.basename(x) for x in self._analysis.get_reads()],
+                **self.to_dict(),
+            )
+        }
 
 
 @dataclass
 class Kraken2(Tool):
     _default = tools_schema.definitions["kraken2.config"].properties
-    _all_input = "{results}/kraken2/{analysis}/{assembly_ids}/{db}.{window_size}.report.txt"
+    _all_input = (
+        "{results}/kraken2/{analysis}/{assembly_ids}/{db}.{window_size}.report.txt"
+    )
 
     db: str
-    window_size: list[int] = field(default_factory=lambda: _default.window_size.default)
+    window_size: List[int] = field(default_factory=lambda: _default.window_size.default)
     npartitions: int = _default.npartitions.default
 
     def _extra(self):
-        d = {
-            'partition': range(0, self.npartitions)
-        }
+        d = {"partition": range(0, self.npartitions)}
         return d
 
     def results(self, wildcards):
-        fmt =  f"{{interim}}/kraken2/{wildcards.analysis}/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.{{suffix}}"
+        fmt = f"{{interim}}/kraken2/{wildcards.analysis}/{wildcards.assembly}/{wildcards.db}.{wildcards.length}.{{partition}}.{{suffix}}"
         d = {
-            'output': expand(fmt, suffix="output.txt.gz", **self.to_dict()),
-            'unclassified': expand(fmt, suffix="unclassified.fasta.gz", **self.to_dict())
+            "output": expand(fmt, suffix="output.txt.gz", **self.to_dict()),
+            "unclassified": expand(
+                fmt, suffix="unclassified.fasta.gz", **self.to_dict()
+            ),
         }
         return d
 
@@ -273,9 +289,14 @@ class Quast(Tool):
     _default = None
     _all_input = "{results}/quast/{analysis}/{assembly_ids}/{rpt}"
 
-    rpt: list[str] = field(default_factory=lambda: ["report.tsv", "transposed_report.tsv", "report.txt", "transposed_report.txt"])
-
-
+    rpt: List[str] = field(
+        default_factory=lambda: [
+            "report.tsv",
+            "transposed_report.tsv",
+            "report.txt",
+            "transposed_report.txt",
+        ]
+    )
 
 
 @dataclass
@@ -287,7 +308,12 @@ class Genecovr(Tool):
     __GENECOVR_MATCH_INDEL__ = ["violin", "boxplot", "boxplot.log10"]
     __GENECOVR_FN__ = ["width_violin.pdf", "qnuminsert.pdf"]
     __GENECOVR_DEPTH_BREADTH__ = ["coverage", "jitter", "hist", "seqlengths"]
-    __GENECOVR_CSV_GZ__ = ["gene_body_coverage.csv.gz", "psldata.csv.gz", "gbc_summary.csv.gz", "ncontigs_per_transcripts.csv.gz"]
+    __GENECOVR_CSV_GZ__ = [
+        "gene_body_coverage.csv.gz",
+        "psldata.csv.gz",
+        "gbc_summary.csv.gz",
+        "ncontigs_per_transcripts.csv.gz",
+    ]
 
     csvfile: str = _default.csvfile.default
     outprefix: str = _default.outprefix.default
@@ -297,25 +323,36 @@ class Genecovr(Tool):
         if self.csvfile is None:
             self.csvfile = self._all_input / "genecovr.csv"
 
-
     def format(self, key):
         pfx = self._fmt[key]
         d = self.to_dict()
         retval = []
-        retval += report(expand(pfx / "gene_body_coverage.minmatch.{mm}.pdf", mm=self.__GENECOVR_MINMATCH__, **d),
-                         caption="../report/genecovr_gbc.rst", category="Gene body coverages")
-        retval += report(expand(pfx / "ncontigs_per_transcripts.{type}.mm0.75.pdf", type=self.__GENECOVR_NCONTIGS__, **d),
-                         caption="../report/genecovr_ncontigs.rst", category="Number of contigs per transcript")
-        retval += report(expand(pfx / "depth_breadth_{type}.mm0.75.pdf", type=self.__GENECOVR_DEPTH_BREADTH__, **d),
-                         caption="../report/genecovr_depth_breadth.rst", category="Depth and breadth of coverage")
-        retval += report(expand(pfx / "match_indel.{type}.pdf", type=self.__GENECOVR_MATCH_INDEL__, **d),
-                         caption="../report/genecovr_match_indel.rst", category="Match and indel distributions")
-        retval += report(expand(pfx / "{fn}", fn=self.__GENECOVR_FN__, **d),
-                         caption="../report/genecovr_match_indel.rst", category="Match and indel distributions")
-        retval += report(expand(pfx / "{fn}", fn=self.__GENECOVR_CSV_GZ__, **d),
-                         caption="../report/genecovr_data.rst", category="Data files")
+        retval += expand(
+            pfx / "gene_body_coverage.minmatch.{mm}.pdf",
+            mm=self.__GENECOVR_MINMATCH__,
+            **d,
+        )
+        retval += expand(
+            pfx / "gene_body_coverage.minmatch.{mm}.pdf",
+            mm=self.__GENECOVR_MINMATCH__,
+            **d,
+        )
+        retval += expand(
+            pfx / "ncontigs_per_transcripts.{type}.mm0.75.pdf",
+            type=self.__GENECOVR_NCONTIGS__,
+            **d,
+        )
+        retval += expand(
+            pfx / "depth_breadth_{type}.mm0.75.pdf",
+            type=self.__GENECOVR_DEPTH_BREADTH__,
+            **d,
+        )
+        retval += expand(
+            pfx / "match_indel.{type}.pdf", type=self.__GENECOVR_MATCH_INDEL__, **d
+        )
+        retval += expand(pfx / "{fn}", fn=self.__GENECOVR_FN__, **d)
+        retval += expand(pfx / "{fn}", fn=self.__GENECOVR_CSV_GZ__, **d)
         return retval
-
 
     def csv_input(self):
         interim = self.to_dict()["interim"]
@@ -324,10 +361,17 @@ class Genecovr(Tool):
         assembly_fasta = self._analysis.assemblies.data["fasta"].tolist()
         trx_fasta = self._analysis.transcripts.data["fasta"].tolist()
         retval = {
-            'dataset': [f"{a}/{b}" for a, b in itertools.product(assembly_ids, transcript_ids)],
-            'psl': [str(f"{interim}/gmap/map/{a}-{b}.psl") for a, b in itertools.product(assembly_ids, transcript_ids)],
-            'assembly': [f"{a}.fai" for a, b in itertools.product(assembly_fasta, trx_fasta)],
-            'trxset': [f"{b}" for a, b in itertools.product(assembly_fasta, trx_fasta)]
+            "dataset": [
+                f"{a}/{b}" for a, b in itertools.product(assembly_ids, transcript_ids)
+            ],
+            "psl": [
+                str(f"{interim}/gmap/map/{a}-{b}.psl")
+                for a, b in itertools.product(assembly_ids, transcript_ids)
+            ],
+            "assembly": [
+                f"{a}.fai" for a, b in itertools.product(assembly_fasta, trx_fasta)
+            ],
+            "trxset": [f"{b}" for a, b in itertools.product(assembly_fasta, trx_fasta)],
         }
         return retval
 
@@ -338,12 +382,12 @@ class Repeatmasker(Tool):
 
 
 tools = {
-    'blast': Blast,
-    'busco': Busco,
-    'jellyfish': Jellyfish,
-    'kraken2': Kraken2,
-    'quast': Quast,
-    'genecovr': Genecovr
+    "blast": Blast,
+    "busco": Busco,
+    "jellyfish": Jellyfish,
+    "kraken2": Kraken2,
+    "quast": Quast,
+    "genecovr": Genecovr,
 }
 
 
@@ -376,25 +420,26 @@ class Analysis:
             t._analysis = self
             self.tools[k] = t
 
-
     @property
     def analysis_tools(self):
         return self.tools.keys()
 
-
     def to_dict(self):
         d = {
-            'analysis': self.name,
-            'assembly_ids': self.assemblies.ids,
-            'read_ids': self.reads.ids,
-            'transcript_ids': self.transcripts.ids,
-            **self.fs
+            "analysis": self.name,
+            "assembly_ids": self.assemblies.ids,
+            "read_ids": self.reads.ids,
+            "transcript_ids": self.transcripts.ids,
+            **self.fs,
         }
         return d
 
     def get_reads(self):
         """Retrieve the sequence files for a set of read ids"""
-        return self.reads.data["read1"].to_list() + self.reads.data["read2"].dropna().to_list()
+        return (
+            self.reads.data["read1"].to_list()
+            + self.reads.data["read2"].dropna().to_list()
+        )
 
     def get_assembly(self, assembly_id, fai=False):
         fasta = self.assemblies.subset(id=assembly_id).data.fasta.to_list()
@@ -408,20 +453,21 @@ class Analysis:
         assert len(fasta) == 1
         return fasta[0]
 
+
 @dataclass
 class RuleConfig:
-    _default = definitions_schema.definitions['resources.default'].properties
+    _default = workflow.default_resources.parsed
     name: str
-    envmodules: list[str] = field(default_factory=list)
-    options: typing.Union[str, list, dict] = ''
-    runtime: int = _default.runtime.default
+    envmodules: List[str] = field(default_factory=list)
+    options: Union[str, list, dict] = ""
+    runtime: int = _default.get("runtime", 100)
     threads: int = 1
     attempt: int = 1
-    mem_mb: int = _default.mem_mb.default
-    java_options: str = _default.java_options.default
-    java_tmpdir: str = _default.java_tmpdir.default
-    window_size: list[int] = field(default_factory=list)
-    step_size: list[int] = field(default_factory=list)
+    mem_mb: int = _default.get("mem_mb", 1000)
+    java_options: str = _default.get("java_options", "")
+    java_tmpdir: str = _default.get("java_tmpdir", _default["tmpdir"])
+    window_size: List[int] = field(default_factory=list)
+    step_size: List[int] = field(default_factory=list)
 
     def xthreads(self, wildcards, attempt):
         return attempt * self.threads
@@ -443,28 +489,27 @@ class Config(PropertyDict):
         super().__init__(conf)
         self.__post_init__()
 
-
     def __post_init__(self):
         self._assemblies = Assemblies(config["assemblies"])
         self._transcripts = Transcripts(config["transcripts"])
         self._reads = Reads(config["reads"])
         self._init_analyses()
 
-
     def _init_analyses(self):
         regex = self._analysissection + os.sep
         for k in self.keys():
             if not k.startswith(regex):
                 continue
-            d = {'name': k, **self[k], **self.to_dict()}
+            d = {"name": k, **self[k], **self.to_dict()}
             self[k] = Analysis(**d)
         # Add default analysis with tools
-        self["analysis/default"] = Analysis(**{'name': 'analysis/default', **self.default, **self.to_dict()})
-
+        self["analysis/default"] = Analysis(
+            **{"name": "analysis/default", **self.default, **self.to_dict()}
+        )
 
     def ruleconf(self, rulename, **kw):
         """Retrieve rule configuration"""
-        data = {'name': rulename, **kw}
+        data = {"name": rulename, **kw}
         if "rules" in self.keys():
             if rulename in self.rules:
                 data.update(**self.rules[rulename])
@@ -495,10 +540,10 @@ class Config(PropertyDict):
 
     def to_dict(self):
         return {
-            'reads': self._reads,
-            'assemblies': self._assemblies,
-            'transcripts': self._transcripts,
-            'fs': self.fs
+            "reads": self._reads,
+            "assemblies": self._assemblies,
+            "transcripts": self._transcripts,
+            "fs": self.fs,
         }
 
     def get_assembly(self, assembly_id, fai=False):

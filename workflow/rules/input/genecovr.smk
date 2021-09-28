@@ -10,7 +10,7 @@ def get_genecovr_input(wildcards):
         genecovr_schema.validate(df)
         df.to_csv(csvfile, index=False, header=False)
     retval = d["psl"] + d["assembly"] + d["trxset"]
-    return {'csv': csvfile, 'files': retval}
+    return {"csv": csvfile, "files": retval}
 
 
 def all_genecovr(wildcards):

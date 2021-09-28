@@ -25,12 +25,8 @@ properties:
     $ref: "definitions.schema.yaml#/definitions/fs"
 
   ##############################
-  # Resources, rules and tools
+  # Rules and tools
   ##############################
-  resources.default:
-    default: {}
-    $ref: "definitions.schema.yaml#/definitions/resources.default"
-
   rules:
     $ref: "definitions.schema.yaml#/definitions/rules.config"
 

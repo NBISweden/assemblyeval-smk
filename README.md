@@ -269,35 +269,17 @@ Plot configurations can be tweaked in a multiqc configuration file
 `multiqc_config.yaml`.
 
 
-### Resource configuration
+### Rule configuration
 
-Every rule has a corresponding configuration entry. Hence, it is
-possible to fine tune resource configuration of `threads`, `runtime`,
-and `mem_mb`, as well as modify and amend program `options`. In most
-cases, these values are not initialized, in which case resources fall
-back on default values defined in the `resources.default`
-configuration section:
+Every rule has a corresponding configuration entry, with keywords for
+`options`, `envmodules`. Java rules have an additional keyword
+`java_options`. To modify rule configuration for a key, add the
+corresponding keyword in the `rules` section under the rule name. For
+instance, to change `options` for `jellyfish_count_chunk`, add
 
-    resources.default:
-      threads: 1
-      mem_mb: 8192
-      runtime: 120
-      options: ""
-      java_options: ""
-      java_tmpdir: "/tmp"
-
-Consequently, changing settings in `resources.default` will affect all
-resource settings.
-
-To modify resources for a rule, add the corresponding property in the
-`resources` section under the rule name. For instance, to change
-runtime, memory use, and threads for `gmap_map`, add
-
-    resources:
-      gmap_map:
-        threads: 10
-        runtime: 600
-        mem_mb: 16000
+    rules:
+      jellyfish_count_chunk:
+        options: --size 20G --canonical
 
 
 

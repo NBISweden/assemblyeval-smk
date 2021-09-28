@@ -1,4 +1,5 @@
 def get_btk_all(wildcards):
+
     retval = []
     for v in config["btk"].keys():
         if not v.startswith("blobdir"):
@@ -12,17 +13,21 @@ def get_btk_all(wildcards):
     return retval[0]
 
 
-
 def _btk_link_fasta_input(wildcards):
-    return [_btk_link_fasta_input_paths(wildcards)['path']]
+    return [_btk_link_fasta_input_paths(wildcards)["path"]]
 
 
 def _btk_link_fasta_input_paths(wildcards):
     ret = {}
-    fn = Path(wildcards.interim) / "btk" / wildcards.blobdir / f"{wildcards.prefix}.fasta.gz"
+    fn = (
+        Path(wildcards.interim)
+        / "btk"
+        / wildcards.blobdir
+        / f"{wildcards.prefix}.fasta.gz"
+    )
     for x in config["btk"][wildcards.blobdir]["fasta"]:
         if str(fn.name) == str(Path(x).name):
-            ret['path'] = str(Path(x))
-            ret['abspath'] = str(Path(x).absolute())
+            ret["path"] = str(Path(x))
+            ret["abspath"] = str(Path(x).absolute())
             break
     return ret
