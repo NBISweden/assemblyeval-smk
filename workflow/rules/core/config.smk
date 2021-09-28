@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 import contextlib
-import typing
+from typing import Union, List
 import types
 from snakemake.utils import logger, validate
 from snakemake.io import _load_configfile
@@ -188,14 +188,14 @@ class Tool:
         return expand(fmt, **self.to_dict())
 
     @property
-    def input(self) -> list[str]:
+    def input(self) -> List[str]:
         return self.format("input")
 
 
 @dataclass
 class Blast(Tool):
     _default = tools_schema.definitions["blast.config"].properties
-    database: list[str]
+    database: List[str]
 
 
 @dataclass
@@ -211,7 +211,7 @@ class Jellyfish(Tool):
     _default = tools_schema.definitions["jellyfish.config"].properties
     _all_input = "{results}/jellyfish/{analysis}/{assembly_ids}/merged.{kmer}_jf.hist"
     tmpdir: str = None
-    kmer: list[int] = field(default_factory=lambda: _default.kmer.default)
+    kmer: List[int] = field(default_factory=lambda: _default.kmer.default)
     npartitions: int = _default.npartitions.default
     count_pairs: str = _default.count_pairs.default
 
@@ -262,7 +262,7 @@ class Kraken2(Tool):
     )
 
     db: str
-    window_size: list[int] = field(default_factory=lambda: _default.window_size.default)
+    window_size: List[int] = field(default_factory=lambda: _default.window_size.default)
     npartitions: int = _default.npartitions.default
 
     def _extra(self):
@@ -289,7 +289,7 @@ class Quast(Tool):
     _default = None
     _all_input = "{results}/quast/{analysis}/{assembly_ids}/{rpt}"
 
-    rpt: list[str] = field(
+    rpt: List[str] = field(
         default_factory=lambda: [
             "report.tsv",
             "transposed_report.tsv",
@@ -327,50 +327,31 @@ class Genecovr(Tool):
         pfx = self._fmt[key]
         d = self.to_dict()
         retval = []
-        retval += report(
-            expand(
-                pfx / "gene_body_coverage.minmatch.{mm}.pdf",
-                mm=self.__GENECOVR_MINMATCH__,
-                **d,
-            ),
-            caption="../report/genecovr_gbc.rst",
-            category="Gene body coverages",
+        retval += expand(
+            pfx / "gene_body_coverage.minmatch.{mm}.pdf",
+            mm=self.__GENECOVR_MINMATCH__,
+            **d,
         )
-        retval += report(
-            expand(
-                pfx / "ncontigs_per_transcripts.{type}.mm0.75.pdf",
-                type=self.__GENECOVR_NCONTIGS__,
-                **d,
-            ),
-            caption="../report/genecovr_ncontigs.rst",
-            category="Number of contigs per transcript",
+        retval += expand(
+            pfx / "gene_body_coverage.minmatch.{mm}.pdf",
+            mm=self.__GENECOVR_MINMATCH__,
+            **d,
         )
-        retval += report(
-            expand(
-                pfx / "depth_breadth_{type}.mm0.75.pdf",
-                type=self.__GENECOVR_DEPTH_BREADTH__,
-                **d,
-            ),
-            caption="../report/genecovr_depth_breadth.rst",
-            category="Depth and breadth of coverage",
+        retval += expand(
+            pfx / "ncontigs_per_transcripts.{type}.mm0.75.pdf",
+            type=self.__GENECOVR_NCONTIGS__,
+            **d,
         )
-        retval += report(
-            expand(
-                pfx / "match_indel.{type}.pdf", type=self.__GENECOVR_MATCH_INDEL__, **d
-            ),
-            caption="../report/genecovr_match_indel.rst",
-            category="Match and indel distributions",
+        retval += expand(
+            pfx / "depth_breadth_{type}.mm0.75.pdf",
+            type=self.__GENECOVR_DEPTH_BREADTH__,
+            **d,
         )
-        retval += report(
-            expand(pfx / "{fn}", fn=self.__GENECOVR_FN__, **d),
-            caption="../report/genecovr_match_indel.rst",
-            category="Match and indel distributions",
+        retval += expand(
+            pfx / "match_indel.{type}.pdf", type=self.__GENECOVR_MATCH_INDEL__, **d
         )
-        retval += report(
-            expand(pfx / "{fn}", fn=self.__GENECOVR_CSV_GZ__, **d),
-            caption="../report/genecovr_data.rst",
-            category="Data files",
-        )
+        retval += expand(pfx / "{fn}", fn=self.__GENECOVR_FN__, **d)
+        retval += expand(pfx / "{fn}", fn=self.__GENECOVR_CSV_GZ__, **d)
         return retval
 
     def csv_input(self):
@@ -477,16 +458,16 @@ class Analysis:
 class RuleConfig:
     _default = workflow.default_resources.parsed
     name: str
-    envmodules: list[str] = field(default_factory=list)
-    options: typing.Union[str, list, dict] = ""
+    envmodules: List[str] = field(default_factory=list)
+    options: Union[str, list, dict] = ""
     runtime: int = _default.get("runtime", 100)
     threads: int = 1
     attempt: int = 1
     mem_mb: int = _default.get("mem_mb", 1000)
     java_options: str = _default.get("java_options", "")
     java_tmpdir: str = _default.get("java_tmpdir", _default["tmpdir"])
-    window_size: list[int] = field(default_factory=list)
-    step_size: list[int] = field(default_factory=list)
+    window_size: List[int] = field(default_factory=list)
+    step_size: List[int] = field(default_factory=list)
 
     def xthreads(self, wildcards, attempt):
         return attempt * self.threads

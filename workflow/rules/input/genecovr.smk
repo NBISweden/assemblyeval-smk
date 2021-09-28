@@ -1,5 +1,4 @@
 def get_genecovr_input(wildcards):
-
     k = f"analysis/{wildcards.analysis}"
     genecovr = cfg[k].tools["genecovr"]
     d = genecovr.csv_input()
