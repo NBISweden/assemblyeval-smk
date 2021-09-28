@@ -7,7 +7,7 @@ from snakemake.utils import logger, validate
 from snakemake.io import _load_configfile
 from dataclasses import dataclass, field, asdict
 
-WORKFLOW_DIR = workflow.current_basedir
+WORKFLOW_DIR = str(workflow.current_basedir)
 SCHEMA_DIR = os.path.realpath(
     os.path.join(WORKFLOW_DIR, os.pardir, os.pardir, "schemas")
 )
