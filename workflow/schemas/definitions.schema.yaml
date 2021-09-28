@@ -22,20 +22,8 @@ definitions:
     items:
       type: string
     uniqueItems: true
-  runtime:
-    description: rule runtime in minutes
-    type: integer
-  threads:
-    description: number of threads
-    type: integer
-  mem_mb:
-    description: Resource that defines assigned memory in megabases
-    type: integer
   java_options:
     description: options to pass to java interpreter
-    type: string
-  java_tmpdir:
-    description: java temporary directory
     type: string
   step_size:
     description: step size
@@ -57,41 +45,6 @@ definitions:
     uniqueItems: true
 
   ##############################
-  # Default resources
-  ##############################
-
-  resources.default:
-    title: Default resources.
-    description: >
-      Default resources. Any rule that does not specify resources will
-      fall back on these default values.
-    type: object
-    default: {}
-    properties:
-      threads:
-        $ref: "#/definitions/threads"
-        default: 1
-      mem_mb:
-        $ref: "#/definitions/mem_mb"
-        default: 8192
-      runtime:
-        $ref: "#/definitions/runtime"
-        default: 120
-      options:
-        $ref: "#/definitions/options"
-        default: ""
-      envmodules:
-        $ref: "#/definitions/envmodules"
-        default: []
-      java_options:
-        $ref: "#/definitions/java_options"
-        default: ""
-      java_tmpdir:
-        $ref: "#/definitions/java_tmpdir"
-        default: "/tmp"
-    additionalProperties: false
-
-  ##############################
   # Rule definitions
   ##############################
 
@@ -104,13 +57,6 @@ definitions:
         $ref: "#/definitions/options"
       envmodules:
         $ref: "#/definitions/envmodules"
-      threads:
-        $ref: "#/definitions/threads"
-      mem_mb:
-        $ref: "#/definitions/mem_mb"
-      runtime:
-        $ref: "#/definitions/runtime"
-
 
   ##############################
   # Java rule
@@ -125,16 +71,8 @@ definitions:
         $ref: "#/definitions/options"
       envmodules:
         $ref: "#/definitions/envmodules"
-      threads:
-        $ref: "#/definitions/threads"
-      mem_mb:
-        $ref: "#/definitions/mem_mb"
-      runtime:
-        $ref: "#/definitions/runtime"
       java_options:
         $ref: "#/definitions/java_options"
-      java_tmpdir:
-        $ref: "#/definitions/java_tmpdir"
 
 
   ##############################
@@ -150,12 +88,6 @@ definitions:
         $ref: "#/definitions/options"
       envmodules:
         $ref: "#/definitions/envmodules"
-      threads:
-        $ref: "#/definitions/threads"
-      mem_mb:
-        $ref: "#/definitions/mem_mb"
-      runtime:
-        $ref: "#/definitions/runtime"
       step_size:
         $ref: "#/definitions/step_size"
       window_size:
@@ -166,36 +98,33 @@ definitions:
   ##############################
   # Resources configurations
   #
-  # NB: resources hold both resource configs as well as rule configs
-  # (e.g. options)
   ##############################
   rules.config:
     type: object
     patternProperties:
       ^(busco_run)$:
-        description: busco rule resources
+        description: busco rule config
         $ref: "definitions.schema.yaml#/definitions/rule.config"
-        #$ref: "/home/peru/dev/snakemake-workflows/snakemake-schema/definitions.schema.yaml#/definitions/rule.config"
       ^(genecovr_make_csv_inputfile|genecovr_run)$:
-        description: genecovr rule resources
+        description: genecovr rule config
         $ref: "definitions.schema.yaml#/definitions/rule.config"
       ^(gmap_build|gmap_map):
-        description: gmap rule resources
+        description: gmap rule config
         $ref: "definitions.schema.yaml#/definitions/rule.config"
       ^(jellyfish_count_chunk|jellyfish_make_chunked_input|jellyfish_histo|jellyfish_kmer_count_pairs|jellyfish_kmers_plot|jellyfish_merge)$:
-        description: jellyfish rule resources
+        description: jellyfish rule config
         $ref: "definitions.schema.yaml#/definitions/rule.config"
       ^(kraken2_parallel|kraken2_gather_reports|kraken2_gather_results)$:
-        description: kraken rule resources
+        description: kraken rule config
         $ref: "definitions.schema.yaml#/definitions/rule.config"
       ^(assemblyeval_samtools_faidx|multiqc)$:
         description: miscellaneous resource configurations
         $ref: "definitions.schema.yaml#/definitions/rule.config"
       ^(quast)$:
-        description: quast rule resources
+        description: quast rule config
         $ref: "definitions.schema.yaml#/definitions/rule.config"
       ^(repeatmasker_chunk|repeatmasker_make_chunked_input)$:
-        description: repeatmasker rule resources
+        description: repeatmasker rule config
         $ref: "definitions.schema.yaml#/definitions/rule.config"
 
 

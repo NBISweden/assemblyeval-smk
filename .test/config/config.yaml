@@ -11,9 +11,6 @@ tools:
     db: resources/kraken2db
     npartitions: 1
 
-rules:
-  busco_run:
-    threads: 2
 
 analysis/small:
   assembly_ids: ["foo_v1"]
