@@ -26,6 +26,7 @@ jobs:
     steps:
     - name: Install rsync
       run: sudo apt-get install -y rsync
+    - uses: conda-incubator/setup-miniconda@v3
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
     - name: Test workflow (local test data)
