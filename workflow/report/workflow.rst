@@ -3,7 +3,7 @@ assemblyeval-smk
 
 The assemblyeval-smk_ workflow runs a suite of programs for evaluating
 genome assembly quality. This analysis is based on commit version {{
-snakemake.config["__workflow_commit__"] }}.
+snakemake.config["__workflow_commit__"] }}_.
 
 The analysis can be rerun with the following command:
 
@@ -85,7 +85,7 @@ MultiQC report
 The `MultiQC report`_ collects results from quast_, jellyfish_, busco_,
 and other QC programs for which `MultiQC tools`_ exist.
 
-.. _assemblyeval-smk: https://github.com/percyfal/assemblyeval-smk
+.. _assemblyeval-smk: https://github.com/NBISweden/assemblyeval-smk
 .. _genecovr: https://github.com/NBISweden/genecovr
 .. _gmap: http://research-pub.gene.com/gmap/
 .. _blobtoolkit: https://blobtoolkit.genomehubs.org/
@@ -96,3 +96,4 @@ and other QC programs for which `MultiQC tools`_ exist.
 .. _Snakemake wrappers: https://snakemake-wrappers.readthedocs.io/en/stable/
 .. _MultiQC report: ./reports/multiqc.html
 .. _MultiQC tools: https://multiqc.info/#supported-tools
+.. _{{ snakemake.config["__workflow_commit__"] }}: {{ snakemake.config["__workflow_commit_link__"] }}

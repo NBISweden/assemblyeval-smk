@@ -29,14 +29,14 @@ jobs:
       with:
         submodules: recursive
     - name: Test workflow (local test data)
-      uses: snakemake/snakemake-github-action@v1.23.0
+      uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .test
         snakefile: workflow/Snakefile
         args: "--use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache --conda-frontend mamba --wrapper-prefix file:///github/workspace/workflow/wrappers"
         stagein: mamba install -y -c conda-forge rsync
     - name: Test report
-      uses: snakemake/snakemake-github-action@v1.21.0
+      uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .test
         snakefile: workflow/Snakefile
