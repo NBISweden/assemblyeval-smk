@@ -12,4 +12,4 @@ rule multiqc:
     envmodules:
         *cfg.ruleconf("multiqc").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/multiqc"
+        os.path.join(WRAPPER_PREFIX, "bio/multiqc")

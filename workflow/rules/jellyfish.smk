@@ -39,7 +39,7 @@ rule jellyfish_count_chunk:
     envmodules:
         *cfg.ruleconf("jellyfish_count_chunk").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/jellyfish/count"
+        os.path.join(WRAPPER_PREFIX, "bio/jellyfish/count")
 
 
 rule jellyfish_merge:
@@ -64,7 +64,7 @@ rule jellyfish_merge:
     envmodules:
         *cfg.ruleconf("jellyfish_merge").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/jellyfish/merge"
+        os.path.join(WRAPPER_PREFIX, "bio/jellyfish/merge")
 
 
 rule jellyfish_histo:
@@ -85,7 +85,7 @@ rule jellyfish_histo:
     envmodules:
         *cfg.ruleconf("jellyfish_histo").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/jellyfish/histo"
+        os.path.join(WRAPPER_PREFIX, "bio/jellyfish/histo")
 
 
 rule jellyfish_kmer_count_pairs:

@@ -14,7 +14,7 @@ rule gmap_build:
     envmodules:
         *cfg.ruleconf("gmap_build").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/gmap/build"
+        os.path.join(WRAPPER_PREFIX, "bio/gmap/build")
 
 
 rule gmap_map:
@@ -38,4 +38,4 @@ rule gmap_map:
     envmodules:
         *cfg.ruleconf("gmap_map").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/gmap/map"
+        os.path.join(WRAPPER_PREFIX, "bio/gmap/map")

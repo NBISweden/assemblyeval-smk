@@ -63,4 +63,4 @@ rule genecovr_run:
         "logs/{results}/genecovr/{analysis}.log",
     threads: cfg.ruleconf("genecovr_run").xthreads
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/genecovr"
+        os.path.join(WRAPPER_PREFIX, "bio/genecovr")

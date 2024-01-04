@@ -24,7 +24,7 @@ rule kraken2_parallel:
     envmodules:
         *cfg.ruleconf("kraken2_parallel").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/kraken2/kraken2"
+        os.path.join(WRAPPER_PREFIX, "bio/kraken2/kraken2")
 
 
 rule kraken2_bedtools_make_windows:

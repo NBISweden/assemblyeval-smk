@@ -21,4 +21,5 @@ rule busco_run:
     threads:
         cfg.ruleconf("busco_run").xthreads
     log: "logs/{results}/busco/{analysis}/{assembly}/{mode}/run_{lineage}.log"
-    wrapper: f"{WRAPPER_PREFIX}/bio/busco"
+    wrapper:
+        os.path.join(WRAPPER_PREFIX, "bio/busco")

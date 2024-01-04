@@ -23,4 +23,4 @@ rule quast:
     envmodules:
         *cfg.ruleconf("quast").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/quast/quast"
+        os.path.join(WRAPPER_PREFIX, "bio/quast/quast")

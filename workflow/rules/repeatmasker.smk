@@ -43,7 +43,7 @@ rule repeatmasker_chunk:
         "logs/{interim}/repeatmasker/{assembly}/{partition}.log",
     threads: cfg.ruleconf("repeatmasker_chunk").threads
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/repeatmasker"
+        os.path.join(WRAPPER_PREFIX, "bio/repeatmasker")
 
 
 rule repeatmasker_all:
