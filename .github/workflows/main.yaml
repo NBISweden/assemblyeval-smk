@@ -11,9 +11,9 @@ jobs:
   Linting:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Lint workflow
-      uses: snakemake/snakemake-github-action@v1.23.0
+      uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .
         snakefile: workflow/Snakefile
@@ -30,7 +30,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: recursive
-        set-safe-directory: /github/workspace
+        # set-safe-directory: "/github/workspace"
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1.25.1
       with:
