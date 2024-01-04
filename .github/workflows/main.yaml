@@ -13,7 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Lint workflow
-      uses: snakemake/snakemake-github-action@v1.25.1
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      # uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .
         snakefile: workflow/Snakefile
@@ -24,17 +25,16 @@ jobs:
     needs: Linting
     timeout-minutes: 30
     steps:
-    - name: Install rsync
-      run: sudo apt-get install -y rsync
-    - uses: conda-incubator/setup-miniconda@v3
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
     - name: Test workflow (local test data)
-      uses: snakemake/snakemake-github-action@v1.23.0
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      #uses: snakemake/snakemake-github-action@v1.23.0
       with:
         directory: .test
         snakefile: workflow/Snakefile
         args: "--use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache --wrapper-prefix file:///github/workspace/workflow/wrappers"
+        stagein: mamba install -y -c conda-forge rsync
     - name: Test report
       uses: snakemake/snakemake-github-action@v1.23.0
       with:
