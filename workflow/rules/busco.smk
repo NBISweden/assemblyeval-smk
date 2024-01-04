@@ -13,9 +13,6 @@ rule busco_run:
         lambda wildcards: cfg.get_assembly(wildcards.assembly),
     wildcard_constraints:
         mode="(genome|transcriptome|proteins)",
-    resources:
-        runtime=cfg.ruleconf("busco_run").xruntime,
-        mem_mb=cfg.ruleconf("busco_run").xmem,
     params:
         options=cfg.ruleconf("busco_run").options,
     envmodules:

@@ -4,8 +4,6 @@ rule assemblyeval_samtools_faidx:
         "{prefix}{fa}{gz}.fai",
     input:
         "{prefix}{fa}{gz}",
-    resources:
-        runtime=cfg.ruleconf("assemblyeval_samtools_faidx").xruntime,
     conda:
         "../envs/samtools.yaml"
     log:

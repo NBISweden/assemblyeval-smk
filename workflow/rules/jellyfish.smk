@@ -11,8 +11,6 @@ rule jellyfish_make_chunked_input:
         .npartitions,
     conda:
         "../envs/pybedtools.yaml"
-    resources:
-        runtime=cfg.ruleconf("jellyfish_make_chunked_input").xruntime,
     threads: cfg.ruleconf("jellyfish_make_chunked_input").threads
     log:
         "logs/{interim}/jellyfish/{analysis}/{assembly}/{partition}.fasta.log",
@@ -26,8 +24,6 @@ rule jellyfish_count_chunk:
         jf=temp("{interim}/jellyfish/{analysis}/{dataset}/{prefix}.{kmer}mer_counts.jf"),
     input:
         unpack(jellyfish_count_input),
-    resources:
-        runtime=cfg.ruleconf("jellyfish_count_chunk").xruntime,
     params:
         options=cfg.ruleconf("jellyfish_count_chunk").options,
         tmpdir=lambda wildcards: cfg.analysis(wildcards.analysis)
@@ -49,8 +45,6 @@ rule jellyfish_merge:
         jf="{results}/jellyfish/{analysis}/{dataset}/merged.{kmer}mer_counts.jf",
     input:
         unpack(jellyfish_merge_input),
-    resources:
-        runtime=cfg.ruleconf("jellyfish_merge").xruntime,
     params:
         options=cfg.ruleconf("jellyfish_merge").options,
         tmpdir=lambda wildcards: cfg.analysis(wildcards.analysis)
@@ -72,8 +66,6 @@ rule jellyfish_histo:
         hist="{results}/jellyfish/{analysis}/{dataset}/{kmer}_jf.hist",
     input:
         counts="{results}/jellyfish/{analysis}/{dataset}/{kmer}mer_counts.jf",
-    resources:
-        runtime=cfg.ruleconf("jellyfish_histo").xruntime,
     params:
         options=cfg.ruleconf("jellyfish_histo").options,
         tmpdir=lambda wildcards: cfg.analysis(wildcards.analysis)
@@ -98,8 +90,6 @@ rule jellyfish_kmer_count_pairs:
         prefix="{results}/jellyfish/{analysis}/kmer_comparison/{assembly}.{kmer}_jf",
     conda:
         "../envs/jellyfish-kmer-utils.yaml"
-    resources:
-        runtime=cfg.ruleconf("jellyfish_kmer_count_pairs").xruntime,
     threads: cfg.ruleconf("jellyfish_kmer_count_pairs").threads
     log:
         "logs/{results}/jellyfish/{analysis}/{assembly}.{kmer}_jf.log",

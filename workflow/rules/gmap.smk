@@ -5,9 +5,6 @@ rule gmap_build:
     input:
         seq=lambda wildcards: cfg.get_assembly(wildcards.assembly),
     cache: True
-    resources:
-        runtime=cfg.ruleconf("gmap_build").xruntime,
-        mem_mb=cfg.ruleconf("gmap_build").xmem,
     threads: cfg.ruleconf("gmap_build").xthreads
     log:
         "logs/gmap_build/{assembly}.log",
@@ -29,9 +26,6 @@ rule gmap_map:
         db=__INTERIM__ / "gmap/db/{assembly}.db.ok",
         transcriptome=lambda wildcards: cfg.get_transcriptome(wildcards.transcriptome),
         log="logs/gmap_build/{assembly}.log",
-    resources:
-        runtime=cfg.ruleconf("gmap_map").xruntime,
-        mem_mb=cfg.ruleconf("gmap_map").xruntime,
     threads: cfg.ruleconf("gmap_map").xthreads
     log:
         "logs/gmap_map/{assembly}-{transcriptome}.psl.log",

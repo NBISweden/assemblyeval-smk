@@ -3,8 +3,6 @@ rule multiqc:
         "{reports}/multiqc.html",
     input:
         unpack(all_multiqc),
-    resources:
-        runtime=cfg.ruleconf("multiqc").xruntime,
     params:
         cfg.ruleconf("multiqc").options,
     log:
