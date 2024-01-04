@@ -4,6 +4,7 @@ import contextlib
 from typing import Union, List
 import types
 from snakemake.utils import logger, validate
+
 try:
     from snakemake.io import _load_configfile
 except:
@@ -456,6 +457,7 @@ class Analysis:
         fasta = self.transcripts.subset(id=assembly_id).data.fasta.to_list()
         assert len(fasta) == 1
         return fasta[0]
+
 
 @dataclass
 class RuleConfig:

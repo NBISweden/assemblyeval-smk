@@ -25,10 +25,12 @@ dbok = snakemake.input.db
 transcriptome = snakemake.input.transcriptome
 output = snakemake.output.res
 
+
 def compose_input_gz(filename):
     if filename.endswith(".gz"):
         return f"<(gzip --decompress --stdout {filename})"
     return filename
+
 
 input_files = [compose_input_gz(fn) for fn in transcriptome]
 dirname = os.path.dirname(dbok)

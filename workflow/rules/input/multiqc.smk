@@ -1,5 +1,4 @@
 def all_multiqc(wildcards):
-
     val = {
         "quast": all_quast(wildcards).get("tsv", []),
         "jellyfish": all_jellyfish(wildcards),

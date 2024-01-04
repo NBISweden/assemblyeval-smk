@@ -1,5 +1,4 @@
 def all_kraken2_input(wildcards):
-
     val = []
     for analysis in cfg.analyses_w_tool("kraken2"):
         kraken2 = analysis.tools["kraken2"]
