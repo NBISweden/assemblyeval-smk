@@ -27,9 +27,10 @@ jobs:
     - name: Install rsync
       run: sudo apt-get install -y rsync
     - name: Checkout repository and submodules
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
+      set-safe-directory: /github/workspace
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1.25.1
       with:
