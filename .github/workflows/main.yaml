@@ -32,7 +32,7 @@ jobs:
       uses: actions/checkout@v4
     - name: Test workflow (local test data)
       #uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
-      uses: snakemake/snakemake-github-action@v1.23.0
+      uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .test
         snakefile: workflow/Snakefile
@@ -42,8 +42,12 @@ jobs:
           ln -s /usr/bin/micromamba /usr/bin/mamba
           ln -s /usr/bin/micromamba /usr/bin/conda
     - name: Test report
-      uses: snakemake/snakemake-github-action@v1.23.0
+      uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .test
         snakefile: workflow/Snakefile
         args: "--report report.zip --wrapper-prefix file:///github/workspace/workflow/wrappers"
+        stagein: 
+          micromamba install -y -c conda-forge rsync
+          ln -s /usr/bin/micromamba /usr/bin/mamba
+          ln -s /usr/bin/micromamba /usr/bin/conda
