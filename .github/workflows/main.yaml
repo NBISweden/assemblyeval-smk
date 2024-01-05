@@ -18,10 +18,7 @@ jobs:
         directory: .
         snakefile: workflow/Snakefile
         args: "--lint"
-        stagein:
-          micromamba install -y -c conda-forge rsync;
-          ln -s /usr/bin/micromamba /usr/bin/mamba;
-          ln -s /usr/bin/micromamba /usr/bin/conda;
+        stagein: micromamba install -y -c conda-forge -c anaconda rsync conda
   Testing:
     runs-on: ubuntu-latest
     needs: Linting
@@ -34,18 +31,12 @@ jobs:
       with:
         directory: .test
         snakefile: workflow/Snakefile
-        args: "--use-conda --conda-frontend mamba --show-failed-logs -j 10 --retries 1 --rerun-incomplete --conda-cleanup-pkgs cache --wrapper-prefix file:///github/workspace/workflow/wrappers"
-        stagein:
-          micromamba install -y -c conda-forge rsync;
-          ln -s /usr/bin/micromamba /usr/bin/mamba;
-          ln -s /usr/bin/micromamba /usr/bin/conda;
+        args: "--use-conda --show-failed-logs -j 10 --retries 1 --rerun-incomplete --keep-going --conda-cleanup-pkgs cache --wrapper-prefix file:///github/workspace/workflow/wrappers"
+        stagein: micromamba install -y -c conda-forge -c anaconda rsync conda
     - name: Test report
       uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .test
         snakefile: workflow/Snakefile
         args: "--report report.zip --wrapper-prefix file:///github/workspace/workflow/wrappers"
-        stagein:
-          micromamba install -y -c conda-forge rsync;
-          ln -s /usr/bin/micromamba /usr/bin/mamba;
-          ln -s /usr/bin/micromamba /usr/bin/conda;
+        stagein: micromamba install -y -c conda-forge -c anaconda rsync conda
