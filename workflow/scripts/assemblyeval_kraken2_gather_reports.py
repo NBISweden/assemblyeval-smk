@@ -3,7 +3,6 @@
 # Read and merge kraken2 results output
 #
 import pandas as pd
-import snakemake
 
 
 def load(fn):

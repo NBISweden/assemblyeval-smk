@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import snakemake
 import yaml
 
 inconfig = snakemake.config

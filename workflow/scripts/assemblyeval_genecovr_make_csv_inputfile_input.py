@@ -2,7 +2,6 @@
 import itertools
 
 import pandas as pd
-import snakemake
 
 input = snakemake.input
 output = snakemake.output

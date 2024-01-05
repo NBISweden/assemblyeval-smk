@@ -5,7 +5,6 @@ __license__ = "MIT"
 
 import os
 import re
-import snakemake
 from snakemake.shell import shell
 
 # Check genome size

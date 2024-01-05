@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import pybedtools
-import snakemake
 from snakemake.utils import logger
 from tqdm import tqdm
 

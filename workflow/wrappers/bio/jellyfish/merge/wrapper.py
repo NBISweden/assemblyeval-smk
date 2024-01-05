@@ -4,7 +4,6 @@ __copyright__ = "Copyright 2020, Per Unneberg"
 __email__ = "per.unneberg@scilifelab.se"
 __license__ = "MIT"
 
-import snakemake
 from snakemake.shell import shell
 
 log = snakemake.log_fmt_shell(stdout=True, stderr=True, append=True)
