@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+import snakemake
 import yaml
-from collections import OrderedDict
 
 inconfig = snakemake.config
 

@@ -1,7 +1,9 @@
 # Snakemake workflow: Assembly evaluation workflow
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.25.0-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![Build status](https://github.com/NBISweden/assemblyeval-smk/workflows/Tests/badge.svg?branch=main)](https://github.com/NBISweden/assemblyeval-smk/actions?query=workflow%3ATests)  ![License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![Build
+status](https://github.com/NBISweden/assemblyeval-smk/workflows/Tests/badge.svg?branch=main)](https://github.com/NBISweden/assemblyeval-smk/actions?query=workflow%3ATests)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 Snakemake workflow for genome assembly evaluation.
 
@@ -15,11 +17,14 @@ available, its DOI (see above; currently N/A).
 
 ## Features
 
-- align transcripts to a reference sequence with [gmap](http://research-pub.gene.com/gmap/)
-- estimate gene body coverage with [genecovr](https://github.com/NBISweden/genecovr)
-- run [quast](http://bioinf.spbau.ru/quast), [jellyfish](http://www.genome.umd.edu/jellyfish.html), [busco](https://busco.ezlab.org), and [kraken2](https://ccb.jhu.edu/software/kraken2/)
-- summarize quality metrics with [MultiQC](https://multiqc.info)
-- (WIP): run some of the steps for adding reads, coverage files, and
+* align transcripts to a reference sequence with [gmap](http://research-pub.gene.com/gmap/)
+* estimate gene body coverage with [genecovr](https://github.com/NBISweden/genecovr)
+* run [quast](http://bioinf.spbau.ru/quast),
+  [jellyfish](http://www.genome.umd.edu/jellyfish.html),
+  [busco](https://busco.ezlab.org), and
+  [kraken2](https://ccb.jhu.edu/software/kraken2/)
+* summarize quality metrics with [MultiQC](https://multiqc.info)
+* (WIP): run some of the steps for adding reads, coverage files, and
   sequences to the [blobtoolkit](https://blobtoolkit.genomehubs.org) viewer
 
 ## Quickstart
@@ -50,13 +55,11 @@ details) . In addition, edit the following files:
 `reads.tsv`
     Raw sequence read files.
 
-
 NOTE: the config directory doesn't have to be in the workflow source
 directory, in which case snakemake must be invoked with the full path
 to the Snakemake file:
 
     snakemake -s /path/to/manticore-smk/workflow/Snakefile
-
 
 ### Step 3: Install Snakemake
 
@@ -117,7 +120,8 @@ The report contains documentation and results from the workflow.
 
 ### Step 6: Contribute back
 
-In case you have also changed or added steps, please consider contributing them back to the original repository:
+In case you have also changed or added steps, please consider
+contributing them back to the original repository:
 
 1. [Fork](https://help.github.com/en/articles/fork-a-repo) the
    original repo to a personal or lab account.
@@ -139,7 +143,6 @@ For a quick overview of example configuration files, see
 [config/config.yaml](https://github.com/NBISweden/assemblyeval-smk/blob/main/config/config.yaml)
 and the test configuration
 [.test/config/config.yaml](https://github.com/NBISweden/assemblyeval-smk/blob/main/.test/config/config.yaml)
-
 
 ### Schemas
 
@@ -177,9 +180,13 @@ examples.
 The tabular input files can also be represented as lists in yaml
 format. For instance, the following tabular data
 
+<!-- markdownlint-disable MD010 -->
+
     species	version	fasta
     foo	v1	resources/assembly.v1.fasta
     foo	v2	resources/assembly.v2.fasta
+
+<!-- markdownlint-enable MD010 -->
 
 would be represented as follows in yaml format
 
@@ -240,7 +247,6 @@ Quast will calculate quality metrics of an assembly.
     quast:
       ids: ["foo_v2", "foo_v1"]
 
-
 #### kraken2
 
 kraken2 assigns taxonomic ids to sequences and is used for
@@ -254,20 +260,18 @@ taxids over windows.
       window_size: 20000
       npartitions: 50
 
-
 #### MultiQC
 
 MultiQC doesn't have a configuration section per se. Instead, it will
 collect and plot results for the following applications:
 
-- busco
-- jellyfish
-- quast
-- kraken2
+* busco
+* jellyfish
+* quast
+* kraken2
 
 Plot configurations can be tweaked in a multiqc configuration file
 `multiqc_config.yaml`.
-
 
 ### Rule configuration
 
@@ -281,8 +285,6 @@ instance, to change `options` for `jellyfish_count_chunk`, add
       jellyfish_count_chunk:
         options: --size 20G --canonical
 
-
-
 ## Testing
 
 Test cases are in the subfolder `.test`. They are automatically
@@ -290,8 +292,13 @@ executed via continuous integration with [Github
 Actions](https://github.com/features/actions). To run the tests, cd to
 `.test` and issue
 
-    snakemake --use-conda --conda-frontend mamba --show-failed-logs --cores 2 --conda-cleanup-pkgs cache -s ../workflow/Snakefile --wrapper-prefix file://$(pwd)/../workflow/wrappers
+    snakemake --use-conda --conda-frontend mamba \
+        --show-failed-logs --cores 2 --conda-cleanup-pkgs cache \
+        -s ../workflow/Snakefile \
+        --wrapper-prefix file://$(pwd)/../workflow/wrappers
 
 Once the test run has finished, create a report and view it:
 
-    snakemake --cores 1 -s ../workflow/Snakefile --wrapper-prefix file://$(pwd)/../workflow/wrappers --report report.html
+    snakemake --cores 1 -s ../workflow/Snakefile \
+        --wrapper-prefix file://$(pwd)/../workflow/wrappers \
+        --report report.html

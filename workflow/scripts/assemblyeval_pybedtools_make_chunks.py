@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-import re
 import pybedtools
-from tqdm import tqdm
-from snakemake.shell import shell
+import snakemake
 from snakemake.utils import logger
+from tqdm import tqdm
 
 log = snakemake.log_fmt_shell(stdout=True, stderr=True)
 
@@ -15,8 +12,8 @@ analysis = snakemake.wildcards.analysis
 
 regions = []
 with open(faidx) as fh:
-    for l in tqdm(fh.readlines()):
-        fields = l.split("\t")
+    for line in tqdm(fh.readlines()):
+        fields = line.split("\t")
         i = pybedtools.Interval(fields[0], 0, int(fields[1]))
         regions.append(i)
 
@@ -25,22 +22,18 @@ npart = snakemake.params.npartitions
 
 try:
     assert len(bed) >= npart
-except AssertionError as e:
+except AssertionError:
     logger.warning(
-        (
-            f"Number of regions smaller than number of partitions: '{len(bed)} < {npart}': "
-            f"lower the number of partitions "
-        )
+        f"Number of regions smaller than number of partitions: '{len(bed)} < {npart}': "
+        f"lower the number of partitions "
     )
     raise
 
 try:
     assert partition < npart
-except AssertionError as e:
+except AssertionError:
     logger.error(
-        (
-            f"partition number {partition} larger than the maximum number of partitions {npart}"
-        )
+        f"partition number {partition} larger than the maximum number of partitions {npart}"
     )
     raise
 

@@ -5,12 +5,13 @@ __license__ = "MIT"
 
 import os
 import re
+import snakemake
 from snakemake.shell import shell
 
 # Check genome size
 gmap = "gmap"
-with open(snakemake.input.log, "r") as fh:
-    m = re.search("Total genomic length = (\d+) bp", "\n".join(fh.readlines()))
+with open(snakemake.input.log) as fh:
+    m = re.search(r"Total genomic length = (\d+) bp", "\n".join(fh.readlines()))
     try:
         if int(m.group(1)) > 2**32:
             gmap = "gmapl"

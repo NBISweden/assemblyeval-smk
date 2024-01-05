@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import itertools
+
 import pandas as pd
+import snakemake
 
 input = snakemake.input
 output = snakemake.output
