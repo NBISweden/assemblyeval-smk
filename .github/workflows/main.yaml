@@ -36,7 +36,7 @@ jobs:
       with:
         directory: .test
         snakefile: workflow/Snakefile
-        args: "--use-conda --conda-backend mamba--show-failed-logs -j 10 --conda-cleanup-pkgs cache --wrapper-prefix file:///github/workspace/workflow/wrappers"
+        args: "--use-conda --conda-frontend mamba--show-failed-logs -j 10 --conda-cleanup-pkgs cache --wrapper-prefix file:///github/workspace/workflow/wrappers"
         stagein: 
           micromamba install -y -c conda-forge rsync
           ln -s /usr/bin/micromamba /usr/bin/mamba
