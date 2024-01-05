@@ -17,7 +17,7 @@ log = snakemake.log_fmt_shell(stdout=True, stderr=True, append=True)
 options = snakemake.params.get("options", "")
 lineage = snakemake.wildcards.lineage
 mode = snakemake.wildcards.mode
-assembly = snakemake.input[0]
+assembly = snakemake.input.assembly
 
 
 out_path = os.path.dirname(os.path.dirname(os.path.dirname(snakemake.output.tsv)))
