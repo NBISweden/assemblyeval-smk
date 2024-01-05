@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # Read and merge kraken2 results output
 #
-from functools import reduce
 import pandas as pd
 
 

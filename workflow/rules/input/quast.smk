@@ -1,5 +1,4 @@
 def all_quast(wildcards):
-
     val = {"tsv": [], "other": []}
     for analysis in cfg.analyses_w_tool("quast"):
         files = analysis.tools["quast"].input

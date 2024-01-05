@@ -12,8 +12,6 @@ rule repeatmasker_make_chunked_input:
         faidx=lambda wildcards: cfg.get_assembly(wildcards.assembly, fai=True),
     conda:
         "../envs/pybedtools.yaml"
-    resources:
-        runtime=cfg.ruleconf("repeatmasker_make_chunked_input").xruntime,
     threads: cfg.ruleconf("repeatmasker_make_chunked_input").threads
     log:
         "logs/{interim}/repeatmasker/{assembly}/fasta/repeatmasker_make_chunked_input.log",
@@ -36,14 +34,11 @@ rule repeatmasker_chunk:
         options=cfg.ruleconf("repeatmasker_chunk").options,
     envmodules:
         *cfg.ruleconf("repeatmasker_chunk").envmodules,
-    resources:
-        runtime=cfg.ruleconf("repeatmasker_chunk").xruntime,
-        mem_mb=cfg.ruleconf("repeatmasker_chunk").xmem,
     log:
         "logs/{interim}/repeatmasker/{assembly}/{partition}.log",
     threads: cfg.ruleconf("repeatmasker_chunk").threads
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/repeatmasker"
+        os.path.join(WRAPPER_PREFIX, "bio/repeatmasker")
 
 
 rule repeatmasker_all:

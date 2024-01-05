@@ -4,15 +4,13 @@ rule assemblyeval_samtools_faidx:
         "{prefix}{fa}{gz}.fai",
     input:
         "{prefix}{fa}{gz}",
-    resources:
-        runtime=cfg.ruleconf("assemblyeval_samtools_faidx").xruntime,
     conda:
         "../envs/samtools.yaml"
     log:
         "logs/{prefix}{fa}{gz}.fai.log",
     threads: 1
     wrapper:
-        f"{SMK_WRAPPER_PREFIX}/bio/samtools/faidx"
+        os.path.join(SMK_WRAPPER_PREFIX, "bio/samtools/faidx")
 
 
 rule assemblyeval_save_config:

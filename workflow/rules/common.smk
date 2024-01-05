@@ -10,12 +10,16 @@ import subprocess as sp
 
 # Determine wrapper prefix since we mix local wrappers with wrappers
 # from snakemake-wrappers
-SMK_WRAPPER_VERSION = "0.78.0"
+SMK_WRAPPER_VERSION = "v3.3.3"
 SMK_WRAPPER_PREFIX_RAW = "https://github.com/snakemake/snakemake-wrappers/raw"
 SMK_WRAPPER_PREFIX = f"{SMK_WRAPPER_PREFIX_RAW}/{SMK_WRAPPER_VERSION}"
-WRAPPER_PREFIX = workflow.wrapper_prefix
+try:
+    WRAPPER_PREFIX = workflow.wrapper_prefix.rstrip("/")
+except:
+    WRAPPER_PREFIX = workflow.workflow_settings.wrapper_prefix.rstrip("/")
 
-if WRAPPER_PREFIX == SMK_WRAPPER_PREFIX:
+# Point wrapper prefix to github repo
+if WRAPPER_PREFIX == SMK_WRAPPER_PREFIX_RAW:
     # Change main to version number once we start sem-versioning
     WRAPPER_PREFIX = "https://raw.githubusercontent.com/NBISweden/assemblyeval-smk/main/workflow/wrappers"
 
@@ -57,7 +61,7 @@ try:
         config["__workflow_commit__"] = commit_short
         config[
             "__workflow_commit_link__"
-        ] = f"https://github.com/NBISweden/manticore-smk/commit/{commit}"
+        ] = f"https://github.com/NBISweden/assemblyeval-smk/commit/{commit}"
 except Exception as e:
     print(e)
     raise

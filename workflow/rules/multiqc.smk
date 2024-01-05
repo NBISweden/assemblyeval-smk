@@ -3,8 +3,6 @@ rule multiqc:
         "{reports}/multiqc.html",
     input:
         unpack(all_multiqc),
-    resources:
-        runtime=cfg.ruleconf("multiqc").xruntime,
     params:
         cfg.ruleconf("multiqc").options,
     log:
@@ -12,4 +10,4 @@ rule multiqc:
     envmodules:
         *cfg.ruleconf("multiqc").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/multiqc"
+        os.path.join(WRAPPER_PREFIX, "bio/multiqc")

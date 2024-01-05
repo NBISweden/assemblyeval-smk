@@ -17,14 +17,5 @@ zipflag = "-g" if re.search("(.gz|.gzip)$", seq) else ""
 dirname = os.path.dirname(touchdb)
 db = f"{snakemake.wildcards.assembly}.db"
 
-shell(
-    "gmap_build {extra} "
-    "{zipflag} "
-    "-d {db} "
-    "--dir {dirname} "
-    "{seq} "
-    "{log}"
-)
-shell(
-    "touch {touchdb}"
-)
+shell("gmap_build {extra} " "{zipflag} " "-d {db} " "--dir {dirname} " "{seq} " "{log}")
+shell("touch {touchdb}")

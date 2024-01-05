@@ -9,8 +9,8 @@ from snakemake.shell import shell
 
 # Check genome size
 gmap = "gmap"
-with open(snakemake.input.log, "r") as fh:
-    m = re.search("Total genomic length = (\d+) bp", "\n".join(fh.readlines()))
+with open(snakemake.input.log) as fh:
+    m = re.search(r"Total genomic length = (\d+) bp", "\n".join(fh.readlines()))
     try:
         if int(m.group(1)) > 2**32:
             gmap = "gmapl"
@@ -25,10 +25,12 @@ dbok = snakemake.input.db
 transcriptome = snakemake.input.transcriptome
 output = snakemake.output.res
 
+
 def compose_input_gz(filename):
     if filename.endswith(".gz"):
         return f"<(gzip --decompress --stdout {filename})"
     return filename
+
 
 input_files = [compose_input_gz(fn) for fn in transcriptome]
 dirname = os.path.dirname(dbok)

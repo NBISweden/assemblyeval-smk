@@ -15,16 +15,13 @@ rule kraken2_parallel:
     params:
         db=lambda wildcards: cfg.analysis(wildcards.analysis).tools["kraken2"].db,
         options=cfg.ruleconf("kraken2_parallel").options,
-    resources:
-        runtime=cfg.ruleconf("kraken2_parallel").xruntime,
-        mem_mb=cfg.ruleconf("kraken2_parallel").xmem,
     threads: cfg.ruleconf("kraken2_parallel").threads
     log:
         "logs/{interim}/kraken2/{analysis}/{assembly}/{db}.{length}.{partition}.log",
     envmodules:
         *cfg.ruleconf("kraken2_parallel").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/kraken2/kraken2"
+        os.path.join(WRAPPER_PREFIX, "bio/kraken2/kraken2")
 
 
 rule kraken2_bedtools_make_windows:
@@ -67,9 +64,6 @@ rule kraken2_gather_results:
         / "kraken2/{analysis}/{assembly}/{db}.{length}.unclassified.fasta.gz",
     input:
         unpack(kraken2_gather_results_input),
-    resources:
-        runtime=cfg.ruleconf("kraken2_gather_results").xruntime,
-        mem_mb=cfg.ruleconf("kraken2_gather_results").xmem,
     log:
         "logs/kraken2/{analysis}/{assembly}/{db}.{length}.results.log",
     threads: cfg.ruleconf("kraken2_gather_results").threads
@@ -86,9 +80,6 @@ rule kraken2_gather_reports:
         unclassified=__RESULTS__
         / "kraken2/{analysis}/{assembly}/{db}.{length}.unclassified.fasta.gz",
         txt=kraken2_gather_reports_input,
-    resources:
-        runtime=cfg.ruleconf("kraken2_gather_reports").xruntime,
-        mem_mb=cfg.ruleconf("kraken2_gather_reports").xmem,
     log:
         "logs/kraken2/{analysis}/{assembly}/{db}.{length}.report.log",
     conda:

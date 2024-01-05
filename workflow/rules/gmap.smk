@@ -5,16 +5,13 @@ rule gmap_build:
     input:
         seq=lambda wildcards: cfg.get_assembly(wildcards.assembly),
     cache: True
-    resources:
-        runtime=cfg.ruleconf("gmap_build").xruntime,
-        mem_mb=cfg.ruleconf("gmap_build").xmem,
     threads: cfg.ruleconf("gmap_build").xthreads
     log:
         "logs/gmap_build/{assembly}.log",
     envmodules:
         *cfg.ruleconf("gmap_build").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/gmap/build"
+        os.path.join(WRAPPER_PREFIX, "bio/gmap/build")
 
 
 rule gmap_map:
@@ -29,13 +26,10 @@ rule gmap_map:
         db=__INTERIM__ / "gmap/db/{assembly}.db.ok",
         transcriptome=lambda wildcards: cfg.get_transcriptome(wildcards.transcriptome),
         log="logs/gmap_build/{assembly}.log",
-    resources:
-        runtime=cfg.ruleconf("gmap_map").xruntime,
-        mem_mb=cfg.ruleconf("gmap_map").xruntime,
     threads: cfg.ruleconf("gmap_map").xthreads
     log:
         "logs/gmap_map/{assembly}-{transcriptome}.psl.log",
     envmodules:
         *cfg.ruleconf("gmap_map").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/gmap/map"
+        os.path.join(WRAPPER_PREFIX, "bio/gmap/map")

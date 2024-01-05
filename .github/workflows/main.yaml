@@ -11,33 +11,32 @@ jobs:
   Linting:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Lint workflow
-      uses: snakemake/snakemake-github-action@v1.23.0
+      uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .
         snakefile: workflow/Snakefile
         args: "--lint"
-
+        stagein: micromamba install snakemake -y -c conda-forge -c anaconda rsync conda
   Testing:
     runs-on: ubuntu-latest
     needs: Linting
     timeout-minutes: 30
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v2
-      with:
-        submodules: recursive
+      uses: actions/checkout@v4
     - name: Test workflow (local test data)
-      uses: snakemake/snakemake-github-action@v1.23.0
+      uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .test
         snakefile: workflow/Snakefile
-        args: "--use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache --conda-frontend mamba --wrapper-prefix file:///github/workspace/workflow/wrappers"
-        stagein: mamba install -y -c conda-forge rsync
+        args: "--use-conda --show-failed-logs -j 10 --retries 1 --rerun-incomplete --keep-going --conda-cleanup-pkgs cache --wrapper-prefix file:///github/workspace/workflow/wrappers"
+        stagein: micromamba config append channels conda-forge; micromamba install -n snakemake -y rsync conda mamba
     - name: Test report
-      uses: snakemake/snakemake-github-action@v1.21.0
+      uses: snakemake/snakemake-github-action@v1.25.1
       with:
         directory: .test
         snakefile: workflow/Snakefile
         args: "--report report.zip --wrapper-prefix file:///github/workspace/workflow/wrappers"
+        stagein: micromamba install -n snakemake -y -c conda-forge  rsync conda

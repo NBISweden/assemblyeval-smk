@@ -1,22 +1,65 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v4.5.0
     hooks:
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: debug-statements
+      - id: mixed-line-ending
+      - id: check-case-conflict
       - id: check-yaml
-      - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: end-of-file-fixer
+  - repo: https://github.com/asottile/reorder_python_imports
+    rev: v3.12.0
+    hooks:
+      - id: reorder-python-imports
+        args: [--application-directories=python, --unclassifiable-application-module=_tskit]
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.0
+    hooks:
+      - id: pyupgrade
+        args: [--py3-plus, --py37-plus]
   - repo: https://github.com/psf/black
-    rev: 21.8b0
+    rev: 23.3.0
     hooks:
       - id: black
+        language_version: python3
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.1.11"
+    hooks:
+      - id: ruff
+        args:
+          [
+          "--ignore=F821",
+          ]
+  - repo: https://github.com/asottile/blacken-docs
+    rev: 1.16.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies: [black==22.12.0]
+        language_version: python3
   - repo: https://github.com/snakemake/snakefmt
-    rev: 0.4.3
+    rev: v0.8.5
     hooks:
       - id: snakefmt
   - repo: local
     hooks:
       - id: lint
         name: Snakemake lint
-        entry: snakemake --lint text
+        entry: snakemake --configfile config/config.yaml --configfile config/envmodules.yaml --lint text -v -s
         language: system
-        files: ''
+        log_file: 'snakemake-lint.txt'
+        files: '.*\.smk$|Snakefile'
+        exclude: .*/test-.*\.smk$
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.11.0
+    hooks:
+      - id: markdownlint-cli2
+        files: \.(md|qmd)$
+        types: [file]
+        exclude: LICENSE.md
+      - id: markdownlint-cli2-fix
+        files: \.(md|qmd)$
+        types: [file]
+        exclude: LICENSE.md

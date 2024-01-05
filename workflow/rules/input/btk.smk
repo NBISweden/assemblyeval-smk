@@ -1,5 +1,4 @@
 def get_btk_all(wildcards):
-
     retval = []
     for v in config["btk"].keys():
         if not v.startswith("blobdir"):

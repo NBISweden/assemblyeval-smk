@@ -1,5 +1,4 @@
 def all_jellyfish(wildcards):
-
     val = []
     for analysis in cfg.analyses_w_tool("jellyfish"):
         jellyfish = analysis.tools["jellyfish"]

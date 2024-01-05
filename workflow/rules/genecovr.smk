@@ -57,10 +57,8 @@ rule genecovr_run:
         unpack(get_genecovr_input),
     params:
         options=cfg.ruleconf("genecovr_run").options,
-    resources:
-        runtime=cfg.ruleconf("genecovr_run").xruntime,
     log:
         "logs/{results}/genecovr/{analysis}.log",
     threads: cfg.ruleconf("genecovr_run").xthreads
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/genecovr"
+        os.path.join(WRAPPER_PREFIX, "bio/genecovr")

@@ -1,4 +1,4 @@
-name: "busco"
+name: "busco run"
 description: Evaluate assembly with busco
 authors:
   - Per Unneberg

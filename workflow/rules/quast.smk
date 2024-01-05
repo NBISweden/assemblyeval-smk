@@ -14,13 +14,10 @@ rule quast:
         seq=lambda wildcards: cfg.analysis(wildcards.analysis).get_assembly(
             wildcards.assembly
         ),
-    resources:
-        runtime=cfg.ruleconf("quast").xruntime,
-        mem_mb=cfg.ruleconf("quast").xmem,
     threads: cfg.ruleconf("quast").xthreads
     log:
         "logs/{results}/quast/{analysis}/{assembly}.log",
     envmodules:
         *cfg.ruleconf("quast").envmodules,
     wrapper:
-        f"{WRAPPER_PREFIX}/bio/quast/quast"
+        os.path.join(WRAPPER_PREFIX, "bio/quast/quast")

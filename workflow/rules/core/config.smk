@@ -4,7 +4,12 @@ import contextlib
 from typing import Union, List
 import types
 from snakemake.utils import logger, validate
-from snakemake.io import _load_configfile
+
+try:
+    from snakemake.io import _load_configfile
+except:
+    from snakemake.common.configfile import _load_configfile
+
 from dataclasses import dataclass, field, asdict
 
 WORKFLOW_DIR = str(workflow.current_basedir)
@@ -456,7 +461,10 @@ class Analysis:
 
 @dataclass
 class RuleConfig:
-    _default = workflow.default_resources.parsed
+    try:
+        _default = workflow.default_resources.parsed
+    except:
+        _default = workflow.resource_settings.default_resources.parsed
     name: str
     envmodules: List[str] = field(default_factory=list)
     options: Union[str, list, dict] = ""
