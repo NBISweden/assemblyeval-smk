@@ -32,7 +32,7 @@ jobs:
         directory: .test
         snakefile: workflow/Snakefile
         args: "--use-conda --show-failed-logs -j 10 --retries 1 --rerun-incomplete --keep-going --conda-cleanup-pkgs cache --wrapper-prefix file:///github/workspace/workflow/wrappers"
-        stagein: micromamba config append channels conda-forge; micromamba install -n snakemake -y rsync conda
+        stagein: micromamba config append channels conda-forge; micromamba install -n snakemake -y rsync conda mamba
     - name: Test report
       uses: snakemake/snakemake-github-action@v1.25.1
       with:
