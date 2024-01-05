@@ -3,4 +3,4 @@ channels:
   - bioconda
 dependencies:
   - rsync
-  - busco >=4
+  - busco >=5
